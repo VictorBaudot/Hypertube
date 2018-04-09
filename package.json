@@ -1,0 +1,20 @@
+{
+  "name": "hypertube",
+  "version": "0.0.1",
+  "description": "The hypertube project for 42's school",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olag18/Hypertube.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olag18/Hypertube/issues"
+  },
+  "homepage": "https://github.com/olag18/Hypertube#readme"
+}
