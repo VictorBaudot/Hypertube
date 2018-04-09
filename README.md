@@ -59,7 +59,9 @@ TODO :
 - [ ] Ajout du `INNER JOIN` dans les requetes de select
 - [ ] Ajout de la requete `insert` avec les memes pre-requis que select
 
-09-04-2018 :
+Changelog :
+
+- 09-04-2018 :
 
 -> Creation des depandeces obligatoire
 -> Creation de l'architecture NodeJS & moteur de template (ejs)
@@ -67,8 +69,8 @@ TODO :
 -> Creation des views index.ejs & connexion.ejs
 -> Sur la view connexion.ejs creation du formulaire de connexion + possibilite de ce connecter si l'utilisateur est present dans la db
 
-	=> todo pour finir l'espace utilisateur
-		- [ ] Possibilite de s'enregistrer (route prevue /user/sign_up)
-		- [ ] Modifier `index.js` pour mettre les methodes de connexion dans `connexion.js`
-		- [ ] Possibilite de check les profils d'autres utilisateur (route prevue /user/{id_user}/info)
-		- [ ] Strategie de connexion Omniauth
+=> todo pour finir l'espace utilisateur
+- [ ] Possibilite de s'enregistrer (route prevue /user/sign_up)
+- [ ] Modifier `index.js` pour mettre les methodes de connexion dans `connexion.js`
+- [ ] Possibilite de check les profils d'autres utilisateur (route prevue /user/{id_user}/info)
+- [ ] Strategie de connexion Omniauth
