@@ -5,7 +5,7 @@ const router				=	express.Router();
 const session				=	require("express-session");
 
 router.get('/', (req, res, next) => {
-	if (req.session && req.session.id)
+	if (req.session && req.session.id_user)
 		return (res.render('index'))
 	else
 		return (res.redirect('/connexion'));
