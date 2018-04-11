@@ -86,6 +86,8 @@ Changelog :
 -> Module d'inscription termine
 -> Creation de la fonction `insert` dans la class `SQL`
 -> Bug trouver sur la redirection des session dans l'espace de connexion
+------
+-> Bug compris dans `connexion.js` oublie de `require(body-parser)` --'
 
 - 09-04-2018 :
 
