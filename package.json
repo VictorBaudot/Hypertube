@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/olag18/Hypertube/issues"
   },
-  "homepage": "https://github.com/olag18/Hypertube#readme"
+  "homepage": "https://github.com/olag18/Hypertube#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "htmlspecialchars": "^1.0.5",
+    "mysql": "^2.15.0"
+  }
 }

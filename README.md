@@ -13,8 +13,14 @@ Database :
 ```
 create database hypertube;
 use hypertube;
-create table user (id int(11) primary key auto_increment, login varchar(255), psswd varchar(255));
+create table user (id int(11) primary key auto_increment, login varchar(255), psswd varchar(255), email varchar(255));
 ```
+
+Rappel :
+
+Vous pouvez ajouter une colonne a une table via la commande : 
+
+`alter table <table name> add column <column_name> <type>;`
 
 Class :
 
@@ -51,15 +57,35 @@ Database : (Model/SQL.class.js);
 
 	`SELECT login FROM user WHERE (login='cbeauvoi' OR login='hmasson') AND (psswd='squeezie' OR psswd='requin')`
 
+- (func) insert : ((String) table, (JSON) values) | return {Promise}
+	
+	Insert dans n'importe quel table n'importe quel valeurs sous la forme suivante : 
+
+	```
+	{
+		column_name: value,
+		column_name: value
+		.
+		.
+		.
+	}
+	```
+
 TODO : 
 
 - [x] Creer une classe pour les requetes sql
 - [x] Selectionner n'importe quel table en fonction de parametres
 - [x] Ajout de conditions and les requetes de select
 - [ ] Ajout du `INNER JOIN` dans les requetes de select
-- [ ] Ajout de la requete `insert` avec les memes pre-requis que select
+- [x] Ajout de la requete `insert` avec les memes pre-requis que select
 
 Changelog :
+
+- 11-04-2018 :
+
+-> Module d'inscription termine
+-> Creation de la fonction `insert` dans la class `SQL`
+-> Bug trouver sur la redirection des session dans l'espace de connexion
 
 - 09-04-2018 :
 
@@ -70,7 +96,7 @@ Changelog :
 -> Sur la view connexion.ejs creation du formulaire de connexion + possibilite de ce connecter si l'utilisateur est present dans la db
 
 => todo pour finir l'espace utilisateur
-- [ ] Possibilite de s'enregistrer (route prevue /user/sign_up)
-- [ ] Modifier `index.js` pour mettre les methodes de connexion dans `connexion.js`
+- [x] Possibilite de s'enregistrer (route prevue /inscription)
+- [x] Modifier `index.js` pour mettre les methodes de connexion dans `connexion.js`
 - [ ] Possibilite de check les profils d'autres utilisateur (route prevue /user/{id_user}/info)
 - [ ] Strategie de connexion Omniauth
