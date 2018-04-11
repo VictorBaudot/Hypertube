@@ -44,8 +44,18 @@ module.exports = class Sql
 		});
 	}
 
-	insert ()
+	insert (table, value)
 	{
+		let request = "INSERT INTO " + table + " SET ?";
+		let params = {};
 
+		for (let i in value)
+			params[i] = value[i];
+		return (new Promise((resolve, reject) => {
+			this.sql.query(request, params, (err, result, fields) => {
+				if (err) throw err;
+				resolve(result);
+			});
+		}));
 	}
 };
