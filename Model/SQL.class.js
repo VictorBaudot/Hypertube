@@ -9,15 +9,15 @@ module.exports = class Sql
 		this.sql = sql.createPool({
 			host: 'localhost',
 			user: 'root',
-			password: 'Beauvois41',
+			password: 'root',
 			database: 'hypertube',
 			port: 3306
 		});
 	}
 
-	select (quantity, table, condition)
+	select (columns, table, condition)
 	{
-		let request = "SELECT " + quantity + " FROM " + table;
+		let request = "SELECT " + columns + " FROM " + table;
 		if (Object.keys(condition).length > 0)
 		{
 			request += " WHERE ";
