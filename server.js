@@ -14,6 +14,9 @@ const index 		=	require('./Controllers/index.js');
 const connexion		=	require('./Controllers/connexion.js');
 const inscription	=	require('./Controllers/inscription.js');
 
+const port = 8080;
+const hostname = '127.0.0.1';
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -29,4 +32,6 @@ app.use('/', index);
 app.use('/connexion', connexion);
 app.use('/inscription', inscription);
 
-http.createServer(app).listen(8080);
+app.listen(port, hostname, () => {
+	console.log(`Server running at http://${hostname}:${port}/`);
+});
