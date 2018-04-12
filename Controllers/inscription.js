@@ -13,12 +13,14 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
 	let params = req.body;
 
-	if (params.login && params.psswd && params.psswd_confirm && params.email)
+	if (params.login && params.psswd && params.psswd_confirm && params.email && params.first_name && params.last_name)
 	{
 		let login = htmlspecialchars(params.login);
 		let psswd = htmlspecialchars(params.psswd);
 		let psswd_confirm = htmlspecialchars(params.psswd_confirm);
 		let email = htmlspecialchars(params.email);
+		let	first_name = htmlspecialchars(params.first_name);
+		let	last_name = htmlspecialchars(params.last_name);
 
 		if (psswd == psswd_confirm)
 		{
@@ -30,18 +32,20 @@ router.post('/', (req, res, next) => {
 				{
 					return (res.render('inscription', {
 						error: "Votre login est deja prit :("
-					}));					
+					}));
 				}
 				else
 				{
 					sql.insert('user', {
 						login: login,
 						psswd: crypto.createHash('md5').update(psswd).digest('hex'),
-						email: email
+						email: email,
+						first_name: first_name,
+						last_name: last_name
 					}).then(result => {
 						if (result && result.affectedRows == 1)
 						{
-							return (res.redirect('/connexion'));							
+							return (res.redirect('/connexion'));
 						}
 						else
 						{
@@ -49,7 +53,7 @@ router.post('/', (req, res, next) => {
 								error: "Une erreur est survenu lors de votre inscription :("
 							}));
 						}
-					});					
+					});
 				}
 			});
 		}
