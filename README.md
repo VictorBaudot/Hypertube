@@ -1,10 +1,10 @@
-Installation : 
+Installation :
 
-Project : 
+Project :
 
 `git clone https://github.com/olag18/Hypertube`
 
-Dependencies : 
+Dependencies :
 
 `npm install`
 
@@ -18,7 +18,7 @@ create table user (id int(11) primary key auto_increment, login varchar(255), ps
 
 Rappel :
 
-Vous pouvez ajouter une colonne a une table via la commande : 
+Vous pouvez ajouter une colonne a une table via la commande :
 
 `alter table <table name> add column <column_name> <type>;`
 
@@ -37,7 +37,7 @@ Database : (Model/SQL.class.js);
 - (func) select : ((String) quantity, (String) table, (JSON) condition) | return {Promise} => {JSON}
 
 	Renvoie en premier lieu une Promise, si la Promise est resolu, renvoie un JSON de la selection demander
-	Format pour les conditions : 
+	Format pour les conditions :
 	```
 		{
 			column_name: [first_value, second_value, third_value, ...],
@@ -53,13 +53,13 @@ Database : (Model/SQL.class.js);
 			psswd: ['squeezie', 'requin']
 		}
 	```
-	Va generer une requete sous cette forme : 
+	Va generer une requete sous cette forme :
 
 	`SELECT login FROM user WHERE (login='cbeauvoi' OR login='hmasson') AND (psswd='squeezie' OR psswd='requin')`
 
 - (func) insert : ((String) table, (JSON) values) | return {Promise}
-	
-	Insert dans n'importe quel table n'importe quel valeurs sous la forme suivante : 
+
+	Insert dans n'importe quel table n'importe quel valeurs sous la forme suivante :
 
 	```
 	{
@@ -71,7 +71,7 @@ Database : (Model/SQL.class.js);
 	}
 	```
 
-TODO : 
+TODO :
 
 - [x] Creer une classe pour les requetes sql
 - [x] Selectionner n'importe quel table en fonction de parametres
