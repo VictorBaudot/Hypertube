@@ -1,0 +1,40 @@
+<div class="ui black centered huge header">Inscription</div>
+<form action="/signup" method="post" class="ui equal width form" accept-charset="utf-8">
+		<div class="fields">
+				<div class="field required">
+						<label>Login</label>
+						<input type="text" placeholder="Login" name="login">
+				</div>
+
+				<div class="field required">
+						<label>Prenom</label>
+						<input type="text" placeholder="Prenom" name="prenom">
+				</div>
+
+				<div class="field required">
+						<label>Nom</label>
+						<input type="text" placeholder="Nom" name="nom">
+				</div>
+		</div>
+
+		<div class="field required">
+				<label>E-mail</label>
+				<input type="email" placeholder="batman@arkham.city" name="email">
+		</div>
+
+		<div class="fields">
+				<div class="field required">
+						<label>Mot de passe</label>
+						<input type="password" placeholder="Mot de passe" name="psswd">
+				</div>
+
+				<div class="field required">
+						<label>Confirmation</label>
+						<input type="password" placeholder="Mot de passe" name="psswd_confirm">
+				</div>
+		</div>
+		
+		<button type="submit" name="send" class="ui fluid black submit button">
+				S'inscrire
+		</button>
+</form>
