@@ -1,0 +1,14 @@
+.noUi-tooltip {
+  display: none;
+}
+.noUi-active .noUi-tooltip {
+  display: block;
+}
+.range-values {
+  float:right;
+  font-size: 12px;
+}
+
+.ui.fluid.searchable.dropdown.labeled.black.icon.centered.button {
+  text-align: center;
+}
