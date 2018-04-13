@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/olag18/Hypertube#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.8",
@@ -25,7 +26,10 @@
     "express-session": "^1.15.6",
     "htmlspecialchars": "^1.0.5",
     "mysql": "^2.15.0",
-    "semantic-ui": "^2.3.1",
-    "nodemon": "^1.17.3"
+    "nodemailer": "^4.6.4",
+    "nodemon": "^1.17.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "semantic-ui": "^2.3.1"
   }
 }
