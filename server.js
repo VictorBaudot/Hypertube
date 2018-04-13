@@ -1,4 +1,5 @@
 const express		=	require("express");
+const i18n			=	require('i18n');
 const app			=	express();
 const http			=	require('http');
 const path			=	require('path');
@@ -10,11 +11,12 @@ const cookieParser 	=	require('cookie-parser');
 
 require('./private/passport')(passport)
 
-const index 		=	require('./Controllers/index.js');
-const signin		=	require('./Controllers/signin.js');
-const signup	=	require('./Controllers/signup.js');
-const forgot_pwd	=	require('./Controllers/forgot_pwd.js');
-const profile	=	require('./Controllers/profile.js');
+const index 			=	require('./Controllers/index.js');
+const lang	 			=	require('./Controllers/lang.js');
+const signin			=	require('./Controllers/signin.js');
+const signup			=	require('./Controllers/signup.js');
+const forgot_pwd		=	require('./Controllers/forgot_pwd.js');
+const profile			=	require('./Controllers/profile.js');
 const modify_profile	=	require('./Controllers/modify_profile.js');
 const logout	=	require('./Controllers/logout.js');
 const confirm	=	require('./Controllers/confirm.js');
@@ -32,16 +34,27 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
+
+i18n.configure({
+	locales:['en', 'fr'],
+	directory: __dirname + '/locales',
+	defaultLocale: 'en',
+	cookie: 'i18n'
+});
+app.use(i18n.init);
+
 app.use(session({
     secret: 'secret',
     resave: true,
     saveUninitialized: true,
+	cookie: { maxAge: 60000 }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
+app.use('/lang', lang);
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
 app.use('/confirm', confirm);

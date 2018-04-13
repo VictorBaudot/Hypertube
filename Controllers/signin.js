@@ -42,12 +42,14 @@ function checkCredentials(req, res, next) {
 			}
 			else
 				return (res.render('not_connected/index', {
-					error: "Nous ne vous trouvons pas parmis nos inscrit :("
+					error: "Nous ne vous trouvons pas parmis nos inscrit :(",
+					, i18n: res
 				}));
 		});
 	}
 	else
 		return (res.render('not_connected/index', {
-			error: "Veuillez remplir tous les champs !"
+			error: "Veuillez remplir tous les champs !",
+			, i18n: res
 		}));
 });*/
