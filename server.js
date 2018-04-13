@@ -14,8 +14,8 @@ const index 		=	require('./Controllers/index.js');
 const connexion		=	require('./Controllers/connexion.js');
 const inscription	=	require('./Controllers/inscription.js');
 
-const port = 8080;
-const hostname = '127.0.0.1';
+// const port = 8080;
+// const hostname = '127.0.0.1';
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
