@@ -6,22 +6,22 @@
 	<div class="container">
 		<form action="/inscription" method="post" accept-charset="utf-8">
 			<div class="row">
-				<label><input type="text" name="login" placeholder="Votre login"></label>
+				<label><input type="text" name="login" placeholder="Votre login" required></label>
 			</div>
 			<div class="row">
-				<label><input type="password" name="passwd" placeholder="Votre mot de passe"></label>
+				<label><input type="password" name="psswd" placeholder="Votre mot de passe" required></label>
 			</div>
 			<div class="row">
-				<label><input type="password" name="passwd_confirm" placeholder="Confirmer"></label>
+				<label><input type="password" name="psswd_confirm" placeholder="Confirmer" required></label>
 			</div>
 			<div class="row">
-				<label><input type="text" name="email" placeholder="Votre email"></label>
+				<label><input type="text" name="email" placeholder="Votre email" required></label>
 			</div>
 			<div class="row">
-				<label><input type="text" name="first_name" placeholder="Votre prenom"></label>
+				<label><input type="text" name="first_name" placeholder="Votre prenom" required></label>
 			</div>
 			<div class="row">
-				<label><input type="text" name="last_name" placeholder="Votre nom de famille"></label>
+				<label><input type="text" name="last_name" placeholder="Votre nom de famille" required></label>
 			<div class="row">
 			</div>
 			<input type="submit" name="send" value="register">

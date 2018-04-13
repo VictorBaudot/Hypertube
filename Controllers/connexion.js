@@ -15,12 +15,12 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
 	let params = req.body;
 
-	if (params.login && params.passwd)
+	if (params.login && params.psswd)
 	{
 		let sql = new SQL();
 		sql.select('id', 'users', {
 			login: htmlspecialchars(params.login),
-			passwd: crypto.createHash('md5').update(htmlspecialchars(params.passwd)).digest('hex')
+			psswd: crypto.createHash('md5').update(htmlspecialchars(params.psswd)).digest('hex')
 		}).then(result => {
 			if (Object.keys(result).length > 0)
 			{

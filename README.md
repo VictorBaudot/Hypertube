@@ -13,7 +13,7 @@ Database :
 ```
 create database hypertube;
 use hypertube;
-create table user (id int(11) primary key auto_increment, login varchar(255), passwd varchar(255), email varchar(255));
+create table user (id int(11) primary key auto_increment, login varchar(255), psswd varchar(255), email varchar(255));
 ```
 
 Rappel :
@@ -50,12 +50,12 @@ Database : (Model/SQL.class.js);
 	```
 		{
 			login: ['cbeauvoi', 'hmasson'],
-			passwd: ['squeezie', 'requin']
+			psswd: ['squeezie', 'requin']
 		}
 	```
 	Va generer une requete sous cette forme :
 
-	`SELECT login FROM user WHERE (login='cbeauvoi' OR login='hmasson') AND (passwd='squeezie' OR passwd='requin')`
+	`SELECT login FROM user WHERE (login='cbeauvoi' OR login='hmasson') AND (psswd='squeezie' OR psswd='requin')`
 
 - (func) insert : ((String) table, (JSON) values) | return {Promise}
 

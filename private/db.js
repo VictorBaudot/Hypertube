@@ -20,14 +20,14 @@ connect.query("CREATE TABLE `users` ( \
   `id` int(11) NOT NULL AUTO_INCREMENT, \
   `mail` varchar(255) NOT NULL, \
   `login` varchar(255) DEFAULT NULL, \
-  `passwd` varchar(255) NOT NULL, \
+  `psswd` varchar(255) NOT NULL, \
   `last_name` varchar(255) DEFAULT NULL, \
   `first_name` varchar(255) NOT NULL, \
   `photos` longtext DEFAULT NULL, \
   PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
-connect.query("INSERT INTO `users` (`id`, `mail`, `login`, `passwd`, `last_name`, `first_name`, `photos`) VALUES \
+connect.query("INSERT INTO `users` (`id`, `mail`, `login`, `psswd`, `last_name`, `first_name`, `photos`) VALUES \
 (1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', 'default.png), \
 (2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', 'default.png), \
 (3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', 'default.png), \
