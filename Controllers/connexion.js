@@ -1,12 +1,12 @@
 "use strict";
 
-const express				=	require('express');
-const router				=	express.Router();
-const SQL					=	require('../Model/SQL.class.js');
-const htmlspecialchars		=	require("htmlspecialchars");
-const session				=	require("express-session");
-const bodyParser			=	require('body-parser');
-const crypto 				=	require('crypto');
+const express	=	require('express');
+const router	=	express.Router();
+const SQL =	require('../Model/SQL.class.js');
+const htmlspecialchars =	require("htmlspecialchars");
+const session	=	require("express-session");
+const bodyParser =	require('body-parser');
+const crypto 	=	require('crypto');
 
 router.get('/', (req, res, next) => {
 	res.render('connexion', { error : false });
@@ -18,7 +18,7 @@ router.post('/', (req, res, next) => {
 	if (params.login && params.passwd)
 	{
 		let sql = new SQL();
-		sql.select('id', 'user', {
+		sql.select('id', 'users', {
 			login: htmlspecialchars(params.login),
 			passwd: crypto.createHash('md5').update(htmlspecialchars(params.passwd)).digest('hex')
 		}).then(result => {

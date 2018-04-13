@@ -25,7 +25,7 @@ router.post('/', (req, res, next) => {
 		if (passwd == passwd_confirm)
 		{
 			let sql = new SQL();
-			sql.select('login', 'user', {
+			sql.select('login', 'users', {
 				login: login
 			}).then(result => {
 				if (Object.keys(result).length)
@@ -36,7 +36,7 @@ router.post('/', (req, res, next) => {
 				}
 				else
 				{
-					sql.insert('user', {
+					sql.insert('users', {
 						login: login,
 						passwd: crypto.createHash('md5').update(passwd).digest('hex'),
 						email: email,
