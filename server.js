@@ -12,6 +12,7 @@ const cookieParser 	=	require('cookie-parser');
 var session = Session({secret: 'pass', resave: true, saveUninitialized: true});
 
 const index 			=	require('./Controllers/index.js');
+const lang	 			=	require('./Controllers/lang.js');
 const signin			=	require('./Controllers/signin.js');
 const signup			=	require('./Controllers/signup.js');
 const forgot_pwd		=	require('./Controllers/forgot_pwd.js');
@@ -48,6 +49,7 @@ app.set('views', path.join(__dirname, './public/views'));
 app.set('view engine', 'ejs');
 
 app.use('/', index);
+app.use('/lang', lang);
 app.use('/signin', signin);
 app.use('/signup', signup);
 app.use('/forgot_pwd', forgot_pwd);

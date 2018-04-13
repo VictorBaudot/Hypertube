@@ -8,7 +8,6 @@ const SQL					=	require('../Model/SQL.class.js');
 
 router.get('/', (req, res, next) => {
 	res.cookie('i18n', 'fr');
-	res.setLocale(req.cookies.i18n);
 	res.render('not_connected/index', {error : false, i18n: res });
 });
 
@@ -33,7 +32,8 @@ router.post('/', (req, res, next) => {
 				if (Object.keys(result).length)
 				{
 					return (res.render('not_connected/index', {
-						error: "Votre login est deja prit :("
+						error: "Votre login est deja prit :(",
+						i18n: res
 					}));
 				}
 				else
@@ -64,13 +64,15 @@ router.post('/', (req, res, next) => {
 							else
 							{
 								return (res.render('not_connected/index', {
-									error: "Une erreur est survenu lors de votre inscription :("
+									error: "Une erreur est survenu lors de votre inscription :(",
+									i18n: res
 								}));
 							}
 						});
 					} else {
 						res.render('inscription', {
-								error: "votre mot de passe doit contenir au moins une minuscule, une majuscule, un nombre et avoir au moins une longeur de 8"
+								error: "votre mot de passe doit contenir au moins une minuscule, une majuscule, un nombre et avoir au moins une longeur de 8",
+								i18n: res
 						});
 					}
 				}
@@ -78,12 +80,14 @@ router.post('/', (req, res, next) => {
 		}
 		else
 			return (res.render('not_connected/index', {
-						error: "Vos mots de passe ne correspondent pas"
+						error: "Vos mots de passe ne correspondent pas",
+						i18n: res
 					}));
 	}
 	else
 		return (res.render('not_connected/index', {
-					error: "Veuillez remplir tous les champs !"
+					error: "Veuillez remplir tous les champs !",
+					i18n: res
 				}));
 });
 
