@@ -1,0 +1,27 @@
+<% include ./assets/header.ejs %>
+<div class="ui">
+    <form action="/forgot_pwd" method="post" class="ui form segment">
+        <div class="field">
+            <label>Pseudo</label>
+            <div class="ui left labeled icon input">
+                <input type="text" placeholder="Pseudo" name="login" required>
+                <div class="ui corner label">
+                    <i class="icon asterisk"></i>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>E-mail</label>
+            <div class="ui left labeled icon input">
+                <input type="email" placeholder="batman@arkham.city" name="email" required>
+                <div class="ui corner label">
+                    <i class="icon asterisk"></i>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="ui black submit button">
+            Reinitialiser
+        </button>
+    </form>
+</div>
+<% include ./assets/footer.ejs %>

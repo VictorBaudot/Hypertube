@@ -1,0 +1,60 @@
+.main.container{
+  margin-top: 7em;
+}
+
+.displayNotifs {
+  display:none;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  /* overflow: auto; */
+  padding-bottom: 20px;
+}
+
+footer {
+  position: relative;
+  margin-top: -20px;
+  /* negative value of footer height */
+  height: 20px;
+  clear: both;
+  text-align: center;
+  color: black;
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+#negativeMsg {
+  margin-bottom: 20px;
+  text-align:center;
+  display:none;
+}
+
+#padBot {
+  padding-bottom: 8px;
+}
+
+#cardMargin {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.pointer {
+  cursor:pointer;
+}
+
+#backimg {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#overimg {
+  position: absolute;
+  opacity: 0.5;
+  top: 0px;
+  left: 0px;
+}
