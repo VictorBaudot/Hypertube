@@ -8,8 +8,8 @@ module.exports = class Sql
 	{
 		this.sql = sql.createPool({
 			host: 'localhost',
-			user: 'finley',
-			password: 'password',
+			user: 'root',
+			password: 'root',
 			database: 'hypertube',
 			port: 3306
 		});

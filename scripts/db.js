@@ -2,8 +2,8 @@ const mysql = require('mysql')
 
 const connection = mysql.createConnection({
 	host: 'localhost',
-	user: 'finley',
-	password: 'password',
+	user: 'root',
+	password: 'root',
 	database: 'hypertube',
 	port: 3306
 });
