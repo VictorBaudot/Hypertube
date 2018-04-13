@@ -11,27 +11,21 @@
     <div class="fields">
         <div class="field">
             <label>Pseudo</label>
-            <input type="text" placeholder="login" name="login">
+            <input type="text" placeholder="<%= user.login %>" name="login">
         </div>
         <div class="field">
             <label>Prenom</label>
-            <input type="text" placeholder="prenom" name="prenom">
+            <input type="text" placeholder="<%= user.first_name %>" name="prenom">
         </div>
         <div class="field">
             <label>Nom</label>
-            <input type="text" placeholder="nom" name="nom">
+            <input type="text" placeholder="<%= user.last_name %>" name="nom">
         </div>
-    </div>
-
-
-    <div class="field">
-        <label>Bio</label>
-        <textarea rows="2" placeholder="blabla.." name="bio"></textarea>
     </div>
 
     <div class="field">
         <label>E-mail</label>
-        <input type="email" placeholder="email" name="email">
+        <input type="email" placeholder="<%= user.email %>" name="email">
     </div>
 
     <div class="fields">
@@ -45,7 +39,7 @@
         </div>
     </div>
     
-    <button type="submit" class="fluid ui black submit button" value="submit">
+    <button type="submit" class="fluid ui black submit button">
         Modifier
     </button>
 </form>
