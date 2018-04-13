@@ -10,7 +10,9 @@ connection.query("CREATE TABLE `users` ( \
   `psswd` varchar(255) NOT NULL, \
   `last_name` varchar(255) DEFAULT NULL, \
   `first_name` varchar(255) NOT NULL, \
-  `photos` longtext DEFAULT NULL, \
+  `photo` longtext DEFAULT NULL, \
+  `token` TEXT NULL, \
+  `email_confirmed` binary(1) not null default '0',\
   PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)

@@ -1,16 +1,27 @@
 "use strict";
 
-const express				=	require('express');
-const router				=	express.Router();
-const htmlspecialchars		=	require("htmlspecialchars");
-const crypto 				=	require('crypto');
-const SQL					=	require('../Model/SQL.class.js');
+const express	=	require('express');
+const router = express.Router();
 
-router.get('/', (req, res, next) => {
-	res.render('not_connected/index', {error : false });
-});
+module.exports = (passport) => {
+	router.post('/', checkCredentials, passport.authenticate('local-signup', {
+		successRedirect : '/', // redirect to the secure profile section
+		failureRedirect : '/', // redirect back to the signup page if there is an error
+		failureFlash : true, // allow flash messages
+		session: false // prevent auto-login
+	}));
+	return router;
+}
 
-router.post('/', (req, res, next) => {
+function checkCredentials(req, res, next) {
+	console.log(req.body)
+	let {login, first_name, last_name, email, password, psswd_confirm} = req.body
+	if (login && first_name && last_name && email && password && psswd_confirm) return next();
+
+	req.flashAdd('tabError', 'Tous les champs ne sont pas remplis.');
+	res.redirect('/');
+}
+/*(req, res, next) => {
 	let params = req.body;
 
 	if (params.login && params.psswd && params.psswd_confirm && params.email && params.first_name && params.last_name)
@@ -83,6 +94,4 @@ router.post('/', (req, res, next) => {
 		return (res.render('not_connected/index', {
 					error: "Veuillez remplir tous les champs !"
 				}));
-});
-
-module.exports = router;
+});*/
