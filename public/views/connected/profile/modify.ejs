@@ -1,0 +1,51 @@
+<form onkeypress="return event.keyCode != 13;" action="/modify_profile" method="post" enctype="multipart/form-data" class="ui equal width form">
+    <div class="fields">
+        <div class="field">
+            <label for="pp" class="ui icon button">
+                <p><i class="cloud icon"></i> Photo de profil</p>
+            </label>
+            <input type="file" id="pp" name="pp" hidden>
+        </div>
+    </div>
+    
+    <div class="fields">
+        <div class="field">
+            <label>Pseudo</label>
+            <input type="text" placeholder="login" name="login">
+        </div>
+        <div class="field">
+            <label>Prenom</label>
+            <input type="text" placeholder="prenom" name="prenom">
+        </div>
+        <div class="field">
+            <label>Nom</label>
+            <input type="text" placeholder="nom" name="nom">
+        </div>
+    </div>
+
+
+    <div class="field">
+        <label>Bio</label>
+        <textarea rows="2" placeholder="blabla.." name="bio"></textarea>
+    </div>
+
+    <div class="field">
+        <label>E-mail</label>
+        <input type="email" placeholder="email" name="email">
+    </div>
+
+    <div class="fields">
+        <div class="field">
+            <label>Nouveau mot de passe</label>
+            <input type="password" placeholder="Mot de passe" name="psswd">
+        </div>
+        <div class="field">
+            <label>Confirmation</label>
+            <input type="password" placeholder="Mot de passe" name="psswd_confirm">
+        </div>
+    </div>
+    
+    <button type="submit" class="fluid ui black submit button" value="submit">
+        Modifier
+    </button>
+</form>

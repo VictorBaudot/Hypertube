@@ -24,6 +24,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "htmlspecialchars": "^1.0.5",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "semantic-ui": "^2.3.1"
   }
 }

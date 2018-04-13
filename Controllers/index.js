@@ -6,9 +6,9 @@ const session				=	require("express-session");
 
 router.get('/', (req, res, next) => {
 	if (req.session && req.session.id_user)
-		return (res.render('index'))
+		return (res.render('connected/index', {title: 'Accueil'} ))
 	else
-		return (res.redirect('/connexion'));
+		return (res.render("connected/index", {title: 'Accueil'} ));
 });
 
 module.exports = router;

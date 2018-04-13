@@ -1,0 +1,19 @@
+<% include ../assets/header %>
+<div class="ui container">
+    <div class="ui fluid two item black secondary pointing menu">
+        <a class="item active" data-tab="first">Profil</a>
+        <a class="item" data-tab="second">Modifier</a>
+    </div>
+
+    <div class="ui tab active" data-tab="first">
+        <% include public %>
+    </div>
+
+    <div class="ui tab" data-tab="second">
+        <% include modify %>
+    </div>
+</div>
+<script>
+$('.menu .item').tab();
+</script>
+<% include ../assets/footer %>

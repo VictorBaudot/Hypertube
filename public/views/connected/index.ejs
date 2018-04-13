@@ -1,0 +1,249 @@
+<% include ./assets/header.ejs %>
+
+<div class="ui main container" style="margin-top: 3em;">
+    <div class="ui styled fluid accordion">
+        <div class="title" style="background-color:#000000; text-align:center;">
+            <i class="dropdown icon" style="color:#fff"></i>
+            <span style="color:#fff">Filtrer et / ou trier les profils</span>
+        </div>
+        <div class="content">
+            <p class="transition hidden">   
+                    <form onkeypress="return event.keyCode != 13;" action="/filter" method="POST" class="ui form">
+                        <div class="ui two column middle aligned very relaxed stackable grid">
+                            <div class="column">
+                        <div class="field">
+                            <span class="range-values">
+                                <input id="note-lower0" name="noteL" type="hidden" value="">
+                                <input id="note-upper0" name="noteU" type="hidden" value="">
+                                <span id="note-lower">3</span>
+                                <span>-</span>
+                                <span id="note-upper">5</span>
+                            </span>
+                            <label>Note</label>
+                            <div id="noteRange"></div>
+                        </div>
+                        <div class="field">
+                            <span class="range-values">
+                                <input id="year-lower0"  name="yearL" type="hidden" value="">
+                                <input id="year-upper0"  name="yearU" type="hidden" value="">
+                                <span id="year-lower">1900</span>
+                                <span>-</span>
+                                <span id="year-upper">1980</span>
+                            </span>
+                            <label>Annee de production</label>
+                            <div id="yearRange"></div>
+                        </div>
+                        <div class="field">
+                            <label>Videos visionnees</label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="etat" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Peu importe</div>
+                                <div class="menu">
+                                    <div class="item" data-value="yes">Oui</div>
+                                    <div class="item" data-value="no">Non</div>
+                                    <div class="item" data-value="all">Peu importe</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Genres</label>
+                            <div class="ui fluid multiple search selection dropdown">
+                                <input name="interests" type="hidden" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Genre</div>
+                                <div class="menu">
+                                    <div class="item" data-value="action">Action</div>
+                                    <div class="item" data-value="horror">Horror</div>
+                                    <div class="item" data-value="fantastic">Fantastic</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <button type="submit" class="ui fluid labeled black icon centered submit button">
+                                <i class="filter icon"></i>
+                                <span class="text">Filtrer</span>
+                            </button>
+                        </div>
+                </div>
+                <div class="column">
+                        <div class="field">
+                            <label>Trier par</label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="sortType" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Aucun</div>
+                                <div class="menu">
+                                    <div class="item" data-value="nom">Nom</div>
+                                    <div class="item" data-value="note">Note</div>
+                                    <div class="item" data-value="year">Annee de production</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Ordre</label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="sortOrder" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Aucun</div>
+                                <div class="menu">
+                                    <div class="item" data-value="asc">Croissant</div>
+                                    <div class="item" data-value="desc">Decroissant</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="field">
+                                <button type="submit" class="ui fluid labeled black icon centered submit button">
+                                    <i class="filter icon"></i>
+                                    <span class="text">Trier</span>
+                                </button>
+                            </div>
+                        </div>
+                </div>
+            </form>
+            </div>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="ui main container" style="margin-top: 3em;"></div>
+<div class="ui match-feed link centered cards">
+        <a id="cardMargin" class="ui black card" href="/video/default">
+            <div class="ui image">
+                 <span id="seen" class="ui black right ribbon label" style="z-index:99">Vue</span>
+                <img src="/pics/video_default.png">
+            </div>
+            <div class="content">
+                <div class="header">V For Vendetta <span style="font-weight:normal;">, 1897</span></div>
+                <div class="meta">
+                    <span class="date">
+                        23 000 Telechargements
+                    </span>
+                </div>
+                <div class="description">
+                    Bla bla... description
+                </div>
+            </div>
+            <div class="extra content">
+                    4.7
+                <span class="right floated">
+                    #Thriller
+                </span>
+            </div>
+        </a>
+        <a id="cardMargin" class="ui black card" href="/video/default">
+            <div class="ui image">
+                 <span id="seen" class="ui black right ribbon label" style="z-index:99">Vue</span>
+                <img src="/pics/video_default.png">
+            </div>
+            <div class="content">
+                <div class="header">V For Vendetta <span style="font-weight:normal;">, 1897</span></div>
+                <div class="meta">
+                    <span class="date">
+                        23 000 Telechargements
+                    </span>
+                </div>
+                <div class="description">
+                    Bla bla... description
+                </div>
+            </div>
+            <div class="extra content">
+                    4.7
+                <span class="right floated">
+                    #Thriller
+                </span>
+            </div>
+        </a>
+        <a id="cardMargin" class="ui black card" href="/video/default">
+            <div class="ui image">
+                 <span id="seen" class="ui black right ribbon label" style="z-index:99">Vue</span>
+                <img src="/pics/video_default.png">
+            </div>
+            <div class="content">
+                <div class="header">V For Vendetta <span style="font-weight:normal;">, 1897</span></div>
+                <div class="meta">
+                    <span class="date">
+                        23 000 Telechargements
+                    </span>
+                </div>
+                <div class="description">
+                    Bla bla... description
+                </div>
+            </div>
+            <div class="extra content">
+                    4.7
+                <span class="right floated">
+                    #Thriller
+                </span>
+            </div>
+        </a>
+    
+</div>
+<script>
+    $('.ui.accordion').accordion();
+    $('.ui.dropdown').dropdown();
+    $('.ui.multiple.search.dropdown').dropdown({allowAdditions: true});
+    
+
+    var yearRange = document.getElementById('yearRange');
+    var noteRange = document.getElementById('noteRange');
+
+    noUiSlider.create(yearRange, {
+        start: [1900, 1980],
+        connect: true,
+        margin: 1,
+        step: 1,
+        tooltips: true,
+        behaviour: 'tap-drag',
+        range: {
+            'min': 1800,
+            'max': 2018
+        }
+    });
+
+    noUiSlider.create(noteRange, {
+        start: [3, 5],
+        connect: true,
+        margin: 1,
+        step: 0.1,
+        tooltips: [ true, true ],
+        behaviour: 'tap-drag',
+        range: {
+            'min': 0,
+            'max': 5
+        }
+    });
+
+    var yearValues0 = [
+        document.getElementById('year-lower0'),
+        document.getElementById('year-upper0')
+    ];
+
+    var yearValues = [
+        document.getElementById('year-lower'),
+        document.getElementById('year-upper')
+    ];
+
+    var noteValues0 = [
+        document.getElementById('note-lower0'),
+        document.getElementById('note-upper0')
+    ];
+
+    var noteValues = [
+        document.getElementById('note-lower'),
+        document.getElementById('note-upper')
+    ];
+
+    yearRange.noUiSlider.on('update', function( values, handle ) {
+        yearValues0[handle].value = values[handle];
+        yearValues[handle].innerHTML = Math.round(values[handle]);
+    });
+    noteRange.noUiSlider.on('update', function( values, handle ) {
+        noteValues0[handle].value = values[handle];
+        noteValues[handle].innerHTML = Math.round(values[handle]);
+    });
+</script>
+
+<% include ./assets/footer.ejs %>
