@@ -18,8 +18,8 @@ const profile	=	require('./Controllers/profile.js');
 const modify_profile	=	require('./Controllers/modify_profile.js');
 const logout	=	require('./Controllers/logout.js');
 
-const port = 8080;
-const hostname = '127.0.0.1';
+// const port = 8080;
+// const hostname = '127.0.0.1';
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
@@ -40,6 +40,8 @@ app.use('/modify_profile', modify_profile);
 app.use('/profile', profile);
 app.use('/logout', logout);
 
-app.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}/`);
-});
+
+http.createServer(app).listen(3001);
+// app.listen(port, hostname, () => {
+// 	console.log(`Server running at http://${hostname}:${port}/`);
+// });

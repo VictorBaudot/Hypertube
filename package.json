@@ -25,6 +25,7 @@
     "express-session": "^1.15.6",
     "htmlspecialchars": "^1.0.5",
     "mysql": "^2.15.0",
-    "semantic-ui": "^2.3.1"
+    "semantic-ui": "^2.3.1",
+    "nodemon": "^1.17.3"
   }
 }
