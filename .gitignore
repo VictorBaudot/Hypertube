@@ -2,3 +2,4 @@ node_modules
 *.log
 db
 .idea
+package-lock.json
