@@ -18,7 +18,7 @@ module.exports = (passport) => {
 }
 
 function checkCredentials(req, res, next) {
-	console.log(req.body)
+	// console.log(req.body)
 	if (req.body.login && req.body.password) return next();
 
 	req.flashAdd('tabError', 'Login / Mot de passe invalides');
