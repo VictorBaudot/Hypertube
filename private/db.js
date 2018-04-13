@@ -1,35 +1,33 @@
 const sql	=	require('mysql');
 
-sql.createPool({
+let connect = sql.createPool({
 	host: 'localhost',
-	user: 'root',
-	password: 'Beauvois41',
+	user: 'finley',
+	password: 'password',
 	database: 'hypertube',
 	port: 3306
 });
 
-// Structure de la table `users`
+// CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
+// GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost' WITH GRANT OPTION;
+// CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
+// GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%' WITH GRANT OPTION;
+// CREATE DATABASE 'hypertube';
 
-sql.query("DROP TABLE IF EXISTS users;", (err, result, fields) => {
-	if (err) throw err;
-	resolve(result);
-});
+connect.query("DROP TABLE IF EXISTS users;");
 
-sql.query("CREATE TABLE `users` ( \
+connect.query("CREATE TABLE `users` ( \
   `id` int(11) NOT NULL AUTO_INCREMENT, \
   `mail` varchar(255) NOT NULL, \
   `login` varchar(255) DEFAULT NULL, \
-  `password` varchar(255) NOT NULL, \
+  `passwd` varchar(255) NOT NULL, \
   `last_name` varchar(255) DEFAULT NULL, \
   `first_name` varchar(255) NOT NULL, \
   `photos` longtext DEFAULT NULL, \
   PRIMARY KEY (`id`) \
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err, result, fields) => {
-	if (err) throw err;
-	resolve(result);
-});
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
-sql.query("INSERT INTO `users` (`id`, `mail`, `login`, `password`, `last_name`, `first_name`, `photos`) VALUES \
+connect.query("INSERT INTO `users` (`id`, `mail`, `login`, `passwd`, `last_name`, `first_name`, `photos`) VALUES \
 (1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', 'default.png), \
 (2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', 'default.png), \
 (3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', 'default.png), \
@@ -39,9 +37,6 @@ sql.query("INSERT INTO `users` (`id`, `mail`, `login`, `password`, `last_name`, 
 (7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', 'default.png), \
 (16, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', 'default.png), \
 (17, 'dorian.jeannin77340@gmail.com ', 'dodo', 'pwd', 'Jeannin', 'jimem', 'default.png), \
-(18, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', 'default.png);", (err, result, fields) => {
-	if (err) throw err;
-	resolve(result);
-});
+(18, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', 'default.png);");
 
-sql.end();
+connect.end();
