@@ -82,18 +82,14 @@ module.exports = (passport) => {
                 html: msghtml // html body
             };
         
-            // send mail with defined transport object
             transporter.sendMail(mailOptions, (err, info) => {
                 if (err) {
                 console.log('Error occurred. ' + err.message);
                 return process.exit(1);
                 }
                 console.log('Message sent: %s', info.messageId);
-                // Preview only available when sending through an Ethereal account
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
                 end()
-                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-                // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
             });
         });
         }
@@ -133,7 +129,7 @@ function isSignUpValid (req, login, password, rows) {
     const last_nameRegex = new RegExp("^[a-zA-Z_]{3,16}$");
     const loginRegex = new RegExp("^[a-zA-Z0-9_]{3,16}$");
     let result = true;
-    console.log(rows)
+    
     if (rows.length) {
         req.flashAdd('tabError', 'Ce pseudo/email est deja pris')
         result = false

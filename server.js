@@ -18,6 +18,7 @@ const profile	=	require('./Controllers/profile.js');
 const modify_profile	=	require('./Controllers/modify_profile.js');
 const logout	=	require('./Controllers/logout.js');
 const confirm	=	require('./Controllers/confirm.js');
+const user	=	require('./Controllers/user.js');
 
 // const port = 8080;
 // const hostname = '127.0.0.1';
@@ -40,17 +41,22 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
-app.use('/', index);
+app.use('/', index(passport));
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
 app.use('/confirm', confirm);
 app.use('/forgot_pwd', forgot_pwd);
-app.use('/modify_profile', modify_profile);
-app.use('/profile', profile);
-app.use('/logout', logout);
-
+app.use('/modify_profile', isLoggedIn, modify_profile);
+app.use('/profile', isLoggedIn, profile(passport));
+app.use('/user', isLoggedIn, user(passport));
+app.use('/logout', isLoggedIn, logout);
 
 http.createServer(app).listen(3001);
 // app.listen(port, hostname, () => {
 // 	console.log(`Server running at http://${hostname}:${port}/`);
 // });
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
+}

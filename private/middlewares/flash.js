@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
     }
 
     req.flashAdd = function (type, content) {
-        console.log(type +' --- '+content)
+        // console.log(type +' --- '+content)
         if (req.session.flash === undefined)
             req.session.flash = {}
         if (req.session.flash[type] === undefined)
