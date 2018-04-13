@@ -13,16 +13,16 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
 	let params = req.body;
 
-	if (params.login && params.psswd && params.psswd_confirm && params.email && params.first_name && params.last_name)
+	if (params.login && params.passwd && params.passwd_confirm && params.email && params.first_name && params.last_name)
 	{
 		let login = htmlspecialchars(params.login);
-		let psswd = htmlspecialchars(params.psswd);
-		let psswd_confirm = htmlspecialchars(params.psswd_confirm);
+		let passwd = htmlspecialchars(params.passwd);
+		let passwd_confirm = htmlspecialchars(params.passwd_confirm);
 		let email = htmlspecialchars(params.email);
 		let	first_name = htmlspecialchars(params.first_name);
 		let	last_name = htmlspecialchars(params.last_name);
 
-		if (psswd == psswd_confirm)
+		if (passwd == passwd_confirm)
 		{
 			let sql = new SQL();
 			sql.select('login', 'user', {
@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
 				{
 					sql.insert('user', {
 						login: login,
-						psswd: crypto.createHash('md5').update(psswd).digest('hex'),
+						passwd: crypto.createHash('md5').update(passwd).digest('hex'),
 						email: email,
 						first_name: first_name,
 						last_name: last_name
