@@ -7,7 +7,9 @@ const crypto 				=	require('crypto');
 const SQL					=	require('../Model/SQL.class.js');
 
 router.get('/', (req, res, next) => {
-	res.render('not_connected/index', {error : false });
+	res.cookie('i18n', 'fr');
+	res.setLocale(req.cookies.i18n);
+	res.render('not_connected/index', {error : false, i18n: res });
 });
 
 router.post('/', (req, res, next) => {
