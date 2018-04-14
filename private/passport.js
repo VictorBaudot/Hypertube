@@ -27,10 +27,10 @@ module.exports = (passport) => {
         passwordField: 'password',
         passReqToCallback: true
     }, (req, login, password, done) => {
-        console.log('Check')
-        console.log('Body')
-        console.log(req.body)
-        console.log(req.files)
+        let photo;
+        if (Object.keys(req.file).length !== 0) {
+            photo = 'pics/'+req.file.filename;
+        } else photo = '/pics/default.jpg';
         connection.query("SELECT * FROM users WHERE login = ? OR email = ?",[login, req.body.email], (err, rows) => {
             if (err) return done(err);
             if (!isSignUpValid(req, login, password, rows)) return done(null, false);
