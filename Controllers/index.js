@@ -2,13 +2,10 @@
 
 const express				=	require('express');
 const router				=	express.Router();
-const session				=	require("express-session");
 
 router.get('/', (req, res, next) => {
-	if (req.session && req.session.id_user)
-		return (res.render('index'))
-	else
-		return (res.redirect('/connexion'));
+	if (req.isAuthenticated()) {
+		res.render("connected/index", {title: 'Accueil'})
+	} else res.render("not_connected/index", { i18n: res })
 });
-
 module.exports = router;
