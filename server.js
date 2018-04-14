@@ -53,15 +53,15 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
-app.use('/', index(passport));
+app.use('/', index);
 app.use('/lang', lang);
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
 app.use('/confirm', confirm);
 app.use('/forgot_pwd', forgot_pwd);
 app.use('/modify_profile', isLoggedIn, modify_profile);
-app.use('/profile', isLoggedIn, profile(passport));
-app.use('/user', isLoggedIn, user(passport));
+app.use('/profile', isLoggedIn, profile);
+app.use('/user', isLoggedIn, user);
 app.use('/logout', isLoggedIn, logout);
 
 http.createServer(app).listen(3001);
