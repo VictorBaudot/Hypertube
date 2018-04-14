@@ -1,5 +1,11 @@
 <div class="ui black centered huge header">Inscription</div>
-<form action="/signup" method="post" class="ui equal width form" accept-charset="utf-8">
+<form action="/signup" method="post" class="ui equal width form" enctype="multipart/form-data" accept-charset="utf-8">
+		<div class="field">
+			<label for="photo" class="ui icon button">
+					<p><i class="cloud icon"></i> Photo de profil</p>
+			</label>
+			<input type="file" id="photo" name="photo" hidden>
+		</div>
 		<div class="fields">
 				<div class="field required">
 						<label>Login</label>

@@ -27,9 +27,16 @@
                     <a href="/logout" class="header item"><i class="power off large icon"></i></a>
                 </div>
                 <div class="ui main container">
-                <% let error;
-                    if (error) { %>
+                <% if (locals.flash && locals.flash.tabError) {
+                    for (id in locals.flash.tabError) { %>
                     <div class="ui negative message">
-                        <%= error %>
+                        <%= locals.flash.tabError[id] %>
                     </div>
-                <% } %>
+                    <% }
+                } else if (locals.flash && locals.flash.tabSuccess) {
+                    for (id in locals.flash.tabSuccess) { %>
+                <div class="ui positive message">
+                    <%= locals.flash.tabSuccess[id] %>
+                </div>
+                <% }
+                } %>

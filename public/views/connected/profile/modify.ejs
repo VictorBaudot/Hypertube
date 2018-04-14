@@ -1,11 +1,9 @@
 <form onkeypress="return event.keyCode != 13;" action="/modify_profile" method="post" enctype="multipart/form-data" class="ui equal width form">
-    <div class="fields">
-        <div class="field">
-            <label for="pp" class="ui icon button">
-                <p><i class="cloud icon"></i> Photo de profil</p>
-            </label>
-            <input type="file" id="pp" name="pp" hidden>
-        </div>
+    <div class="field">
+        <label for="photo" class="ui icon button">
+            <p><i class="cloud icon"></i> Photo de profil</p>
+        </label>
+        <input type="file" id="photo" name="photo" hidden>
     </div>
     
     <div class="fields">
@@ -15,11 +13,11 @@
         </div>
         <div class="field">
             <label>Prenom</label>
-            <input type="text" placeholder="<%= user.first_name %>" name="prenom">
+            <input type="text" placeholder="<%= user.first_name %>" name="first_name">
         </div>
         <div class="field">
             <label>Nom</label>
-            <input type="text" placeholder="<%= user.last_name %>" name="nom">
+            <input type="text" placeholder="<%= user.last_name %>" name="last_name">
         </div>
     </div>
 
