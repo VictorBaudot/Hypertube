@@ -69,10 +69,10 @@ module.exports = class Sql
  //   console.log(cols)
 
     let request = `UPDATE ${table} SET ${cols} WHERE ${idcol} = ?`;
-    console.log(request)
+    // console.log(request)
 		let params = keys.map(k => values[k]).concat(id);
 		
-		console.log(params)
+		// console.log(params)
 
 		return (new Promise((resolve, reject) => {
 			this.sql.query(request, params, (err, result, fields) => {
