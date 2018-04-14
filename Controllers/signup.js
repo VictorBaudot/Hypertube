@@ -5,7 +5,6 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
-module.exports = (passport) => {
 const storage = multer.diskStorage({
 	destination: './public/pics/',
 	filename: (req, file, cb) => {
@@ -21,6 +20,7 @@ const upload = multer({
 	}
 }).fields([{name: 'photo'}]);
 
+module.exports = (passport) => {
 	router.post('/', checkCredentials, addphoto, passport.authenticate('local-signup', {
 		successRedirect : '/', // redirect to the secure profile section
 		failureRedirect : '/', // redirect back to the signup page if there is an error
