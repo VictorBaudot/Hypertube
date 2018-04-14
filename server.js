@@ -13,6 +13,7 @@ require('./private/passport')(passport)
 
 const index 			=	require('./Controllers/index.js');
 const lang	 			=	require('./Controllers/lang.js');
+const auth	=	require('./Controllers/auth.js');
 const signin			=	require('./Controllers/signin.js');
 const signup			=	require('./Controllers/signup.js');
 const forgot_pwd		=	require('./Controllers/forgot_pwd.js');
@@ -54,6 +55,7 @@ app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
 app.use('/lang', lang);
+app.use('/auth', auth(passport))
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
 app.use('/confirm', confirm);

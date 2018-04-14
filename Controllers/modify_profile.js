@@ -41,7 +41,7 @@ function modify_pics(req, res, cb) {
       //console.log(JSON.stringify(o, null, 4));
   if (Object.keys(req.files).length !== 0) {
     // console.log("File: ")
-    console.log(req.files['photo'][0].filename)
+    // console.log(req.files['photo'][0].filename)
     let photo = 'pics/'+req.files['photo'][0].filename
     let sql = new SQL();
     sql.update('users', 'id', id, {photo: photo}).then(result => {

@@ -31,7 +31,10 @@
     "nodemailer": "^4.6.4",
     "nodemon": "^1.17.3",
     "passport": "^0.4.0",
+    "passport-42": "^1.2.4",
+    "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
     "semantic-ui": "^2.3.1"
   }
