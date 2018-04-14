@@ -1,7 +1,7 @@
-const LocalStrategy = require('passport-local').Strategy
-const nodemailer = require('nodemailer')
+const LocalStrategy = require('passport-local').Strategy;
+const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
-const connection = require('./../scripts/db')
+const connection = require('./../scripts/db');
 
 module.exports = (passport) => {
 
@@ -20,6 +20,7 @@ module.exports = (passport) => {
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
+    // Set The Storage Engine
     
     passport.use('local-signup', new LocalStrategy({
         usernameField: 'login',
@@ -27,9 +28,9 @@ module.exports = (passport) => {
         passReqToCallback: true
     }, (req, login, password, done) => {
         console.log('Check')
-        let end = () => {
-            return done(null, null, req.flashAdd('tabSuccess', 'Bravo, finalisez votre compte en cliquant sur le lien que vous venez de recevoir par email!'));
-        }
+        console.log('Body')
+        console.log(req.body)
+        console.log(req.files)
         connection.query("SELECT * FROM users WHERE login = ? OR email = ?",[login, req.body.email], (err, rows) => {
             if (err) return done(err);
             if (!isSignUpValid(req, login, password, rows)) return done(null, false);
@@ -39,7 +40,7 @@ module.exports = (passport) => {
                     password: bcrypt.hashSync(password, bcrypt.genSaltSync(9)),
                     first_name: capitalizeFirstLetter(req.body.first_name),
                     last_name: capitalizeFirstLetter(req.body.last_name),
-                    photo: '/pics/default.jpg',
+                    photo,
                     email: req.body.email,
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
@@ -89,7 +90,7 @@ module.exports = (passport) => {
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                end()
+                return done(null, null, req.flashAdd('tabSuccess', 'Bravo, finalisez votre compte en cliquant sur le lien que vous venez de recevoir par email!'));
             });
         });
         }
@@ -126,10 +127,10 @@ module.exports = (passport) => {
 function isSignUpValid (req, login, password, rows) {
     const pwdRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,20})");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const last_nameRegex = new RegExp("^[a-zA-Z_]{3,16}$");
+    const nameRegex = new RegExp("^[a-zA-Z_]{3,16}$");
     const loginRegex = new RegExp("^[a-zA-Z0-9_]{3,16}$");
     let result = true;
-    
+
     if (rows.length) {
         req.flashAdd('tabError', 'Ce pseudo/email est deja pris')
         result = false
@@ -138,11 +139,11 @@ function isSignUpValid (req, login, password, rows) {
         req.flashAdd('tabError', 'Pseudo: format incorrect')
         result = false
     }
-    if (!last_nameRegex.test(req.body.first_name)) {
+    if (!nameRegex.test(req.body.first_name)) {
         req.flashAdd('tabError', 'first_name: format incorrect')
         result = false
     }
-    if (!last_nameRegex.test(req.body.last_name)) {
+    if (!nameRegex.test(req.body.last_name)) {
         req.flashAdd('tabError', 'last_name: format incorrect')
         result = false
     }
@@ -158,7 +159,7 @@ function isSignUpValid (req, login, password, rows) {
         req.flashAdd('tabError', 'Syntaxe de l\'email invalide');
         result = false
     }
-    if (!isLengthOkay('Pseudo', login, req) || !isLengthOkay('first_name', req.body.first_name, req) || !isLengthOkay('last_name', req.body.last_name, req))
+    if (!isLengthOkay('login', login, req) || !isLengthOkay('first_name', req.body.first_name, req) || !isLengthOkay('last_name', req.body.last_name, req))
         result = false
     return result
 }
