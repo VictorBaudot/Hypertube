@@ -4,7 +4,6 @@ const app			=	express();
 const http			=	require('http');
 const path			=	require('path');
 const bodyParser	=	require('body-parser');
-const busboyBodyParser = require("busboy-body-parser")
 const passport = require('passport');
 const database		=	require('./Model/SQL.class.js');
 const session       =	require('express-session');
@@ -35,7 +34,6 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-app.use(busboyBodyParser());
 i18n.configure({
 	locales:['en', 'fr'],
 	directory: __dirname + '/locales',
