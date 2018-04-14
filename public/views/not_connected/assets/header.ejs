@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Hypertube</title>
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/semantic/dist/semantic.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="icon" type="image/png" href="/favicon.png">
+        <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+        <script src="/semantic/dist/semantic.min.js"></script>
+    </head>
+    <body>
+
+        <div id="wrap">
+            <div id="main">
+                <div class="ui large inverted black one item pointing menu" style="border-radius:0;">
+                    <a href="/" class="header item active">Hypertube</a>
+                </div>
+                <div class="ui main container">
+                <% if (locals.flash && locals.flash.tabError) {
+                    for (id in locals.flash.tabError) { %>
+                    <div class="ui negative message">
+                        <%= locals.flash.tabError[id] %>
+                    </div>
+                    <% }
+                } else if (locals.flash && locals.flash.tabSuccess) {
+                    for (id in locals.flash.tabSuccess) { %>
+                <div class="ui positive message">
+                    <%= locals.flash.tabSuccess[id] %>
+                </div>
+                <% }
+                } %>

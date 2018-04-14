@@ -1,0 +1,26 @@
+<div class="ui black centered huge header"><%= i18n.__("Connection") %></div>
+<form action="/signin" method="post" class="ui form" accept-charset="utf-8">
+		<div class="field">
+				<label>Votre login</label>
+				<div class="ui icon labeled input">
+						<input type="text" placeholder="Votre login" name="login" autofocus required>
+						<div class="ui corner label">
+								<i class="icon asterisk"></i>
+						</div>
+				</div>
+		</div>
+		<div class="field">
+				<label>Votre mot de passe</label>
+				<div class="ui labeled icon input">
+						<input type="password" placeholder="Votre mot de passe" name="password" required>
+						<div class="ui corner label">
+								<i class="icon asterisk"></i>
+						</div>
+				</div>
+		</div>
+
+		<button type="submit" class="ui fluid black submit button">
+				Se connecter
+		</button>
+		<p><a href="/forgot_pwd" class="ui black">*J'ai oublie mon mot de passe</a></p>
+</form>

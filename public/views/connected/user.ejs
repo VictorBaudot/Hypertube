@@ -1,0 +1,16 @@
+<% include ./assets/header %>
+<div class="ui teal centered card" style="margin-top:30px;">
+    <div class="ui image">
+        <img src="<%= user.photo %>">
+    </div>
+    <div class="content">
+        <div class="header"><%= user.first_name %> <%= user.last_name %></div>
+        <div class="meta">
+            <span class="date">
+                <%= user.login %>
+            </span>
+        </div>
+    </div>
+</div>
+
+<% include ./assets/footer %>
