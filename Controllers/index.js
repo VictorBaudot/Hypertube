@@ -7,14 +7,14 @@ const connection = require('../private/db')
 router.get('/', (req, res, next) => {
 	if (req.isAuthenticated()) {
 		let genres = [], directors = [], actors = [], videos = [];
-		
+
 		function display() {
 			console.log('Display')
 			// console.log(videos)
 			// videos.forEach(video => {
 			// 	console.log(video.genres)
 			// })
-			res.render("connected/index", { title: 'Accueil', videos })
+			res.render("connected/index", { title: 'Accueil', videos, i18n: res })
 		}
 
 		function addVideosInfos() {
