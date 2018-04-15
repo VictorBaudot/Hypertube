@@ -4,7 +4,7 @@ const express	=	require('express');
 const router	=	express.Router();
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
-const connection = require('./../scripts/db');
+const connection = require('./../private/db');
 
 router.get('/', (req, res, next) => {
 	res.render('not_connected/forgot_pwd', { error : false });
