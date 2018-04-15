@@ -13,19 +13,19 @@
                         <div class="column">
                             <div class="field">
                                 <span class="range-values">
-                                    <input id="note-lower0" name="noteL" type="hidden" value="">
-                                    <input id="note-upper0" name="noteU" type="hidden" value="">
-                                    <span id="note-lower">3</span>
+                                    <input id="score-lower0" name="scoreL" type="hidden" value="<%= filters.score.l %>">
+                                    <input id="score-upper0" name="scoreU" type="hidden" value="<%= filters.score.u %>">
+                                    <span id="score-lower">3</span>
                                     <span>-</span>
-                                    <span id="note-upper">5</span>
+                                    <span id="score-upper">5</span>
                                 </span>
-                                <label><%= i18n.__("Note") %></label>
-                                <div id="noteRange"></div>
+                                <label><%= i18n.__("Score") %></label>
+                                <div id="scoreRange"></div>
                             </div>
                             <div class="field">
                                 <span class="range-values">
-                                    <input id="year-lower0"  name="yearL" type="hidden" value="">
-                                    <input id="year-upper0"  name="yearU" type="hidden" value="">
+                                    <input id="year-lower0"  name="yearL" type="hidden" value="<%= filters.year.l %>">
+                                    <input id="year-upper0"  name="yearU" type="hidden" value="<%= filters.year.u %>">
                                     <span id="year-lower">1900</span>
                                     <span>-</span>
                                     <span id="year-upper">1980</span>
@@ -36,26 +36,52 @@
                             <div class="field">
                                 <label><%= i18n.__("Videos viewed") %></label>
                                 <div class="ui selection dropdown">
-                                    <input type="hidden" name="etat" value="">
+                                    <input type="hidden" name="videos_viewed" value="<%= filters.videos_viewed %>">
                                     <i class="dropdown icon"></i>
-                                    <div class="default text"><%= i18n.__("Whatever") %></div>
+                                    <div class="default text"><%= i18n.__("None") %></div>
                                     <div class="menu">
-                                        <div class="item" data-value="yes"><%= i18n.__("Yes") %></div>
-                                        <div class="item" data-value="no"><%= i18n.__("No") %></div>
+                                        <div class="item" data-value="Y"><%= i18n.__("Yes") %></div>
+                                        <div class="item" data-value="N"><%= i18n.__("No") %></div>
                                         <div class="item" data-value="all"><%= i18n.__("Whatever") %></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="field">
-                                <label><%= i18n.__("Genre") %></label>
+                                <label><%= i18n.__("Genres") %></label>
                                 <div class="ui fluid multiple search selection dropdown">
-                                    <input name="interests" type="hidden" value="">
+                                    <input name="filterGenres" type="hidden" value="<%= filters.genres.join(',') %>">
                                     <i class="dropdown icon"></i>
-                                    <div class="default text"><%= i18n.__("Genre") %></div>
+                                    <div class="default text"><%= i18n.__("Genres") %></div>
                                     <div class="menu">
-                                        <div class="item" data-value="action"><%= i18n.__("Action") %></div>
-                                        <div class="item" data-value="horror"><%= i18n.__("Horror") %></div>
-                                        <div class="item" data-value="fantastic"><%= i18n.__("Fantastic") %></div>
+                                        <% for (genre of genres) { %>
+                                            <div class="item" data-value="<%= genre.genre %>"><%= i18n.__(genre.genre) %></div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label><%= i18n.__("Directors") %></label>
+                                <div class="ui fluid multiple search selection dropdown">
+                                    <input name="filterDirectors" type="hidden" value="<%= filters.directors.join(',') %>">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text"><%= i18n.__("Directors") %></div>
+                                    <div class="menu">
+                                        <% for (director of directors) { %>
+                                            <div class="item" data-value="<%= director.director %>"><%= director.director %></div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label><%= i18n.__("Actors") %></label>
+                                <div class="ui fluid multiple search selection dropdown">
+                                    <input name="filterActors" type="hidden" value="<%= filters.actors.join(',') %>">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text"><%= i18n.__("Actors") %></div>
+                                    <div class="menu">
+                                        <% for (actor of actors) { %>
+                                            <div class="item" data-value="<%= actor.actor %>"><%= actor.actor %></div>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -70,12 +96,12 @@
                             <div class="field">
                                 <label><%= i18n.__("Sort by") %></label>
                                 <div class="ui selection dropdown">
-                                    <input type="hidden" name="sortType" value="">
+                                    <input type="hidden" name="sortType" value="<%= filters.sortType %>">
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("None") %></div>
                                     <div class="menu">
-                                        <div class="item" data-value="nom"><%= i18n.__("Name") %></div>
-                                        <div class="item" data-value="note"><%= i18n.__("note") %></div>
+                                        <div class="item" data-value="name"><%= i18n.__("Name") %></div>
+                                        <div class="item" data-value="score"><%= i18n.__("Score") %></div>
                                         <div class="item" data-value="year"><%= i18n.__("Year of production") %></div>
                                     </div>
                                 </div>
@@ -83,7 +109,7 @@
                             <div class="field">
                                 <label><%= i18n.__("Order") %></label>
                                 <div class="ui selection dropdown">
-                                    <input type="hidden" name="sortOrder" value="">
+                                    <input type="hidden" name="sortOrder" value="<%= filters.sortOrder %>">
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("None") %></div>
                                     <div class="menu">
@@ -110,6 +136,11 @@
 <% for (video of videos) { %>
     <a id="cardMargin" class="ui black card" href="/video/<%= video.id %>">
         <div class="ui image">
+            <%  if (video.seen === "Y") { %>
+                <span id="seen" class="ui teal right ribbon label" style="z-index:99">Vue</span>
+            <% } else { %>
+                <span id="seen" class="ui grey right ribbon label" style="z-index:99">Non vue</span>
+            <% } %>
             <img src="<%= video.image %>">
         </div>
         <div class="content">
@@ -144,10 +175,10 @@
 
 
     var yearRange = document.getElementById('yearRange');
-    var noteRange = document.getElementById('noteRange');
+    var scoreRange = document.getElementById('scoreRange');
 
     noUiSlider.create(yearRange, {
-        start: [1900, 1980],
+        start: [<%= filters.year.l %>, <%= filters.year.u %>],
         connect: true,
         margin: 1,
         step: 1,
@@ -159,8 +190,8 @@
         }
     });
 
-    noUiSlider.create(noteRange, {
-        start: [3, 5],
+    noUiSlider.create(scoreRange, {
+        start: [<%= filters.score.l %>, <%= filters.score.u %>],
         connect: true,
         margin: 1,
         step: 0.1,
@@ -182,23 +213,23 @@
         document.getElementById('year-upper')
     ];
 
-    var noteValues0 = [
-        document.getElementById('note-lower0'),
-        document.getElementById('note-upper0')
+    var scoreValues0 = [
+        document.getElementById('score-lower0'),
+        document.getElementById('score-upper0')
     ];
 
-    var noteValues = [
-        document.getElementById('note-lower'),
-        document.getElementById('note-upper')
+    var scoreValues = [
+        document.getElementById('score-lower'),
+        document.getElementById('score-upper')
     ];
 
     yearRange.noUiSlider.on('update', function( values, handle ) {
         yearValues0[handle].value = values[handle];
         yearValues[handle].innerHTML = Math.round(values[handle]);
     });
-    noteRange.noUiSlider.on('update', function( values, handle ) {
-        noteValues0[handle].value = values[handle];
-        noteValues[handle].innerHTML = Math.round(values[handle]);
+    scoreRange.noUiSlider.on('update', function( values, handle ) {
+        scoreValues0[handle].value = values[handle];
+        scoreValues[handle].innerHTML = Math.round(values[handle]);
     });
 </script>
 

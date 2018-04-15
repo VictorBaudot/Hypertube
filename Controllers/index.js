@@ -7,14 +7,24 @@ const connection = require('../private/db')
 router.get('/', (req, res, next) => {
 	if (req.isAuthenticated()) {
 		let genres = [], directors = [], actors = [], videos = [];
-
+    let filters = {
+      score: {l: 0, u: 5.0},
+      year: {l: 1800, u: 2018},
+      genres: [],
+			directors: [],
+			actors: [],
+      sortType: "score",
+      sortOrder: "desc",
+      videos_viewed: "all"
+    }
+		
 		function display() {
 			console.log('Display')
 			// console.log(videos)
 			// videos.forEach(video => {
 			// 	console.log(video.genres)
 			// })
-			res.render("connected/index", { title: 'Accueil', videos, i18n: res })
+			res.render("connected/index", { title: 'Accueil', videos, filters, genres, directors, actors, i18n: res })
 		}
 
 		function addVideosInfos() {
