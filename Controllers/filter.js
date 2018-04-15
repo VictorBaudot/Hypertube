@@ -33,7 +33,8 @@ router.post('/', (req, res, next) => {
 
   if (sortType && (sortType === "name" || sortType === "score" || sortType === "year")) {
     filters.sortType = sortType
-    request += " ORDER BY " + sortType
+    if (sortType === "name") request += " ORDER BY title"
+    else request += " ORDER BY " + sortType
     if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
       filters.sortOrder = sortOrder
       request += " " + sortOrder.toUpperCase()
