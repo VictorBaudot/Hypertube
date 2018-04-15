@@ -1,7 +1,18 @@
-const LocalStrategy = require('passport-local').Strategy
-const nodemailer = require('nodemailer')
+const LocalStrategy = require('passport-local').Strategy;
+const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
-const connection = require('./../scripts/db')
+const connection = require('./../private/db');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
+const FortyTwoStrategy = require('passport-42').Strategy;
+const SQL = require('../Model/SQL.class');
+
+const FACEBOOK_APP_ID = '212847129480653'
+const FACEBOOK_APP_SECRET = 'fef4a6f5a25ba642811cce2f412a67f6'
+const TWITTER_CONSUMER_KEY = 'IidPkloSmiH1W4uRuYkeuP9HP'
+const TWITTER_CONSUMER_SECRET = 'PE3swPhmFZA3YC5nNnJxOJQOrbjYr9hpPBgyTgIL902stGExLo'
+const FORTYTWO_APP_ID = 'ff7d5d612e9972ef32dba3e2ecee80a5d7167faba6f03ae3c9437716b62159b8'
+const FORTYTWO_APP_SECRET = '9f72df0188b6f08d8f7cfb000866a75645c50e048b2ae3e53e4d86e46f36ee3a'
 
 module.exports = (passport) => {
 
@@ -16,20 +27,114 @@ module.exports = (passport) => {
     })
 
     // =========================================================================
+    // FACEBOOK STRATEGY  ======================================================
+    // =========================================================================
+
+    passport.use(new FacebookStrategy({
+        clientID: FACEBOOK_APP_ID,
+        clientSecret: FACEBOOK_APP_SECRET,
+        callbackURL: "https://localhost:3001/auth/facebook/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        console.log(profile)
+        done(null)
+      }
+    ));
+
+    // =========================================================================
+    // TWITTER STRATEGY  =======================================================
+    // =========================================================================
+
+    passport.use(new TwitterStrategy({
+        consumerKey: TWITTER_CONSUMER_KEY,
+        consumerSecret: TWITTER_CONSUMER_SECRET,
+        callbackURL: "http://localhost:3001/auth/twitter/callback"
+      },
+      function(token, tokenSecret, profile, done) {
+        // console.log(profile)
+        let {id_str, screen_name, name, profile_image_url} = profile._json
+        // console.log(id_str + '\n' + screen_name + '\n' + name + '\n' + profile_image_url)
+        connection.query("SELECT * FROM users WHERE twitterId = ?",[id_str], (err, rows) => {
+            if (err) return done(err);
+            if (rows.length) return done(null, rows[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    twitterId: id_str,
+                    login: screen_name,
+                    first_name: capitalizeFirstLetter(name),
+                    photo: profile_image_url,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+screen_name, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+                    email_confirmed: 1
+                };
+                console.log(newUser)
+                let sql = new SQL()
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
+      }
+    ));
+
+    // =========================================================================
+    // 42 STRATEGY =============================================================
+    // =========================================================================
+
+    passport.use(new FortyTwoStrategy({
+        clientID: FORTYTWO_APP_ID,
+        clientSecret: FORTYTWO_APP_SECRET,
+        callbackURL: "http://localhost:3001/auth/42/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        // console.log(profile)
+        let {id, login, first_name, last_name, image_url, email} = profile._json
+        // console.log(id + '\n' + login + '\n' + first_name + '\n' + last_name + '\n' + image_url + '\n' + email)
+        connection.query("SELECT * FROM users WHERE fortytwoId = ?",[id], (err, rows) => {
+            if (err) return done(err);
+            if (rows.length) return done(null, rows[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    fortytwoId: id,
+                    login: login + id,
+                    first_name: capitalizeFirstLetter(first_name),
+                    last_name: capitalizeFirstLetter(last_name),
+                    photo: image_url,
+                    email: email,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+                    email_confirmed: 1
+                };
+                console.log(newUser)
+                let sql = new SQL()
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
+      }
+    ));
+
+    // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
+    // Set The Storage Engine
     
     passport.use('local-signup', new LocalStrategy({
         usernameField: 'login',
         passwordField: 'password',
         passReqToCallback: true
     }, (req, login, password, done) => {
-        console.log('Check')
-        let end = () => {
-            return done(null, null, req.flashAdd('tabSuccess', 'Bravo, finalisez votre compte en cliquant sur le lien que vous venez de recevoir par email!'));
-        }
+        let photo;
+        if (Object.keys(req.file).length !== 0) {
+            photo = 'pics/'+req.file.filename;
+        } else photo = '/pics/default.jpg';
         connection.query("SELECT * FROM users WHERE login = ? OR email = ?",[login, req.body.email], (err, rows) => {
             if (err) return done(err);
             if (!isSignUpValid(req, login, password, rows)) return done(null, false);
@@ -39,7 +144,7 @@ module.exports = (passport) => {
                     password: bcrypt.hashSync(password, bcrypt.genSaltSync(9)),
                     first_name: capitalizeFirstLetter(req.body.first_name),
                     last_name: capitalizeFirstLetter(req.body.last_name),
-                    photo: '/pics/default.jpg',
+                    photo,
                     email: req.body.email,
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
@@ -89,7 +194,7 @@ module.exports = (passport) => {
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                end()
+                return done(null, null, req.flashAdd('tabSuccess', 'Bravo, finalisez votre compte en cliquant sur le lien que vous venez de recevoir par email!'));
             });
         });
         }
@@ -126,10 +231,10 @@ module.exports = (passport) => {
 function isSignUpValid (req, login, password, rows) {
     const pwdRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,20})");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const last_nameRegex = new RegExp("^[a-zA-Z_]{3,16}$");
+    const nameRegex = new RegExp("^[a-zA-Z_]{3,16}$");
     const loginRegex = new RegExp("^[a-zA-Z0-9_]{3,16}$");
     let result = true;
-    
+
     if (rows.length) {
         req.flashAdd('tabError', 'Ce pseudo/email est deja pris')
         result = false
@@ -138,11 +243,11 @@ function isSignUpValid (req, login, password, rows) {
         req.flashAdd('tabError', 'Pseudo: format incorrect')
         result = false
     }
-    if (!last_nameRegex.test(req.body.first_name)) {
+    if (!nameRegex.test(req.body.first_name)) {
         req.flashAdd('tabError', 'first_name: format incorrect')
         result = false
     }
-    if (!last_nameRegex.test(req.body.last_name)) {
+    if (!nameRegex.test(req.body.last_name)) {
         req.flashAdd('tabError', 'last_name: format incorrect')
         result = false
     }
@@ -158,7 +263,7 @@ function isSignUpValid (req, login, password, rows) {
         req.flashAdd('tabError', 'Syntaxe de l\'email invalide');
         result = false
     }
-    if (!isLengthOkay('Pseudo', login, req) || !isLengthOkay('first_name', req.body.first_name, req) || !isLengthOkay('last_name', req.body.last_name, req))
+    if (!isLengthOkay('login', login, req) || !isLengthOkay('first_name', req.body.first_name, req) || !isLengthOkay('last_name', req.body.last_name, req))
         result = false
     return result
 }
@@ -180,3 +285,13 @@ function isLengthOkay(champs, value, req) {
 function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
+
+function generatePassword() {
+    var length = 12,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }
