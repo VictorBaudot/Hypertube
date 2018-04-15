@@ -4,65 +4,98 @@
     <div class="ui styled fluid accordion">
         <div class="title" style="background-color:#000000; text-align:center;">
             <i class="dropdown icon" style="color:#fff"></i>
-            <span style="color:#fff">Filtrer et / ou trier les profils</span>
+            <span style="color:#fff"><%= i18n.__("Filter and / or sort profiles") %></span>
         </div>
         <div class="content">
-            <p class="transition hidden">   
-                <form onkeypress="return event.keyCode != 13;" action="/filter" method="POST" class="ui form">
-                    <div class="ui two column middle aligned very relaxed stackable grid">
-                        <div class="column">
-                            <div class="field">
-                                <span class="range-values">
-                                    <input id="note-lower0" name="noteL" type="hidden" value="">
-                                    <input id="note-upper0" name="noteU" type="hidden" value="">
-                                    <span id="note-lower">3</span>
-                                    <span>-</span>
-                                    <span id="note-upper">5</span>
-                                </span>
-                                <label>Note</label>
-                                <div id="noteRange"></div>
-                            </div>
-                            <div class="field">
-                                <span class="range-values">
-                                    <input id="year-lower0"  name="yearL" type="hidden" value="">
-                                    <input id="year-upper0"  name="yearU" type="hidden" value="">
-                                    <span id="year-lower">1900</span>
-                                    <span>-</span>
-                                    <span id="year-upper">1980</span>
-                                </span>
-                                <label>Annee de production</label>
-                                <div id="yearRange"></div>
-                            </div>
-                            <div class="field">
-                                <label>Videos visionnees</label>
-                                <div class="ui selection dropdown">
-                                    <input type="hidden" name="etat" value="">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Peu importe</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="yes">Oui</div>
-                                        <div class="item" data-value="no">Non</div>
-                                        <div class="item" data-value="all">Peu importe</div>
-                                    </div>
+            <p class="transition hidden">
+                    <form onkeypress="return event.keyCode != 13;" action="/filter" method="POST" class="ui form">
+                        <div class="ui two column middle aligned very relaxed stackable grid">
+                            <div class="column">
+                        <div class="field">
+                            <span class="range-values">
+                                <input id="note-lower0" name="noteL" type="hidden" value="">
+                                <input id="note-upper0" name="noteU" type="hidden" value="">
+                                <span id="note-lower">3</span>
+                                <span>-</span>
+                                <span id="note-upper">5</span>
+                            </span>
+                            <label><%= i18n.__("Note") %></label>
+                            <div id="noteRange"></div>
+                        </div>
+                        <div class="field">
+                            <span class="range-values">
+                                <input id="year-lower0"  name="yearL" type="hidden" value="">
+                                <input id="year-upper0"  name="yearU" type="hidden" value="">
+                                <span id="year-lower">1900</span>
+                                <span>-</span>
+                                <span id="year-upper">1980</span>
+                            </span>
+                            <label><%= i18n.__("Year of production") %></label>
+                            <div id="yearRange"></div>
+                        </div>
+                        <div class="field">
+                            <label><%= i18n.__("Videos viewed") %></label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="etat" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text"><%= i18n.__("Whatever") %></div>
+                                <div class="menu">
+                                    <div class="item" data-value="yes"><%= i18n.__("Yes") %></div>
+                                    <div class="item" data-value="no"><%= i18n.__("No") %></div>
+                                    <div class="item" data-value="all"><%= i18n.__("Whatever") %></div>
                                 </div>
                             </div>
-                            <div class="field">
-                                <label>Genres</label>
-                                <div class="ui fluid multiple search selection dropdown">
-                                    <input name="interests" type="hidden" value="">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Genre</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="action">Action</div>
-                                        <div class="item" data-value="horror">Horror</div>
-                                        <div class="item" data-value="fantastic">Fantastic</div>
-                                    </div>
+                        </div>
+                        <div class="field">
+                            <label><%= i18n.__("Genre") %></label>
+                            <div class="ui fluid multiple search selection dropdown">
+                                <input name="interests" type="hidden" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text"><%= i18n.__("Genre") %></div>
+                                <div class="menu">
+                                    <div class="item" data-value="action"><%= i18n.__("Action") %></div>
+                                    <div class="item" data-value="horror"><%= i18n.__("Horror") %></div>
+                                    <div class="item" data-value="fantastic"><%= i18n.__("Fantastic") %></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <button type="submit" class="ui fluid labeled black icon centered submit button">
+                                <i class="filter icon"></i>
+                                <span class="text"><%= i18n.__("Filter") %></span>
+                            </button>
+                        </div>
+                </div>
+                <div class="column">
+                        <div class="field">
+                            <label><%= i18n.__("Sort by") %></label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="sortType" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text"><%= i18n.__("None") %></div>
+                                <div class="menu">
+                                    <div class="item" data-value="nom"><%= i18n.__("Name") %></div>
+                                    <div class="item" data-value="note"><%= i18n.__("note") %></div>
+                                    <div class="item" data-value="year"><%= i18n.__("Year of production") %></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label><%= i18n.__("Order") %></label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="sortOrder" value="">
+                                <i class="dropdown icon"></i>
+                                <div class="default text"><%= i18n.__("None") %></div>
+                                <div class="menu">
+                                    <div class="item" data-value="asc"><%= i18n.__("Ascending") %></div>
+                                    <div class="item" data-value="desc"><%= i18n.__("Descending") %></div>
                                 </div>
                             </div>
                             <div class="field">
                                 <button type="submit" class="ui fluid labeled black icon centered submit button">
                                     <i class="filter icon"></i>
-                                    <span class="text">Filtrer</span>
+                                    <span class="text"><%= i18n.__("Sort") %></span>
                                 </button>
                             </div>
                         </div>
@@ -143,7 +176,7 @@
     $('.ui.accordion').accordion();
     $('.ui.dropdown').dropdown();
     $('.ui.multiple.search.dropdown').dropdown({allowAdditions: true});
-    
+
 
     var yearRange = document.getElementById('yearRange');
     var noteRange = document.getElementById('noteRange');
