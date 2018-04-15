@@ -2,7 +2,7 @@
 
 const express	=	require('express');
 const router = express.Router();
-const connection = require('./../scripts/db');
+const connection = require('./../private/db');
 
 router.get('/:login/:token', (req, res) => {
   confirm(req, res)

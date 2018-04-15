@@ -13,6 +13,7 @@ require('./private/passport')(passport)
 
 const index 			=	require('./Controllers/index.js');
 const lang	 			=	require('./Controllers/lang.js');
+const auth	=	require('./Controllers/auth.js');
 const signin			=	require('./Controllers/signin.js');
 const signup			=	require('./Controllers/signup.js');
 const forgot_pwd		=	require('./Controllers/forgot_pwd.js');
@@ -21,6 +22,7 @@ const modify_profile	=	require('./Controllers/modify_profile.js');
 const logout	=	require('./Controllers/logout.js');
 const confirm	=	require('./Controllers/confirm.js');
 const user	=	require('./Controllers/user.js');
+const video	=	require('./Controllers/video.js');
 
 // const port = 8080;
 // const hostname = '127.0.0.1';
@@ -34,7 +36,6 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-
 i18n.configure({
 	locales:['en', 'fr'],
 	directory: __dirname + '/locales',
@@ -55,6 +56,7 @@ app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
 app.use('/lang', lang);
+app.use('/auth', auth(passport))
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
 app.use('/confirm', confirm);
@@ -62,6 +64,7 @@ app.use('/forgot_pwd', forgot_pwd);
 app.use('/modify_profile', isLoggedIn, modify_profile);
 app.use('/profile', isLoggedIn, profile);
 app.use('/user', isLoggedIn, user);
+app.use('/video', isLoggedIn, video);
 app.use('/logout', isLoggedIn, logout);
 
 http.createServer(app).listen(3001);

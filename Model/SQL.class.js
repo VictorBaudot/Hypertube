@@ -58,4 +58,27 @@ module.exports = class Sql
 			});
 		}));
 	}
+
+	update (table, idcol, id, values)
+	{
+
+		let keys = Object.keys(values);
+
+ //   console.log(keys)
+    let cols = keys.map(k => `${k} = ?`).join(', ');
+ //   console.log(cols)
+
+    let request = `UPDATE ${table} SET ${cols} WHERE ${idcol} = ?`;
+    // console.log(request)
+		let params = keys.map(k => values[k]).concat(id);
+		
+		// console.log(params)
+
+		return (new Promise((resolve, reject) => {
+			this.sql.query(request, params, (err, result, fields) => {
+				if (err) throw err;
+				resolve(result);
+			});
+		}));
+	}
 };
