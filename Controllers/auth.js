@@ -9,7 +9,7 @@ module.exports = (passport) => {
   router.get('/42/callback', 
     passport.authenticate('42', { failureRedirect: '/' }), 
     (req, res) => {
-      res.redirect('/profile'); // Successful authentication, redirect home.
+      res.redirect('/video/1'); // Successful authentication, redirect home.
   }); 
   
   // router.get('/facebook', passport.authenticate('facebook'));
