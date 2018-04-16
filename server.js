@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 require('./private/passport')(passport)
 
 const index = require('./Controllers/index.js');
+const api = require('./Controllers/api.js');
 const filter = require('./Controllers/filter.js');
 const lang = require('./Controllers/lang.js');
 const auth = require('./Controllers/auth.js');
@@ -57,6 +58,7 @@ app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
+app.use('/api', api);
 app.use('/filter', isLoggedIn, filter);
 app.use('/lang', lang);
 app.use('/auth', auth(passport))

@@ -3,15 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../private/db');
-const Popcorn = require('../Model/Popcorn.js');
+const Api	= require('../Model/Api.js');
 
 router.get('/', (req, res, next) => {
-	let pop = new Popcorn;
-	let films = pop.getOnePage(1);
-	films.then((films) => {
-		console.log(films);
-		res.render('not_connected/rating', { films, i18n: res });
-	})
+	let api = new Api;
+
+	api.get().then((films) => {
+		res.render('not_connected/rating', { films: films["films"], i18n: res });
+	}).catch((err) => { console.log(err); });
 });
 
 module.exports = router;
