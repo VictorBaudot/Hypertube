@@ -1,23 +1,35 @@
 const request	=	require('request');
 
 module.exports = class Yify
-// class Yify
 {
 	getOnePage(Pagenumber)
 	{
-		request('https://yts.ag/api/v2/list_movies.json?sort_by=rating&limit=50&page='+Pagenumber, function (error, response, body) {
-			if (response && response.statusCode == 200)
-				return JSON.parse(body);
-			// console.log('error:', error); // Print the error if one occurred
-			// console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-			// let obj = JSON.parse(body);
-			// // for (var i = 0; i < obj.data.movies.length; i++) {
-			// // 	obj.data.movies[i];
-			// // }
-			// console.log('body:', obj.data.movies[0].background_image) // Print the HTML for the Google homepage.
+		return new Promise((resolve, reject) => {
+			request('https://yts.ag/api/v2/list_movies.json?sort_by=rating&limit=50&page=' + Pagenumber, function (err, response, body) {
+				if (err) throw err;
+				resolve(JSON.parse(body).data.movies);
+			});
 		});
 	}
-}
 
-// let y = new Yify;
-// let res = y.getOnePage(1);
+	getFilm(id)
+	{
+		return new Promise((resolve, reject) => {
+			request('https://yts.am/api/v2/movie_details.json?movie_id=' + id, function (err, response, body) {
+				if (err) throw err;
+				resolve(JSON.parse(body));
+			});
+		});
+	}
+
+	getTorrent(id)
+	{
+		return new Promise((resolve, reject) => {
+			request('https://yts.am/api/v2/movie_details.json?movie_id=' + id, function (err, response, body) {
+				if (err) throw err;
+				resolve(JSON.parse(body).data.movie.torrents[0].url);
+			});
+		});
+	}
+
+}
