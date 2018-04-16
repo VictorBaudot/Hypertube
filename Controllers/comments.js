@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const SQL = require('../Model/SQL.class.js');
+const sql = new SQL()
 const htmlspecialchars = require("htmlspecialchars");
 const Check = require('../Model/check');
 const moment = require('moment');
@@ -21,7 +22,6 @@ router.post('/', (req, res, next) => {
     com: com.com,
     creation: time
   }
-  let sql = new SQL()
   Check.com(com.com, req, (check) => {
     if (check === true) {
       sql.insert('coms', obj).then((result) => {

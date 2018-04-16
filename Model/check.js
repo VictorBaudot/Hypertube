@@ -18,9 +18,7 @@ var Check = {
             rep = false
         }
         let sql = new SQL()
-        sql.select('*', 'users', {}, {
-			login: htmlspecialchars(login)
-		}).then(result => {
+        sql.select('*', 'users', {}, {login: htmlspecialchars(login)}).then(result => {
 			if (Object.keys(result).length > 0)
 			{
 				req.flashAdd('tabError', 'Ce pseudo n\'est pas disponible')
@@ -55,9 +53,7 @@ var Check = {
     email: email = (email, req, cb) => {
         let rep = true
         let sql = new SQL()
-        sql.select('*', 'users', {}, {
-			email: htmlspecialchars(email)
-		}).then(result => {
+        sql.select('*', 'users', {}, {email: htmlspecialchars(email)}).then(result => {
 			if (Object.keys(result).length > 0) {
                 req.flashAdd('tabError', 'Cet email n\'est pas disponible')
                 rep = false

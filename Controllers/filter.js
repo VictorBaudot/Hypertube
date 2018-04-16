@@ -124,8 +124,8 @@ router.post('/', (req, res, next) => {
             tabActors.push(row.actor)
           })
           video.actors = tabActors.join(', ')
-          if (++count2 == total2) check()
         }
+        if (++count2 == total2) check()
       });
 
       sql.select('*', 'genres', { table: 'videos_genres', column1: 'genres.genre', column2: 'videos_genres.genre' }, { video_id: video.id }).then(result => {
@@ -134,15 +134,15 @@ router.post('/', (req, res, next) => {
             tabGenres.push('#' + row.genre)
           })
           video.genres = tabGenres.join(', ')
-          if (++count2 == total2) check()
         }
+        if (++count2 == total2) check()
       });
 
       sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
         if (Object.keys(result).length > 0) {
           video.director = result[0].director
-          if (++count2 == total2) check()
         }
+        if (++count2 == total2) check()
       });
       
       sql.select('*', 'videos_users', {}, { video_id: video.id, user_id: id }).then(result => {
@@ -174,8 +174,8 @@ router.post('/', (req, res, next) => {
       sql.select('*', data[i]).then(result => {
         if (Object.keys(result).length > 0) {
           data[i] = result
-          if (++count == total) getVideos()
         }
+        if (++count == total) getVideos()
       });
     }
   }
