@@ -9,11 +9,12 @@ const moment = require('moment');
 
 let genres = [], directors = [], actors = [];
 let user = {}, coms = {}, video = {};
+let video_id
 
 router.get('/:id', (req, res, next) => {
-  let id = req.params.id;
+  video_id = htmlspecialchars(req.params.id);
 
-  sql.select('*', 'videos', {}, { id: htmlspecialchars(id) }).then(result => {
+  sql.select('*', 'videos', {}, { id: video_id}).then(result => {
     if (Object.keys(result).length > 0) {
       video = result[0]
       user = req.user
@@ -42,8 +43,8 @@ function addVideoInfos(res) {
         tabActors.push(row.actor)
       })
       video.actors = tabActors.join(', ')
-      if (++count2 == total2) display(res)
     }
+    if (++count2 == total2) display(res)
   });
 
   sql.select('*', 'genres', {table: 'videos_genres', column1: 'genres.genre', column2: 'videos_genres.genre'}, {video_id: video.id}).then(result => {
@@ -52,15 +53,15 @@ function addVideoInfos(res) {
         tabGenres.push(row.genre)
       })
       video.genres = tabGenres.join(', ')
-      if (++count2 == total2) display(res)
     }
+    if (++count2 == total2) display(res)
   });
 
   sql.select('*', 'directors', {table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director'}, {video_id: video.id}).then(result => {
     if (Object.keys(result).length > 0) {
       video.director = result[0].director
-      if (++count2 == total2) display(res)
     }
+    if (++count2 == total2) display(res)
   });
 }
 
@@ -74,19 +75,19 @@ function getInfos(res) {
     sql.select('*', data[i]).then(result => {
       if (Object.keys(result).length > 0) {
         data[i] = result
-        if (++count == total) addVideoInfos(res)
       }
+      if (++count == total) addVideoInfos(res)
     });
   }
 
-  sql.select('*', 'coms', {table: 'users', column1: 'coms.user_id', column2: 'users.id'}, {}, {col: 'coms.creation', order: 'DESC'}).then(result => {
+  sql.select('*', 'coms', {table: 'users', column1: 'coms.user_id', column2: 'users.id'}, {'coms.video_id': video_id}, {col: 'coms.creation', order: 'DESC'}).then(result => {
     if (Object.keys(result).length > 0) {
       coms = result
       coms.forEach(com => {
         com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
       })
-      if (++count == total) addVideoInfos(res)
     }
+    if (++count == total) addVideoInfos(res)
   });
 }
 
