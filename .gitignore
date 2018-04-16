@@ -4,3 +4,4 @@ db
 .idea
 package-lock.json
 public/pics/photo*
+public/semantic
