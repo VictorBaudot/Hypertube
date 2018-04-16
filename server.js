@@ -24,6 +24,7 @@ const logout = require('./Controllers/logout.js');
 const confirm = require('./Controllers/confirm.js');
 const user = require('./Controllers/user.js');
 const video = require('./Controllers/video.js');
+const rating = require('./Controllers/rating.js');
 
 // const port = 8080;
 // const hostname = '127.0.0.1';
@@ -68,6 +69,7 @@ app.use('/profile', isLoggedIn, profile);
 app.use('/user', isLoggedIn, user);
 app.use('/video', isLoggedIn, video);
 app.use('/logout', isLoggedIn, logout);
+app.use('/rating', rating);
 
 http.createServer(app).listen(3001);
 // app.listen(port, hostname, () => {

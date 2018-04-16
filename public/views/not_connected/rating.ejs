@@ -1,0 +1,78 @@
+<% include ./assets/header.ejs %>
+
+<div class="ui main container" style="margin-top: 3em;"></div>
+<div class="ui match-feed center link cards">
+<% films.forEach((video) => { %>
+	    <a id="cardMargin" class="ui black card" href="/video/video.id">
+	        <div class="ui image">
+	                <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
+	                <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
+				<% if (video.images.poster == "N/A" || video.images.poster == "images/posterholder.png") { %>
+					<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">
+				<% } else { %>
+	            	<img src="<%= video.images.poster %>">
+				<% } %>
+			</div>
+	        <div class="content">
+	            <span class="right floated">
+	                <i class="star red icon"></i>
+	                <span style="color:red !important;"><%= video.rating.percentage / 10 %></span>
+	            </span>
+	            <div class="header"><%= video.title %><span style="font-weight:normal;">, <%= video.year %></span></div>
+	            <div class="meta">
+	                <span class="date">
+	                     <%= video.runtime %>
+	                </span>
+	            </div>
+	            <div class="description">
+	                 <%= video.synopsis %>
+	            </div>
+	        </div>
+	        <div class="extra content">
+	            <span class="right floated">
+	                <%= video.genres %>
+	            </span>
+	        </div>
+	    </a>
+<% }) %>
+</div>
+<script>
+    $('.ui.accordion').accordion();
+    $('.ui.dropdown').dropdown();
+    $('.ui.multiple.search.dropdown').dropdown({allowAdditions: true});
+
+
+    var yearRange = document.getElementById('yearRange');
+    var scoreRange = document.getElementById('scoreRange');
+
+    var yearValues0 = [
+        document.getElementById('year-lower0'),
+        document.getElementById('year-upper0')
+    ];
+
+    var yearValues = [
+        document.getElementById('year-lower'),
+        document.getElementById('year-upper')
+    ];
+
+    var scoreValues0 = [
+        document.getElementById('score-lower0'),
+        document.getElementById('score-upper0')
+    ];
+
+    var scoreValues = [
+        document.getElementById('score-lower'),
+        document.getElementById('score-upper')
+    ];
+
+    yearRange.noUiSlider.on('update', function( values, handle ) {
+        yearValues0[handle].value = values[handle];
+        yearValues[handle].innerHTML = Math.round(values[handle]);
+    });
+    scoreRange.noUiSlider.on('update', function( values, handle ) {
+        scoreValues0[handle].value = values[handle];
+        scoreValues[handle].innerHTML = Math.round(values[handle]);
+    });
+</script>
+
+<% include ./assets/footer.ejs %>
