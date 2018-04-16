@@ -7,16 +7,16 @@
 	        <div class="ui image">
 	                <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
 	                <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
-				<% if (video.images.poster == "N/A" || video.images.poster == "images/posterholder.png") { %>
+				<% if (!video.poster) { %>
 					<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">
 				<% } else { %>
-	            	<img src="<%= video.images.poster %>">
+	            	<img src="<%= video.poster %>">
 				<% } %>
 			</div>
 	        <div class="content">
 	            <span class="right floated">
 	                <i class="star red icon"></i>
-	                <span style="color:red !important;"><%= video.rating.percentage / 10 %></span>
+	                <span style="color:red !important;"><%= video.rating %></span>
 	            </span>
 	            <div class="header"><%= video.title %><span style="font-weight:normal;">, <%= video.year %></span></div>
 	            <div class="meta">
