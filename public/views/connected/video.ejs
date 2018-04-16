@@ -1,4 +1,5 @@
 <% include ./assets/header %>
+    <div id="dark_light" class="ui"><i class="lightbulb outline icon"></i></div>
     <div id="padBot" class="ui breadcrumb">
         <a class="section" href="/">Home</a>
         <span class="divider">/</span>
@@ -43,7 +44,7 @@
             </p>
         </div>
     </div>
-    <div class="ui segment">
+    <div class="ui raised segment">
         <h3 class="ui dividing header">
             <%= i18n.__("Comments") %>
         </h3>
@@ -116,5 +117,29 @@
                 $('#comForm #m').focus()
             }
         });
+        let dark = 0
+        $('.url.example .ui.embed').embed();
+        $('.ui.accordion').accordion();
+        $('#dark_light').click(() => {
+            if (dark == 0) {
+                $('#dark_light i').css({color: "white"});
+                $('a.section').css({color: "black"});
+                $('.menu i').css({color: "black"});
+                $('body').css({backgroundColor: "black"});
+                $('.ui.raised.segment').css({visibility: "hidden"});
+                $('.ui.styled.fluid.accordion').css({visibility: "hidden"});
+                $('html').addClass('hide-scrollbar');
+                dark = 1
+            } else {
+                $('#dark_light i').css({color: ""});
+                $('a.section').css({color: ""});
+                $('.menu i').css({color: ""});
+                $('body').css({backgroundColor: ""});
+                $('.ui.raised.segment').css({visibility: ""});
+                $('.ui.styled.fluid.accordion').css({visibility: ""});
+                $('html').removeClass('hide-scrollbar');
+                dark = 0
+            }
+        })
     </script>
     <% include ./assets/footer %>

@@ -7,12 +7,11 @@ const sql = new SQL();
 const htmlspecialchars = require("htmlspecialchars");
 const moment = require('moment');
 
-let genres = [], directors = [], actors = [];
-let user = {}, coms = {}, video = {};
-let video_id
-
-router.get('/:id', (req, res, next) => {
-  video_id = htmlspecialchars(req.params.id);
+router.get('/:id', (req, res) => {
+  let coms = [], genres = [], directors = [], actors = [];
+  let user = {}, video = {};
+  let video_id = htmlspecialchars(req.params.id);
+  let user_id = req.user.id
 
   sql.select('*', 'videos', {}, { id: video_id}).then(result => {
     if (Object.keys(result).length > 0) {
@@ -25,9 +24,13 @@ router.get('/:id', (req, res, next) => {
       res.redirect('/');
     }
   });
-})
 
 function display(res) {
+  // console.log('Display')
+  // console.log(video_id + " : " + user_id)
+  // coms.forEach(com => {
+  //   console.log(com.first_name + ': '+com.com)
+  // })
   res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
 }
 
@@ -90,6 +93,7 @@ function getInfos(res) {
     if (++count == total) addVideoInfos(res)
   });
 }
+})
 
 module.exports = router;
 
