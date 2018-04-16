@@ -43,5 +43,9 @@
 	"Family": "Family",
 	"Fantasy": "Fantasy",
 	"Romance": "Romance",
-	"Sci-Fi": "Sci-Fi"
+	"Sci-Fi": "Sci-Fi",
+	"About": "About",
+	"Summary": "Summary",
+	"Thoughts": "Share what you thought about this movie...",
+	"Comments": "Comments"
 }

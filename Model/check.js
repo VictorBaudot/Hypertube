@@ -2,6 +2,7 @@ const pwdRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,20})");
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nomRegex = new RegExp("^[a-zA-Z]{3,16}$");
 const loginRegex = new RegExp("^[a-zA-Z0-9_]{3,16}$");
+const comRegex = new RegExp("^[a-zA-Z0-9\p{L}_,#\ +-]{2,100}$");
 const htmlspecialchars = require("htmlspecialchars");
 const SQL = require('./SQL.class');
 
@@ -17,7 +18,7 @@ var Check = {
             rep = false
         }
         let sql = new SQL()
-        sql.select('*', 'users', {
+        sql.select('*', 'users', {}, {
 			login: htmlspecialchars(login)
 		}).then(result => {
 			if (Object.keys(result).length > 0)
@@ -48,12 +49,13 @@ var Check = {
         }
         cb(rep)
     },
+
     // - Pas deja pris
     // - Format correct
     email: email = (email, req, cb) => {
         let rep = true
         let sql = new SQL()
-        sql.select('*', 'users', {
+        sql.select('*', 'users', {}, {
 			email: htmlspecialchars(email)
 		}).then(result => {
 			if (Object.keys(result).length > 0) {
@@ -77,6 +79,16 @@ var Check = {
         }
         if (!pwdRegex.test(password)) {
             req.flashAdd('tabError', 'Mot de passe en carton. ([a-z]+[A-Z]+[0-9])*(6-20)');
+            rep = false
+        }
+        cb(rep)
+    },
+
+    // - Taille correcte
+    com: com = (com, req, cb) => {
+        let rep = true
+        if (!comRegex.test(com)) {
+            req.flashAdd('tabError', 'Commentaire: format incorrect')
             rep = false
         }
         cb(rep)

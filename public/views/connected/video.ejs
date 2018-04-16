@@ -1,3 +1,120 @@
 <% include ./assets/header %>
-<h1>Partie video</h1>
-<% include ./assets/footer %>
+    <div id="padBot" class="ui breadcrumb">
+        <a class="section" href="/">Home</a>
+        <span class="divider">/</span>
+        <div class="active section">
+            <%= title %>
+        </div>
+    </div>
+    <div class="ui embed" data-url="https://www.youtube.com/embed/O6Xo21L0ybE" data-placeholder="/<%= video.image %>"></div>
+    <div class="ui styled fluid accordion">
+        <div class="title" style="background-color:#000000; text-align:center;">
+            <i class="dropdown icon" style="color:#fff"></i>
+            <span style="color:#fff">
+                <%= i18n.__("About") %>
+            </span>
+        </div>
+        <div class="content">
+            <p class="transition hidden">
+                <div class="ui left aligned large header">
+                    <%= video.title %>
+                        <span style="font-weight:normal;">,
+                            <%= video.year %>
+                        </span>
+                </div>
+                <p style="font-style: italic;">
+                    <%= video.summary %>
+                </p>
+                <p>
+                    <span class='vid_infos'>
+                        <%= i18n.__("Genres") %>: </span>
+                    <%= video.genres %>
+                </p>
+                <p>
+                    <span class='vid_infos'>
+                        <%= i18n.__("Directors") %>: </span>
+                    <%= video.director %>
+                </p>
+                <p>
+                    <span class='vid_infos'>
+                        <%= i18n.__("Actors") %>: </span>
+                    <%= video.actors %>
+                </p>
+            </p>
+        </div>
+    </div>
+    <div class="ui segment">
+        <h3 class="ui dividing header">
+            <%= i18n.__("Comments") %>
+        </h3>
+        <div id="comForm" class="ui form" style="margin-bottom:1rem;">
+            <div class="ui fluid input">
+                <img class="fixavatar ui tiny rounded bordered image" src="<%= user.photo %>">
+                <input class="ui" type="text" id="m" placeholder="<%= i18n.__('Thoughts') %>" autofocus>
+            </div>
+        </div>
+        <div id="coms" class="ui comments">
+            <% coms.forEach(com => { %>
+                <% if (com.user_id === user.id) { %>
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="<%= com.photo %>">
+                        </a>
+                        <div class="content">
+                            <a class="author">
+                                <%= com.first_name %>
+                            </a>
+                            <div class="metadata">
+                                <span class="date">
+                                    <%= com.creation %>
+                                </span>
+                            </div>
+                            <div class="text">
+                                <%= com.com %>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <div class="comment">
+                            <a class="avatar" href="/user/<%= com.login %>">
+                                <img src="<%= com.photo %>">
+                            </a>
+                            <div class="content">
+                                <a class="author" href="/user/<%= com.login %>">
+                                    <%= com.first_name %>
+                                </a>
+                                <div class="metadata">
+                                    <span class="date">
+                                        <%= com.creation %>
+                                    </span>
+                                </div>
+                                <div class="text">
+                                    <%= com.com %>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                <% }) %>
+        </div>
+    </div>
+    <script>
+        $('.url.example .ui.embed').embed();
+        $('.ui.accordion').accordion();
+        $('#comForm #m').keypress(function (e) {
+            if (e.which == 13) {
+                let com = $('#comForm #m').val()
+                $.ajax({
+                    type: "POST",
+                    url: "/comments",
+                    data: { "newcom": com, "video_id": <%= video.id %> },
+                    dataType: "html",
+                    success: function (response) {
+                        $('#coms').prepend(response)
+                    }
+                });
+                $('#comForm #m').val('')
+                $('#comForm #m').focus()
+            }
+        });
+    </script>
+    <% include ./assets/footer %>
