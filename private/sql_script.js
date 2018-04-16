@@ -46,7 +46,7 @@ connection.query("CREATE TABLE `videos` ( \
   `title` varchar(255) NOT NULL, \
   `image` longtext NOT NULL, \
   `year` int(11) NULL, \
-  `score` int(11) NULL, \
+  `score` FLOAT NULL, \
   `duration` int(11) NULL, \
   `summary` varchar(255) NULL, \
   PRIMARY KEY (`id`) \
@@ -55,7 +55,7 @@ connection.query("CREATE TABLE `videos` ( \
 	else console.log('Success: table videos created!')
 });
 
-let lorem = 'Et dolorem sequi omnis eius iste soluta sint. Ipsum molestiae id ut velit illum ipsam. Quis dolorum sequi praesentium rerum. Quidem accusantium aut vel ad.'
+let lorem = 'Et dolorem sequi omnis eius iste soluta sint. Ipsum molestiae id ut velit illum ipsam.'
 
 connection.query("INSERT INTO `videos` (`id`, `title`, `image`, `year`, `score`, `summary`) VALUES \
 (1, 'Harry Potter', 'pics/video_default.png', 1938, 4.4, '"+lorem+"'), \
@@ -71,7 +71,7 @@ connection.query("CREATE TABLE `videos_users` ( \
   `video_id` int(11) NOT NULL, \
   `user_id` int(11) NOT NULL, \
   `seen` enum('Y', 'N') NOT NULL DEFAULT 'N', \
-  `score` int(11) NULL, \
+  `score` float NULL, \
   PRIMARY KEY (`video_id`, `user_id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
