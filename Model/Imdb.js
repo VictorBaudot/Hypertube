@@ -6,7 +6,7 @@ module.exports = class Imdb
 	{
 		return new Promise((resolve, reject) => {
 			request.post("http://imdbapi.net/api?key=yDDM2vEeZKyhBkypTsrgUUuOavQ4z8&id=" + id, function (err, response, body) {
-				if (err) throw err;
+				if (err) throw console.log(err);
 				resolve(JSON.parse(body));
 			});
 		});
