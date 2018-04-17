@@ -39,9 +39,7 @@ async function maj_db(i)
 		let sql = new SQL;
 		let promise = pop.getOnePage(i);
 		let getter;
-
 		sql.select('*', 'films').then((films_db) => {
-
 			promise.then((films) => {
 				getAllInfo(films, films_db).then((new_films) => {
 					// new_films.sort((a, b) => { return b.rating-a.rating; })

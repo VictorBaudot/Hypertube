@@ -13,7 +13,7 @@ module.exports = class Sql {
 		});
 	}
 
-	select(columns, table, innerjoin, condition, orderby, more) {
+	select(columns, table, innerjoin, condition, orderby, more = "") {
 		let request = "SELECT " + columns + " FROM " + table;
 		if (innerjoin && Object.keys(innerjoin).length > 0) {
 			request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
