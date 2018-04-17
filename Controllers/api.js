@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
 		if (req.query.page != undefined) {
 			more = " limit 50 offset " + (50 * (req.query.page - 1));
 		}
-		sql.select('*', 'films', {}, {}, {}, more).then((films) => {
+		sql.select('*', 'films', {}, {}, {col: 'rating', order: 'DESC'}, more).then((films) => {
 			res.send({ films });
 		}).catch((err) => {console.log(err);});
 	} else {
