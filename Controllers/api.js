@@ -7,7 +7,13 @@ const SQL = require('../model/SQL.class.js');
 let sql = new SQL;
 
 router.get('/', (req, res, next) => {
-	sql.select('*', 'films').then((rend) => {
+	let more = "";
+
+	if (req.query.page != undefined) {
+		more = " limit 50 offset " + 50*req.query.page;
+	}
+
+	sql.select('*', 'films', {}, {}, {}, more).then((rend) => {
 		res.send({ rend });
 	}).catch((err) => {console.log(err);});
 });
