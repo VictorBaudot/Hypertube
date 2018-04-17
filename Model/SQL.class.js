@@ -94,4 +94,16 @@ module.exports = class Sql {
 			});
 		}));
 	}
+
+	delete(table, col, params) {
+
+		let request = `DELETE FROM ${table} WHERE ${col} = ?`;
+
+		return (new Promise((resolve, reject) => {
+			this.sql.query(request, params, (err, result, fields) => {
+				if (err) throw err;
+				resolve(result);
+			});
+		}));
+	}
 };
