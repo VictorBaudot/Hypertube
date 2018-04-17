@@ -24,4 +24,28 @@ router.post('/', (req, res, next) => {
 	}).catch((err) => {console.log(err);});
 });
 
+router.put('/', (req, res, next) => {
+	sql.select('*', 'films', {}, { id: req.body.id }).then((result) => {
+		if (result.length == 0) {
+			res.send({ error: "film absent en bdd" });
+		} else {
+			sql.update('films', 'imdb_id', req.body.imdb_id, req.body).then((result) => {
+				res.send({ result: result });
+			}).catch((err) => {console.log(err);});
+		}
+	}).catch((err) => {console.log(err);});
+});
+
+router.delete('/', (req, res, next) => {
+	sql.select('*', 'films', {}, { id: req.body.id }).then((result) => {
+		if (result.length == 0) {
+			res.send({ error: "film absent en bdd" });
+		} else {
+			sql.delete('films', 'imdb_id', req.body.imdb_id).then((result) => {
+				res.send({ result: result });
+			}).catch((err) => {console.log(err);});
+		}
+	}).catch((err) => {console.log(err);});
+});
+
 module.exports = router;

@@ -3,8 +3,7 @@ const request	=	require('request');
 module.exports = class Api
 {
 
-	get()
-	{
+	get() {
 		return new Promise((resolve, reject) => {
 			request.get("http://127.0.0.1:3001/api", function (err, response, body) {
 				if (err) throw console.log(err);;
@@ -13,10 +12,27 @@ module.exports = class Api
 		});
 	}
 
-	post(form)
-	{
+	post(form) {
 		return new Promise((resolve, reject) => {
 			request.post({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
+				if (err) throw console.log(err);;
+				resolve(JSON.parse(body));
+			});
+		});
+	}
+
+	put(form) {
+		return new Promise((resolve, reject) => {
+			request.put({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
+				if (err) throw console.log(err);;
+				resolve(JSON.parse(body));
+			});
+		});
+	}
+
+	delete(form) {
+		return new Promise((resolve, reject) => {
+			request.delete({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));
 			});
