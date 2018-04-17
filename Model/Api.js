@@ -1,11 +1,12 @@
 const request	=	require('request');
+const token = "kb90dQbxzq0397352800";
 
 module.exports = class Api
 {
 
 	get() {
 		return new Promise((resolve, reject) => {
-			request.get("http://127.0.0.1:3001/api", function (err, response, body) {
+			request.get("http://127.0.0.1:3001/api?token=${token}", function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));
 			});
@@ -14,7 +15,7 @@ module.exports = class Api
 
 	post(form) {
 		return new Promise((resolve, reject) => {
-			request.post({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
+			request.post({ url: "http://127.0.0.1:3001/api?token=${token}", form: form }, function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));
 			});
@@ -23,7 +24,7 @@ module.exports = class Api
 
 	put(form) {
 		return new Promise((resolve, reject) => {
-			request.put({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
+			request.put({ url: "http://127.0.0.1:3001/api?token=${token}", form: form }, function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));
 			});
@@ -32,7 +33,7 @@ module.exports = class Api
 
 	delete(form) {
 		return new Promise((resolve, reject) => {
-			request.delete({ url: "http://127.0.0.1:3001/api", form: form }, function (err, response, body) {
+			request.delete({ url: "http://127.0.0.1:3001/api?token=${token}", form: form }, function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));
 			});
