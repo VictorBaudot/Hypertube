@@ -45,5 +45,9 @@
 	"Romance": "Romance",
 	"Sci-Fi": "Sci-Fi",
 	"Seen" : "Seen",
-	"Not seen" : "Not seen"
+	"Not seen" : "Not seen",
+	"About": "About",
+	"Summary": "Summary",
+	"Thoughts": "Share what you thought about this movie...",
+	"Comments": "Comments"
 }

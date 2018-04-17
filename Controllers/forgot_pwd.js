@@ -4,7 +4,8 @@ const express	=	require('express');
 const router	=	express.Router();
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
-const connection = require('./../private/db');
+const SQL = require('../Model/SQL.class.js');
+const sql = new SQL();
 
 router.get('/', (req, res, next) => {
 	res.render('not_connected/forgot_pwd', { error : false });
@@ -18,22 +19,21 @@ function forgot_pwd(req, res) {
   let {login, email} = req.body
   let id
   let check = () => {
-    connection.query("SELECT * FROM users WHERE login = ? AND email = ?",[login, email], (err, rows) => {
-      if (err) return console.log(err);
-      else if (!rows.length) {
+    sql.select('*', 'users', {}, {login: login, email: email}).then(result => {
+      if (Object.keys(result).length > 0) {
+        id = result[0].id
+        let newpwd = generatePassword()
+        let newpwd_crypt = bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9))
+        sql.update('users', 'id', id, {psswd: newpwd_crypt}).then(result => {
+          if (Object.keys(result).length > 0){
+            go("Reinitialisation Mot de Passe", newpwd, newpwd, email)
+          }
+        });
+      } else {
         req.flashAdd('tabError', 'Les informations que vous venez d\'envoyer sont incorrectes.')
         res.redirect('back')
       }
-      else {
-        id = rows[0].id
-        let newpwd = generatePassword()
-        let newpwd_crypt = bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9))
-        connection.query("UPDATE users SET psswd = ? WHERE id = ?",[newpwd_crypt, id], (err, rows) => {
-          if (err) return console.log(err);
-          else go("Reinitialisation Mot de Passe", newpwd, newpwd, email)
-        })
-      }
-    })
+    });
   }
 
   let go = (subj, msgtext, msghtml, towho) => {

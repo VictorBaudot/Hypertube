@@ -20,7 +20,7 @@ connection.query("CREATE TABLE `users` ( \
   `first_name` varchar(255) DEFAULT NULL, \
   `photo` longtext NULL, \
   `token` TEXT NULL, \
-  `email_confirmed` binary(1) NOT NULL DEFAULT '0',\
+  `email_confirmed` binary(1) NOT NULL DEFAULT '0', \
   PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
@@ -28,16 +28,16 @@ connection.query("CREATE TABLE `users` ( \
 });
 
 connection.query("INSERT INTO `users` (`id`, `email`, `login`, `psswd`, `last_name`, `first_name`, `photo`, `email_confirmed`) VALUES \
-(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', 'pics/default.jpg', 1), \
-(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', 'pics/default.jpg', 1), \
-(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', 'pics/default.jpg', 1), \
-(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', 'pics/default.jpg', 1), \
-(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', 'pics/default.jpg', 1), \
-(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', 'pics/default.jpg', 1), \
-(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', 'pics/default.jpg', 1), \
-(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', 'pics/default.jpg', 1), \
-(9, 'dorian.jeannin77340@gmail.com ', 'dodo', 'pwd', 'Jeannin', 'jimem', 'pics/default.jpg', 1), \
-(10, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', 'pics/default.jpg', 1);");
+(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', '/pics/default.jpg', 1), \
+(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', '/pics/default.jpg', 1), \
+(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', '/pics/default.jpg', 1), \
+(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', '/pics/default.jpg', 1), \
+(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', '/pics/default.jpg', 1), \
+(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', '/pics/default.jpg', 1), \
+(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', '/pics/default.jpg', 1), \
+(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', '/pics/default.jpg', 1), \
+(9, 'dorian.jeannin77340@gmail.com ', 'dodo', 'pwd', 'Jeannin', 'jimem', '/pics/default.jpg', 1), \
+(10, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', '/pics/default.jpg', 1);");
 
 connection.query("DROP TABLE IF EXISTS videos;");
 
@@ -206,5 +206,15 @@ connection.query("CREATE TABLE `coms` ( \
 	if (err) console.error(err)
 	else console.log('Success: table coms created!')
 });
+
+let time = new Date();
+
+connection.query("INSERT INTO `coms` (`video_id`, `user_id`, `com`, `creation`) VALUES \
+(3, 1, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 2, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 3, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 4, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 5, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 6, '"+lorem+"', "+connection.escape(time)+")");
 
 connection.end();

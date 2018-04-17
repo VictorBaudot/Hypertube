@@ -1,11 +1,9 @@
 "use strict";
 
-const sql	=	require('mysql');
+const sql = require('mysql');
 
-module.exports = class Sql
-{
-	constructor ()
-	{
+module.exports = class Sql {
+	constructor() {
 		this.sql = sql.createPool({
 			host: 'localhost',
 			user: 'finley',
@@ -15,37 +13,80 @@ module.exports = class Sql
 		});
 	}
 
-	select (columns, table, condition)
-	{
+	// select(columns, table, innerjoin, condition, orderby) {
+	// 	let request = "SELECT " + columns + " FROM " + table;
+	// 	if (innerjoin && Object.keys(innerjoin).length > 0) {
+	// 		request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
+	// 	}
+	// 	if (condition && Object.keys(condition).length > 0) {
+	// 		request += " WHERE ";
+	// 		for (let i in condition) {
+	// 			if (Array.isArray(condition[i])) {
+	// 				request += " ( ";
+	// 				for (let j in condition[i])
+	// 					request += i + " = '" + condition[i][j] + "' OR ";
+	// 				request = request.substr(0, request.length - 4);
+	// 				request += " ) AND ";
+	// 			}
+	// 			else
+	// 				request += i + " = '" + condition[i] + "' AND ";
+	// 		}
+	// 		request = request.substr(0, request.length - 5);
+	// 	}
+	// 	if (orderby && Object.keys(orderby).length > 0) {
+	// 		request += " ORDER BY " + orderby.col;
+	// 		if (orderby.order) request += " " + orderby.order;
+	// 	}
+	// 	console.log(request)
+	// 	return new Promise((resolve, reject) => {
+	// 		this.sql.query(request, (err, result, fields) => {
+	// 			if (err) throw err;
+	// 			resolve(result);
+	// 		});
+	// 	});
+	// }
+
+	select(columns, table, innerjoin, condition, orderby) {
 		let request = "SELECT " + columns + " FROM " + table;
-		if (Object.keys(condition).length > 0)
-		{
+		if (innerjoin && Object.keys(innerjoin).length > 0) {
+			request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
+		}
+		if (condition && Object.keys(condition).length > 0) {
 			request += " WHERE ";
-			for (let i in condition)
-			{
-				if (Array.isArray(condition[i]))
-				{
+			for (let i in condition) {
+				if (Array.isArray(condition[i])) {
 					request += " ( ";
 					for (let j in condition[i])
-						request += i + " = '" + condition[i][j] + "' OR ";
+						request += i + " = ? OR ";
 					request = request.substr(0, request.length - 4);
 					request += " ) AND ";
 				}
 				else
-					request += i + " = '" + condition[i] + "' AND ";
+					request += i + " = ? AND ";
 			}
 			request = request.substr(0, request.length - 5);
 		}
+		if (orderby && Object.keys(orderby).length > 0) {
+			request += " ORDER BY " + orderby.col;
+			if (orderby.order) request += " " + orderby.order;
+		}
+		let params = []
+		if (condition) {
+			for (const key in condition) {
+				params.push(condition[key])
+			}
+		}
+		// console.log(request + ' / ' + params)
 		return new Promise((resolve, reject) => {
-			this.sql.query(request, (err, result, fields) => {
+			this.sql.query(request, params, (err, result, fields) => {
 				if (err) throw err;
 				resolve(result);
 			});
 		});
 	}
 
-	insert (table, value)
-	{
+	insert(table, value) {
+		
 		let request = "INSERT INTO " + table + " SET ?";
 		let params = {};
 
@@ -59,19 +100,18 @@ module.exports = class Sql
 		}));
 	}
 
-	update (table, idcol, id, values)
-	{
+	update(table, idcol, id, values) {
 
 		let keys = Object.keys(values);
 
- //   console.log(keys)
-    let cols = keys.map(k => `${k} = ?`).join(', ');
- //   console.log(cols)
+		//   console.log(keys)
+		let cols = keys.map(k => `${k} = ?`).join(', ');
+		//   console.log(cols)
 
-    let request = `UPDATE ${table} SET ${cols} WHERE ${idcol} = ?`;
-    // console.log(request)
+		let request = `UPDATE ${table} SET ${cols} WHERE ${idcol} = ?`;
+		// console.log(request)
 		let params = keys.map(k => values[k]).concat(id);
-		
+
 		// console.log(params)
 
 		return (new Promise((resolve, reject) => {
