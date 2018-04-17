@@ -13,39 +13,6 @@ module.exports = class Sql {
 		});
 	}
 
-	// select(columns, table, innerjoin, condition, orderby) {
-	// 	let request = "SELECT " + columns + " FROM " + table;
-	// 	if (innerjoin && Object.keys(innerjoin).length > 0) {
-	// 		request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
-	// 	}
-	// 	if (condition && Object.keys(condition).length > 0) {
-	// 		request += " WHERE ";
-	// 		for (let i in condition) {
-	// 			if (Array.isArray(condition[i])) {
-	// 				request += " ( ";
-	// 				for (let j in condition[i])
-	// 					request += i + " = '" + condition[i][j] + "' OR ";
-	// 				request = request.substr(0, request.length - 4);
-	// 				request += " ) AND ";
-	// 			}
-	// 			else
-	// 				request += i + " = '" + condition[i] + "' AND ";
-	// 		}
-	// 		request = request.substr(0, request.length - 5);
-	// 	}
-	// 	if (orderby && Object.keys(orderby).length > 0) {
-	// 		request += " ORDER BY " + orderby.col;
-	// 		if (orderby.order) request += " " + orderby.order;
-	// 	}
-	// 	console.log(request)
-	// 	return new Promise((resolve, reject) => {
-	// 		this.sql.query(request, (err, result, fields) => {
-	// 			if (err) throw err;
-	// 			resolve(result);
-	// 		});
-	// 	});
-	// }
-
 	select(columns, table, innerjoin, condition, orderby) {
 		let request = "SELECT " + columns + " FROM " + table;
 		if (innerjoin && Object.keys(innerjoin).length > 0) {
@@ -76,26 +43,32 @@ module.exports = class Sql {
 				params.push(condition[key])
 			}
 		}
-		// console.log(request + ' / ' + params)
 		return new Promise((resolve, reject) => {
-			this.sql.query(request, params, (err, result, fields) => {
-				if (err) throw err;
-				resolve(result);
+			this.sql.getConnection(function(error, connection) {
+			// console.log(request + ' / ' + params)
+				connection.query(request, params, (err, result, fields) => {
+					connection.release();
+					if (err) throw console.log(err);
+					resolve(result);
+				});
 			});
 		});
 	}
 
 	insert(table, value) {
-		
+
 		let request = "INSERT INTO " + table + " SET ?";
 		let params = {};
 
 		for (let i in value)
 			params[i] = value[i];
 		return (new Promise((resolve, reject) => {
-			this.sql.query(request, params, (err, result, fields) => {
-				if (err) throw err;
-				resolve(result);
+			this.sql.getConnection(function(error, connection) {
+				connection.query(request, params, (err, result, fields) => {
+					connection.release();
+					if (err) throw console.log(err);
+					resolve(result);
+				});
 			});
 		}));
 	}
