@@ -13,7 +13,7 @@ module.exports = class Sql {
 		});
 	}
 
-	select(columns, table, innerjoin, condition, orderby) {
+	select(columns, table, innerjoin, condition, orderby, more) {
 		let request = "SELECT " + columns + " FROM " + table;
 		if (innerjoin && Object.keys(innerjoin).length > 0) {
 			request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
@@ -43,6 +43,7 @@ module.exports = class Sql {
 				params.push(condition[key])
 			}
 		}
+		request += more;
 		return new Promise((resolve, reject) => {
 			this.sql.getConnection(function(error, connection) {
 			// console.log(request + ' / ' + params)
