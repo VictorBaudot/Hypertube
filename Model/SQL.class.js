@@ -33,16 +33,19 @@ module.exports = class Sql {
 			}
 			request = request.substr(0, request.length - 5);
 		}
+
 		if (orderby && Object.keys(orderby).length > 0) {
 			request += " ORDER BY " + orderby.col;
 			if (orderby.order) request += " " + orderby.order;
 		}
+
 		let params = []
 		if (condition) {
 			for (const key in condition) {
 				params.push(condition[key])
 			}
 		}
+
 		request += more;
 		return new Promise((resolve, reject) => {
 			this.sql.getConnection(function(error, connection) {
