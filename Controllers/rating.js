@@ -8,8 +8,8 @@ const Api	= require('../Model/Api.js');
 router.get('/', (req, res, next) => {
 	let api = new Api;
 
-	api.get().then((films) => {
-		res.render('not_connected/rating', { films: films["films"], i18n: res });
+	api.get(1).then((body) => {
+		res.render('not_connected/rating', { films: body.films, i18n: res });
 	}).catch((err) => { console.log(err); });
 });
 
