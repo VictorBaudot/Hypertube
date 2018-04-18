@@ -6,6 +6,8 @@ const SQL = require('../Model/SQL.class.js');
 const sql = new SQL();
 const htmlspecialchars = require("htmlspecialchars");
 const moment = require('moment');
+const torrentStream = require('torrent-stream');
+const fs = require('fs');
 
 router.get('/:id', (req, res) => {
   let coms = [], genres = [], directors = [], actors = [];
@@ -29,16 +31,17 @@ router.get('/:id', (req, res) => {
     // }
   });
 
-function display(res) {
-  // console.log('Display')
-  // console.log(video_id + " : " + user_id)
-  // coms.forEach(com => {
-  //   console.log(com.first_name + ': '+com.com)
-  // })
-	console.log(JSON.parse(JSON.stringify(video)));
-	video = JSON.parse(JSON.stringify(video));
- 	res.render('connected/video', { video , title: video.title, user, coms, i18n: res });
-}
+  function display(res) {
+    // console.log('Display')
+    // console.log(video_id + " : " + user_id)
+    // coms.forEach(com => {
+    //   console.log(com.first_name + ': '+com.com)
+    // })
+    console.log(JSON.parse(JSON.stringify(video)));
+    video = JSON.parse(JSON.stringify(video));
+    console.log(video.imdb_id)
+    res.render('connected/video', { video , title: video.title, user, coms, i18n: res });
+  }
 
 function addVideoInfos(res) {
   let count2 = 0;
