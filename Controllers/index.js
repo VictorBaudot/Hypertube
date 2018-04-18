@@ -8,4 +8,5 @@ router.get('/', (req, res, next) => {
 		res.render("connected/index", {title: 'Accueil'})
 	} else res.render("not_connected/index", { i18n: res })
 });
+
 module.exports = router;
