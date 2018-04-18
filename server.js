@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 require('./private/passport')(passport)
 
 const index = require('./Controllers/index.js');
+const api = require('./Controllers/api.js');
 const filter = require('./Controllers/filter.js');
 const lang = require('./Controllers/lang.js');
 const auth = require('./Controllers/auth.js');
@@ -24,6 +25,8 @@ const logout = require('./Controllers/logout.js');
 const confirm = require('./Controllers/confirm.js');
 const user = require('./Controllers/user.js');
 const video = require('./Controllers/video.js');
+const rating = require('./Controllers/rating.js');
+const comments = require('./Controllers/comments.js');
 
 // const port = 8080;
 // const hostname = '127.0.0.1';
@@ -49,13 +52,14 @@ app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
+	cookie: { maxAge: 60000*60*24*30 }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
+app.use('/api', api);
 app.use('/filter', isLoggedIn, filter);
 app.use('/lang', lang);
 app.use('/auth', auth(passport))
@@ -67,7 +71,9 @@ app.use('/modify_profile', isLoggedIn, modify_profile);
 app.use('/profile', isLoggedIn, profile);
 app.use('/user', isLoggedIn, user);
 app.use('/video', isLoggedIn, video);
+app.use('/comments', isLoggedIn, comments);
 app.use('/logout', isLoggedIn, logout);
+app.use('/rating', rating);
 
 http.createServer(app).listen(3001);
 // app.listen(port, hostname, () => {
