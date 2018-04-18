@@ -132,41 +132,48 @@
     </div>
 </div>
 <div class="ui main container" style="margin-top: 3em;"></div>
-<div class="ui match-feed link centered cards">
-<% for (video of videos) { %>
-    <a id="cardMargin" class="ui black card" href="/video/<%= video.id %>">
-        <div class="ui image">
-            <%  if (video.seen === "Y") { %>
-                <span id="seen" class="ui teal right ribbon label" style="z-index:99">Vue</span>
-            <% } else { %>
-                <span id="seen" class="ui grey right ribbon label" style="z-index:99">Non vue</span>
-            <% } %>
-            <img src="<%= video.image %>">
-        </div>
-        <div class="content">
-            <span class="right floated">
-                <i class="star red icon"></i>
-                <span style="color:red !important;"><%= video.score %></span>
-            </span>
-            <div class="header"><%= video.title %> <span style="font-weight:normal;">, <%= video.year %></span></div>
-            <div class="meta">
-                <span class="date">
-                    <%= video.director %> - <%= video.actors %>
-                </span>
-            </div>
-            <div class="description">
-                <%= video.summary %>
-            </div>
-        </div>
-        <div class="extra content">
-            <span class="right floated">
-                <%= video.genres %>
-            </span>
-        </div>
-    </a>
-<% }%>
+<div class="ui match-feed center link cards">
+<% films.forEach((video) => { %>
+	    <a id="cardMargin" class="ui black card" href="/video/video.id">
+	        <div class="ui image">
+	                <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
+	                <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
+				<% if (!video.poster) { %>
+					<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">
+				<% } else { %>
+	            	<img src="<%= video.poster %>">
+				<% } %>
+			</div>
+	        <div class="content">
+	            <span class="right floated">
+	                <i class="star red icon"></i>
+	                <span style="color:red !important;"><%= video.rating %></span>
+	            </span>
+	            <div class="header"><%= video.title %><span style="font-weight:normal;">, <%= video.year %></span></div>
+				<div class="meta">
+					<span class="date">
+						<%= video.director %> - <%= video.actors %>
+					</span>
+				</div>
+				<div class="meta">
+					 <span class="date">
+						  <%= video.runtime %>
+					 </span>
+			 	</div>
+	            <div class="description">
+	                 <%= video.synopsis %>
+	            </div>
+	        </div>
+	        <div class="extra content">
+	            <span class="right floated">
+	                <%= video.genres %>
+	            </span>
+	        </div>
+	    </a>
+<% }) %>
+</div>
 <% if (videos.length == 0) { %> <h1 class="ui">Aucun resultat...</h1> <% } %>
-    
+
 </div>
 <script>
     $('.ui.accordion').accordion();

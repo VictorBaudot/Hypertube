@@ -20,22 +20,23 @@ function getAllInfo(films, films_db, model)
 			});
 			if (found == undefined && model == "popcorn") {
 				imdb.getById(film.imdb_id).then((res) => {
-					// film.magnet
-					// api.post(res).then((log) => {
-					// 	console.log(log);
-					// });
+					res.magnet = film.torrents.en['720p'].url
+					api.post(res).then((log) => {
+						console.log(log);
+					});
 					resolve(new_films)
 				}).catch((err) => {console.log(err);});
 			} else if (found == undefined && model == "yify") {
 				imdb.getById(film.imdb_code).then((res) => {
-					Tbp.getFilm(film.title).then((tbpFilm) => {
-						if (tbpFilm && tbpFilm[0] && tbpFilm[0].magnetLink)
-							res.magnet = tbpFilm[0].magnetLink;
-						else
-							reject(new_films);
+					// Tbp.getFilm(film.title).then((tbpFilm) => {
+						// if (tbpFilm && tbpFilm[0] && tbpFilm[0].magnetLink)
+						// 	res.magnet = tbpFilm[0].magnetLink;
+						// else
+						// 	reject(new_films);
+						res.magnet = "magnet:?xt=urn:btih:" + film.torrents[0].hash;
 						api.post(res).then((log) => {});
 						resolve(new_films)
-					}).catch((e) => {console.log(e);})
+					// }).catch((e) => {console.log(e);})
 				}).catch((err) => {console.log(err);});
 			}
 		});
