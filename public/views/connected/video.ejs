@@ -7,7 +7,10 @@
             <%= title %>
         </div>
     </div>
-    <div class="ui embed" data-url="https://www.youtube.com/embed/O6Xo21L0ybE" data-placeholder="/<%= video.image %>"></div>
+
+    <div class="ui embed" data-url="https://www.youtube.com/embed/O6Xo21L0ybE" data-placeholder="<%= video.poster %>">
+		<iframe width="1275" height="1178" src="https://www.youtube.com/embed/O6Xo21L0ybE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>		
+	</div>
     <div class="ui styled fluid accordion">
         <div class="title" style="background-color:#000000; text-align:center;">
             <i class="dropdown icon" style="color:#fff"></i>
@@ -24,7 +27,7 @@
                         </span>
                 </div>
                 <p style="font-style: italic;">
-                    <%= video.summary %>
+                    <%= video.plot %>
                 </p>
                 <p>
                     <span class='vid_infos'>
