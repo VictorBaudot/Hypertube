@@ -5,8 +5,11 @@ const router = express.Router();
 const SQL = require('../Model/SQL.class.js');
 const sql = new SQL();
 const htmlspecialchars = require("htmlspecialchars");
+const Api	= require('../Model/Api.js');
 
 router.get('/', (req, res, next) => {
+	let api = new Api;
+
 	if (req.isAuthenticated()) {
 		let genres = [], directors = [], actors = [], videos = [];
 		let filters = {
@@ -21,7 +24,9 @@ router.get('/', (req, res, next) => {
 		}
 
 		function display() {
-			res.render("connected/index", { title: 'Accueil', videos, filters, genres, directors, actors, i18n: res })
+			api.get(1).then((body) => {
+				res.render("connected/index", { films: body.films, title: 'Accueil', videos, filters, genres, directors, actors, i18n: res })
+			}).catch((err) => { console.log(err); });
 		}
 
 		function addVideosInfos() {

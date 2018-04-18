@@ -25,7 +25,6 @@ const logout			= require('./Controllers/logout.js');
 const confirm			= require('./Controllers/confirm.js');
 const user				= require('./Controllers/user.js');
 const video				= require('./Controllers/video.js');
-const rating			= require('./Controllers/rating.js');
 const comments			= require('./Controllers/comments.js');
 const dwl				= require('./Controllers/dwl.js');
 
@@ -74,7 +73,6 @@ app.use('/user', isLoggedIn, user);
 app.use('/video', isLoggedIn, video);
 app.use('/comments', isLoggedIn, comments);
 app.use('/logout', isLoggedIn, logout);
-app.use('/rating', rating);
 app.use('/dwl', dwl);
 
 http.createServer(app).listen(3001);
