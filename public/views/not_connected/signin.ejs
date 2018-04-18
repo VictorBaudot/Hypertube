@@ -1,18 +1,18 @@
 <div class="ui black centered huge header"><%= i18n.__("Connection") %></div>
 <form action="/signin" method="post" class="ui form" accept-charset="utf-8">
 		<div class="field">
-				<label>Votre login</label>
+				<label><%= i18n.__("Your login") %></label>
 				<div class="ui icon labeled input">
-						<input type="text" placeholder="Votre login" name="login" autofocus required>
+						<input type="text" placeholder="<%= i18n.__("Your login") %>" name="login" autofocus required>
 						<div class="ui corner label">
 								<i class="icon asterisk"></i>
 						</div>
 				</div>
 		</div>
 		<div class="field">
-				<label>Votre mot de passe</label>
+				<label><%= i18n.__("Your password") %></label>
 				<div class="ui labeled icon input">
-						<input type="password" placeholder="Votre mot de passe" name="password" required>
+						<input type="password" placeholder="<%= i18n.__("Your password") %>" name="password" required>
 						<div class="ui corner label">
 								<i class="icon asterisk"></i>
 						</div>
@@ -20,7 +20,15 @@
 		</div>
 
 		<button type="submit" class="ui fluid black submit button">
-				Se connecter
+				<%= i18n.__("Log in") %>
 		</button>
-		<p><a href="/forgot_pwd" class="ui black">*J'ai oublie mon mot de passe</a></p>
+		<p><a href="/forgot_pwd" class="ui black">*<%= i18n.__("Forgot password") %></a></p>
+		<div class="ui two column middle aligned very relaxed stackable grid">
+			<div class="column">
+				<a href="/auth/42"><img class="ui image" src="42.png" alt="42 connection"></a>
+			</div>
+			<div class="column">
+				<a href="/auth/twitter"><img class="ui image" src="twitter.png" alt="Twitter connection"></a>
+			</div>
+		</div>
 </form>
