@@ -13,16 +13,20 @@ router.get('/:id', (req, res) => {
   let video_id = htmlspecialchars(req.params.id);
   let user_id = req.user.id
 
-  sql.select('*', 'videos', {}, { id: video_id}).then(result => {
-    if (Object.keys(result).length > 0) {
-      video = result[0]
-      user = req.user
-      getInfos(res)
-    }
-    else {
-      req.flashAdd('tabError', 'Cette video n\'existe pas.');
-      res.redirect('/');
-    }
+  sql.select('*', 'films', {}, { id: video_id}).then(result => {
+
+	  video = result[0];
+	  display(res);
+
+    // if (Object.keys(result).length > 0) {
+    //   video = result[0]
+    //   user = req.user
+    //   getInfos(res)
+    // }
+    // else {
+    //   req.flashAdd('tabError', 'Cette video n\'existe pas.');
+    //   res.redirect('/');
+    // }
   });
 
 function display(res) {
@@ -31,7 +35,9 @@ function display(res) {
   // coms.forEach(com => {
   //   console.log(com.first_name + ': '+com.com)
   // })
-  res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
+	console.log(JSON.parse(JSON.stringify(video)));
+	video = JSON.parse(JSON.stringify(video));
+ 	res.render('connected/video', { video , title: video.title, user, coms, i18n: res });
 }
 
 function addVideoInfos(res) {
