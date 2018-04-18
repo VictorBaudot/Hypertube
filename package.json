@@ -38,6 +38,8 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
-    "semantic-ui": "^2.3.1"
+    "semantic-ui": "^2.3.1",
+    "thepiratebay": "^1.4.7",
+    "torrent-stream": "^1.0.4"
   }
 }
