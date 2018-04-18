@@ -7,7 +7,14 @@ module.exports = class Popcorn
 		return new Promise((resolve, reject) => {
 			request("https://tv-v2.api-fetch.website/movies/" + Pagenumber + "?sort=rating&order=-1", function (err, response, body) {
 				if (err) throw err;
-				resolve(JSON.parse(body));
+				let result;
+				try {
+					result = JSON.parse(body);
+				} catch (e) {
+					console.log(e);
+					reject(e);
+				}
+				resolve(result);
 			});
 		});
 	}
@@ -17,7 +24,14 @@ module.exports = class Popcorn
 		return new Promise((resolve, reject) => {
 			request('https://tv-v2.api-fetch.website/movie/' + id, function (err, response, body) {
 				if (err) throw err;
-				resolve(JSON.parse(body));
+				let result;
+				try {
+					result = JSON.parse(body);
+				} catch (e) {
+					console.log(e);
+					reject(e);
+				}
+				resolve(result);
 			});
 		});
 	}
@@ -27,7 +41,14 @@ module.exports = class Popcorn
 		return new Promise((resolve, reject) => {
 			request('https://tv-v2.api-fetch.website/movie/' + id, function (err, response, body) {
 				if (err) throw err;
-				resolve(JSON.parse(body).torrents.en['720p'].url);
+				let result;
+				try {
+					result = JSON.parse(body);
+				} catch (e) {
+					console.log(e);
+					reject(e);
+				}
+				resolve(result.torrents.en['720p'].url);
 			});
 		});
 	}
