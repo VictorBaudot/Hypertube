@@ -70,6 +70,7 @@ connection.query("CREATE TABLE `films` ( \
 	`session` varchar(255) NULL,  \
 	`episode` varchar(255) NULL,  \
 	`status` varchar(255) NULL,	\
+	`magnet` longtext NULL, \
 	PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
