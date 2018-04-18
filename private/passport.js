@@ -1,11 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy;
-const nodemailer = require('nodemailer');
-const bcrypt = require('bcrypt-nodejs');
-const connection = require('./../private/db');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const FortyTwoStrategy = require('passport-42').Strategy;
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt-nodejs');
 const SQL = require('../Model/SQL.class');
+const sql = new SQL();
 
 const FACEBOOK_APP_ID = '212847129480653'
 const FACEBOOK_APP_SECRET = 'fef4a6f5a25ba642811cce2f412a67f6'
@@ -21,9 +21,9 @@ module.exports = (passport) => {
     })
 
     passport.deserializeUser((id, done) => {
-        connection.query("SELECT * FROM users WHERE id = ? ",[id], (err, rows) => {
-            done(err, rows[0]);
-        });
+        sql.select('*', 'users', {}, {id: id}).then(result => {
+            done(null, result[0]);
+        })
     })
 
     // =========================================================================
@@ -54,9 +54,8 @@ module.exports = (passport) => {
         // console.log(profile)
         let {id_str, screen_name, name, profile_image_url} = profile._json
         // console.log(id_str + '\n' + screen_name + '\n' + name + '\n' + profile_image_url)
-        connection.query("SELECT * FROM users WHERE twitterId = ?",[id_str], (err, rows) => {
-            if (err) return done(err);
-            if (rows.length) return done(null, rows[0]);
+        sql.select('*', 'users', {}, {twitterId: id_str}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
                 let newpwd = generatePassword()
                 var newUser = {
@@ -69,13 +68,12 @@ module.exports = (passport) => {
                     email_confirmed: 1
                 };
                 console.log(newUser)
-                let sql = new SQL()
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
                 });
             }
-        });
+        })
       }
     ));
 
@@ -92,9 +90,8 @@ module.exports = (passport) => {
         // console.log(profile)
         let {id, login, first_name, last_name, image_url, email} = profile._json
         // console.log(id + '\n' + login + '\n' + first_name + '\n' + last_name + '\n' + image_url + '\n' + email)
-        connection.query("SELECT * FROM users WHERE fortytwoId = ?",[id], (err, rows) => {
-            if (err) return done(err);
-            if (rows.length) return done(null, rows[0]);
+        sql.select('*', 'users', {}, {fortytwoId: id}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
                 let newpwd = generatePassword()
                 var newUser = {
@@ -109,7 +106,6 @@ module.exports = (passport) => {
                     email_confirmed: 1
                 };
                 console.log(newUser)
-                let sql = new SQL()
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -133,15 +129,14 @@ module.exports = (passport) => {
     }, (req, login, password, done) => {
         let photo;
         if (Object.keys(req.file).length !== 0) {
-            photo = 'pics/'+req.file.filename;
+            photo = '/pics/'+req.file.filename;
         } else photo = '/pics/default.jpg';
-        connection.query("SELECT * FROM users WHERE login = ? OR email = ?",[login, req.body.email], (err, rows) => {
-            if (err) return done(err);
-            if (!isSignUpValid(req, login, password, rows)) return done(null, false);
+        sql.select('*', 'users', {}, {login: login, email: req.body.email}).then(result => {
+            if (!isSignUpValid(req, login, password, result)) return done(null, false);
             else {
                 var newUser = {
                     login: login,
-                    password: bcrypt.hashSync(password, bcrypt.genSaltSync(9)),
+                    psswd: bcrypt.hashSync(password, bcrypt.genSaltSync(9)),
                     first_name: capitalizeFirstLetter(req.body.first_name),
                     last_name: capitalizeFirstLetter(req.body.last_name),
                     photo,
@@ -149,17 +144,12 @@ module.exports = (passport) => {
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
                 console.log(newUser)
-                var insertQuery = "INSERT INTO users ( login, first_name, last_name, photo, email, psswd, token ) values (?, ?, ?, ?, ?, ?, ?)";
-
-                connection.query(insertQuery,[newUser.login, newUser.first_name, newUser.last_name, newUser.photo, newUser.email, newUser.password, newUser.token], (err) => {
-                    if (err) throw err
-                    else {
-                        let link = 'http://localhost:3001/confirm/'+newUser.login+'/'+newUser.token
-                        let msgtext = "Valider votre compte en vous rendant a cette adresse : "+link
-                        let msghtml = "<p>Valider votre compte en "+"<a href="+link+">cliquant ici</a></p>"
-                        go("Hypertube", msgtext, msghtml, newUser.email)
-                    }
-                });
+                sql.insert('users', newUser).then(result => {
+                    let link = 'http://localhost:3001/confirm/'+newUser.login+'/'+newUser.token
+                    let msgtext = "Valider votre compte en vous rendant a cette adresse : "+link
+                    let msghtml = "<p>Valider votre compte en "+"<a href="+link+">cliquant ici</a></p>"
+                    go("Hypertube", msgtext, msghtml, newUser.email)
+                })
             }
         });
 
@@ -211,19 +201,16 @@ module.exports = (passport) => {
             passwordField: 'password',
             passReqToCallback: true, // allows us to pass back the entire request to the callback
         }, (req, login, password, done) => {
-            connection.query('SELECT * FROM users WHERE login = ?', [login], (err, rows) => {
-                if (err) return done(err);
-                // console.log(rows)
-                if (!rows.length) {
+            sql.select('*', 'users', {}, {login: login}).then(result => {
+                if (Object.keys(result).length < 1) {
                     return done(null, false, req.flashAdd('tabError', 'Cet utilisateur n\'existe pas.'));
                 }
-                if (rows[0].email_confirmed == 0)  return done(null, false, req.flashAdd('tabError', 'L\'email de ce compte n\'a pas encore ete confirme'));
+                if (result[0].email_confirmed == 0)  return done(null, false, req.flashAdd('tabError', 'L\'email de ce compte n\'a pas encore ete confirme'));
                 
-                if (!bcrypt.compareSync(password, rows[0].psswd)) return done(null, false, req.flashAdd('tabError', 'Oops! Mauvais mot de passe.'));
+                if (!bcrypt.compareSync(password, result[0].psswd)) return done(null, false, req.flashAdd('tabError', 'Oops! Mauvais mot de passe.'));
 
-                return done(null, rows[0]);
-            });
-            
+                return done(null, result[0]);
+            })
         })
     );
 }

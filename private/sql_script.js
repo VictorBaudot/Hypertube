@@ -20,7 +20,7 @@ connection.query("CREATE TABLE `users` ( \
   `first_name` varchar(255) DEFAULT NULL, \
   `photo` longtext NULL, \
   `token` TEXT NULL, \
-  `email_confirmed` binary(1) NOT NULL DEFAULT '0',\
+  `email_confirmed` binary(1) NOT NULL DEFAULT '0', \
   PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
@@ -28,16 +28,53 @@ connection.query("CREATE TABLE `users` ( \
 });
 
 connection.query("INSERT INTO `users` (`id`, `email`, `login`, `psswd`, `last_name`, `first_name`, `photo`, `email_confirmed`) VALUES \
-(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', 'pics/default.jpg', 1), \
-(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', 'pics/default.jpg', 1), \
-(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', 'pics/default.jpg', 1), \
-(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', 'pics/default.jpg', 1), \
-(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', 'pics/default.jpg', 1), \
-(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', 'pics/default.jpg', 1), \
-(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', 'pics/default.jpg', 1), \
-(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', 'pics/default.jpg', 1), \
-(9, 'dorian.jeannin77340@gmail.com ', 'dodo', 'pwd', 'Jeannin', 'jimem', 'pics/default.jpg', 1), \
-(10, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', 'pics/default.jpg', 1);");
+(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', '/pics/default.jpg', 1), \
+(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', '/pics/default.jpg', 1), \
+(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', '/pics/default.jpg', 1), \
+(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', '/pics/default.jpg', 1), \
+(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', '/pics/default.jpg', 1), \
+(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', '/pics/default.jpg', 1), \
+(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', '/pics/default.jpg', 1), \
+(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', '/pics/default.jpg', 1), \
+(9, 'dorian.jeannin77340@gmail.com', 'olag', '$2a$09$FXaBNRo92qwxpecqlQicKu9vFigq6n2HO34IIIKAimCjAT8y4bNt.', 'olag', 'olag', '/pics/default.jpg', 1), \
+(10, 'ogre181@hotmail.com', 'dodo', 'pwd', 'Jeannin', 'jimem', '/pics/default.jpg', 1), \
+(11, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', '/pics/default.jpg', 1);");
+
+connection.query("DROP TABLE IF EXISTS films;");
+
+connection.query("CREATE TABLE `films` ( \
+	`id` int(11) NOT NULL AUTO_INCREMENT, \
+	`imdb_id` varchar(255) NOT NULL, \
+	`parent_id` varchar(255) NULL, \
+	`title` varchar(255) NOT NULL, \
+	`year` int(11) NULL, \
+	`rated` varchar(255) NULL, \
+	`released` varchar(255) NULL, \
+	`runtime` varchar(255) NULL, \
+	`genre` varchar(255) NULL, \
+	`director` varchar(255) NULL, \
+	`writers` varchar(255) NULL, \
+	`actors` varchar(255) NULL, \
+	`plot` longtext NULL, \
+	`country` varchar(255) NULL, \
+	`language` varchar(255) NULL, \
+	`metascore` int(11) NULL, \
+	`poster` varchar(255) NULL, \
+	`rating` varchar(255) NULL, \
+	`votes` varchar(255) NULL,  \
+	`budget` varchar(255) NULL,  \
+	`opening_weekend` varchar(255) NULL,  \
+	`gross` varchar(255) NULL,  \
+	`production` varchar(255) NULL,  \
+	`type` varchar(255) NULL,  \
+	`session` varchar(255) NULL,  \
+	`episode` varchar(255) NULL,  \
+	`status` varchar(255) NULL,	\
+	PRIMARY KEY (`id`) \
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
+	if (err) console.error(err)
+	else console.log('Success: table films created!')
+});
 
 connection.query("DROP TABLE IF EXISTS videos;");
 
@@ -206,5 +243,15 @@ connection.query("CREATE TABLE `coms` ( \
 	if (err) console.error(err)
 	else console.log('Success: table coms created!')
 });
+
+let time = new Date();
+
+connection.query("INSERT INTO `coms` (`video_id`, `user_id`, `com`, `creation`) VALUES \
+(3, 1, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 2, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 3, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 4, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 5, '"+lorem+"', "+connection.escape(time)+"), \
+(3, 6, '"+lorem+"', "+connection.escape(time)+")");
 
 connection.end();
