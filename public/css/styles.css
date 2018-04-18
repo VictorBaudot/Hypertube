@@ -58,3 +58,23 @@ footer {
   top: 0px;
   left: 0px;
 }
+
+.vid_infos {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.fixavatar {
+  width: 48px !important;
+  height: 48px !important;
+  margin-right: 4px;
+}
+
+div#dark_light {
+  float: right;
+  cursor: pointer;
+}
+
+.hide-scrollbar ::-webkit-scrollbar{
+  visibility : hidden;
+}

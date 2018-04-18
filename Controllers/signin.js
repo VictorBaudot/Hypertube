@@ -24,32 +24,3 @@ function checkCredentials(req, res, next) {
 	req.flashAdd('tabError', 'Login / Mot de passe invalides');
 	res.redirect('/');
 }
-
-/*(req, res, next) => {
-	let params = req.body;
-
-	if (params.login && params.psswd)
-	{
-		let sql = new SQL();
-		sql.select('id', 'users', {
-			login: htmlspecialchars(params.login),
-			psswd: crypto.createHash('md5').update(htmlspecialchars(params.psswd)).digest('hex')
-		}).then(result => {
-			if (Object.keys(result).length > 0)
-			{
-				req.session.id_user = result[0].id;
-				return (res.redirect('/'));
-			}
-			else
-				return (res.render('not_connected/index', {
-					error: "Nous ne vous trouvons pas parmis nos inscrit :(",
-					, i18n: res
-				}));
-		});
-	}
-	else
-		return (res.render('not_connected/index', {
-			error: "Veuillez remplir tous les champs !",
-			, i18n: res
-		}));
-});*/
