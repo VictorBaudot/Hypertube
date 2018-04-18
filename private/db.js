@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
 	database: 'hypertube',
 	port: 3306
 });
-
+//https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/adding-users.html
 connection.connect()
 
 module.exports = connection
