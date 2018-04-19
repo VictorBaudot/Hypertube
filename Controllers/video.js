@@ -9,7 +9,7 @@ const moment = require('moment');
 
 router.get('/:id', (req, res) => {
   let coms = [], genres = [], directors = [], actors = [];
-  let user = {}, video = {};
+  let user = req.user, video = {};
   let video_id = htmlspecialchars(req.params.id);
   let user_id = req.user.id
 
@@ -36,7 +36,8 @@ function display(res) {
   //   console.log(com.first_name + ': '+com.com)
   // })
 	console.log(JSON.parse(JSON.stringify(video)));
-	video = JSON.parse(JSON.stringify(video));
+  video = JSON.parse(JSON.stringify(video));
+  console.log(user)
  	res.render('connected/video', { video , title: video.title, user, coms, i18n: res });
 }
 
