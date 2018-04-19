@@ -245,6 +245,15 @@ connection.query("CREATE TABLE `coms` ( \
 	else console.log('Success: table coms created!')
 });
 
+connection.query("CREATE TABLE `downloads` ( \
+	`imdb_id` varchar(255) NOT NULL, \
+	`started` int(11) NOT NULL, \
+	`progress` int(11) NOT NULL \
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", err => {
+	  if (err) console.error(err)
+	  else console.log('Success: table downloads created!')
+  })
+
 let time = new Date();
 
 connection.query("INSERT INTO `coms` (`video_id`, `user_id`, `com`, `creation`) VALUES \
