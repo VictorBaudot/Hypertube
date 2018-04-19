@@ -245,6 +245,8 @@ connection.query("CREATE TABLE `coms` ( \
 	else console.log('Success: table coms created!')
 });
 
+connection.query("DROP TABLE IF EXISTS downloads;");
+
 connection.query("CREATE TABLE `downloads` ( \
 	`imdb_id` varchar(255) NOT NULL, \
 	`started` int(11) NOT NULL, \
