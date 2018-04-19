@@ -11,94 +11,80 @@ router.get('/', (req, res, next) => {
 	let api = new Api;
 
 	if (req.isAuthenticated()) {
-		let genres = [], directors = [], actors = [], videos = [];
+		let infos = {genres: [], directors: [], actors: []}
+		let films = []
 		let filters = {
-			score: { l: 0, u: 5.0 },
-			year: { l: 1800, u: 2018 },
+			page: 1,
+			rating: { l: 0, u: 10.0 },
+			year: { l: 1900, u: 2018 },
 			genres: [],
 			directors: [],
 			actors: [],
-			sortType: "score",
+			sortType: "rating",
 			sortOrder: "desc",
 			videos_viewed: "all"
 		}
 
 		function display() {
-			api.get(1).then((body) => {
-				res.render("connected/index", { films: body.films, title: 'Accueil', videos, filters, genres, directors, actors, i18n: res })
-			}).catch((err) => { console.log(err); });
-		}
-
-		function addVideosInfos() {
-			let count = 0;
-			let total = videos.length;
-			videos.forEach(video => {
-				// console.log(video)
-				let count2 = 0;
-				let total2 = 3;
-				let tabGenres = [], tabActors = [], director;
-
-				let check = () => {
-					if (++count == total) display()
+			for (const key in infos) {
+				if (infos.hasOwnProperty(key)) {
+					infos[key].sort();
 				}
-
-				video.id = htmlspecialchars(video.id)
-
-				sql.select('*', 'actors', { table: 'videos_actors', column1: 'actors.actor', column2: 'videos_actors.actor' }, { video_id: video.id }).then(result => {
-					if (Object.keys(result).length > 0) {
-						result.forEach(row => {
-							tabActors.push(row.actor)
-						})
-						video.actors = tabActors.join(', ')
-					}
-					if (++count2 == total2) check()
-				});
-
-				sql.select('*', 'genres', { table: 'videos_genres', column1: 'genres.genre', column2: 'videos_genres.genre' }, { video_id: video.id }).then(result => {
-					if (Object.keys(result).length > 0) {
-						result.forEach(row => {
-							tabGenres.push('#' + row.genre)
-						})
-						video.genres = tabGenres.join(', ')
-					}
-					if (++count2 == total2) check()
-				});
-
-				sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
-					if (Object.keys(result).length > 0) {
-						video.director = result[0].director
-					}
-					if (++count2 == total2) check()
-				});
-			});
-
-		}
-
-		function getVideos() {
-			sql.select('*', 'videos', {}, {}, { col: 'score', order: 'DESC' }).then(result => {
-				if (result) {
-					videos = result
-				}
-				addVideosInfos()
-			});
+			}
+			// infos.actors.forEach(el => {
+			// 	console.log("-->"+el)
+			// })
+			// console.log(filters)
+			// console.log(infos.genres)
+			// console.log(infos.actors)
+			// console.log(infos.directors)
+			res.render("connected/index", { films, title: 'Accueil', filters, genres: infos.genres, directors: infos.directors, actors: infos.actors, i18n: res })
 		}
 
 		function getInfos() {
-			let count = 0;
-			let total = 3;
-			let data = ['genres', 'directors', 'actors']
+			// let count = 0;
+			// let total = 3;
 
-			for (let i = 0; i < data.length; i++) {
-				sql.select('*', data[i]).then(result => {
-					if (Object.keys(result).length > 0) {
-						data[i] = result
+			// for (let i = 0; i < data.length; i++) {
+			// 	sql.select('*', data[i]).then(result => {
+			// 		if (Object.keys(result).length > 0) {
+			// 			data[i] = result
+			// 		}
+			// 		// console.log(result)
+			// 		if (++count == total) display()
+			// 	});
+			// }
+			films.forEach(video =>{
+				let infos_video = {genres: [], directors: [], actors: []}
+				for (const key in infos_video) {
+					if (infos_video.hasOwnProperty(key)) {
+						if (key == "genres") infos_video[key] = video.genre.split(", ")
+						else if (key == "directors") infos_video[key] = video.director.split(" ,")
+						else infos_video[key] = video.actors.split(" , ")
+						infos_video[key].forEach(elem => {
+							if (!infos[key].includes(elem) && elem != '' && elem != ' ') infos[key].push(elem)
+						})
 					}
-					if (++count == total) getVideos()
-				});
-			}
+				}
+				
+			})
+			display()
 		}
 
-		getInfos()
+		function getVideos() {
+			api.get(filters).then((body) => {
+				films = body.films
+				getInfos()
+			}).catch((err) => { console.log(err); });
+			// sql.select('*', 'videos', {}, {}, { col: 'score', order: 'DESC' }).then(result => {
+			// 	if (result) {
+			// 		videos = result
+			// 	}
+			// 	addVideosInfos()
+			// });
+		}
+
+		getVideos()
 
 	} else res.render("not_connected/index", { i18n: res })
 });
