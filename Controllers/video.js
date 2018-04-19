@@ -12,7 +12,7 @@ const fs = require('fs');
 
 router.get('/:id', (req, res) => {
   let coms = [], genres = [], directors = [], actors = [];
-  let user = {}, video = {};
+  let user = req.user, video = {};
   let video_id = htmlspecialchars(req.params.id);
   let user_id = req.user.id
 
@@ -87,6 +87,7 @@ router.get('/:id', (req, res) => {
     console.log(JSON.parse(JSON.stringify(video)));
     video = JSON.parse(JSON.stringify(video));
     console.log(video.imdb_id)
+	console.log(user);
     res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
   }
 
