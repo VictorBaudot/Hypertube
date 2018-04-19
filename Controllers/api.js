@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../private/db');
-const SQL = require('../model/SQL.class.js');
+const SQL = require('../Model/SQL.class.js');
 let sql = new SQL;
 const token = "kb90dQbxzq0397352800";
 
