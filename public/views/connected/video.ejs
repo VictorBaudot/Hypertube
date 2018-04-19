@@ -8,9 +8,8 @@
         </div>
     </div>
 
-    <div class="ui embed" data-url="https://www.youtube.com/embed/O6Xo21L0ybE" data-placeholder="<%= video.poster %>">
-		<iframe width="1275" height="1178" src="https://www.youtube.com/embed/O6Xo21L0ybE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>		
-	</div>
+    <div id="videoContainer">
+    </div>
     <div class="ui styled fluid accordion">
         <div class="title" style="background-color:#000000; text-align:center;">
             <i class="dropdown icon" style="color:#fff"></i>
@@ -144,5 +143,11 @@
                 dark = 0
             }
         })
+
+        setTimeout(function () {
+            $("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
+            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
+            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
+        }, 3000) 
     </script>
     <% include ./assets/footer %>
