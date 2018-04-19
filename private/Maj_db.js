@@ -3,7 +3,7 @@ const Yify = require('../Model/Yify.js');
 const Imdb = require('../Model/Imdb.js');
 const Api = require('../Model/Api.js');
 const Thepiratebay = require('../Model/Thepiratebay.js');
-const SQL = require('../model/SQL.class.js');
+const SQL = require('../Model/SQL.class.js');
 
 function getAllInfo(films, films_db, model)
 {
