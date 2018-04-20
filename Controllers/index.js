@@ -10,6 +10,11 @@ const Api	= require('../Model/Api.js');
 router.get('/', (req, res, next) => {
 	let api = new Api;
 
+	if (req.session.lang == undefined)
+		res.cookie('i18n', 'en');
+	else
+		res.cookie('i18n', req.session.lang);
+
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
 		let films = []
@@ -66,7 +71,7 @@ router.get('/', (req, res, next) => {
 						})
 					}
 				}
-				
+
 			})
 			display()
 		}
