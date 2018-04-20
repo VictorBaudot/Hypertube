@@ -9,36 +9,37 @@ const connection = require('./db')
 connection.query("DROP TABLE IF EXISTS users;");
 
 connection.query("CREATE TABLE `users` ( \
-  `id` int(11) NOT NULL AUTO_INCREMENT, \
-  `fortytwoId` int(11) NULL, \
-  `facebookId` BIGINT NULL, \
-  `twitterId` BIGINT NULL, \
-  `email` varchar(255) DEFAULT NULL, \
-  `login` varchar(255) NOT NULL, \
-  `psswd` varchar(255) NULL, \
-  `last_name` varchar(255) DEFAULT NULL, \
-  `first_name` varchar(255) DEFAULT NULL, \
-  `photo` longtext NULL, \
-  `token` TEXT NULL, \
-  `email_confirmed` binary(1) NOT NULL DEFAULT '0', \
-  PRIMARY KEY (`id`) \
+	`id` int(11) NOT NULL AUTO_INCREMENT, \
+	`fortytwoId` int(11) NULL, \
+	`facebookId` BIGINT NULL, \
+	`twitterId` BIGINT NULL, \
+	`email` varchar(255) DEFAULT NULL, \
+	`login` varchar(255) NOT NULL, \
+	`psswd` varchar(255) NULL, \
+	`last_name` varchar(255) DEFAULT NULL, \
+	`first_name` varchar(255) DEFAULT NULL, \
+	`photo` longtext NULL, \
+	`token` TEXT NULL, \
+	`email_confirmed` binary(1) NOT NULL DEFAULT '0', \
+	`lang` varchar(255) DEFAULT 'en', \
+ 	PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
 	else console.log('Success: table users created!')
 });
 
-connection.query("INSERT INTO `users` (`id`, `email`, `login`, `psswd`, `last_name`, `first_name`, `photo`, `email_confirmed`) VALUES \
-(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', '/pics/default.jpg', 1), \
-(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', '/pics/default.jpg', 1), \
-(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', '/pics/default.jpg', 1), \
-(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', '/pics/default.jpg', 1), \
-(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', '/pics/default.jpg', 1), \
-(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', '/pics/default.jpg', 1), \
-(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', '/pics/default.jpg', 1), \
-(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', '/pics/default.jpg', 1), \
-(9, 'dorian.jeannin77340@gmail.com', 'olag', '$2a$09$FXaBNRo92qwxpecqlQicKu9vFigq6n2HO34IIIKAimCjAT8y4bNt.', 'olag', 'olag', '/pics/default.jpg', 1), \
-(10, 'ogre181@hotmail.com', 'dodo', 'pwd', 'Jeannin', 'jimem', '/pics/default.jpg', 1), \
-(11, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', '/pics/default.jpg', 1);");
+connection.query("INSERT INTO `users` (`id`, `email`, `login`, `psswd`, `last_name`, `first_name`, `photo`, `email_confirmed`, lang) VALUES \
+(1, 'mjeannin@student.42.fr', 'mjeannin', 'test', 'Jeannin', 'Marine', '/pics/default.jpg', 1, 'en'), \
+(2, 'dchristo@student.42.fr', 'xeis', 'pwd', 'Christophe', 'Damien', '/pics/default.jpg', 1, 'en'), \
+(3, 'hmassonn@student.42.fr', 'hmassonn', 'pwd', 'Massonnet', 'Hugo', '/pics/default.jpg', 1, 'en'), \
+(4, 'jrasoloh@student.42.fr', 'haydn', 'pwd', 'Rasoloharijaona', 'Jossy', '/pics/default.jpg', 1, 'en'), \
+(5, 'ecunniet@student.42.fr', 'ecunniet', 'pwd', 'Cunniet-Robert', 'Élise', '/pics/default.jpg', 1, 'en'), \
+(6, 'kperreau@student.42.fr', 'kperreau', 'pwd', 'Perreau', 'Kevin', '/pics/default.jpg', 1, 'en'), \
+(7, 'ntibi@student.42.fr', 'ntibi', 'pwd', 'Tibi', 'Nicolas', '/pics/default.jpg', 1, 'en'), \
+(8, 'ocornevi@student.42.fr', 'ocornevi', 'pwd', 'Cornevin', 'cannot', '/pics/default.jpg', 1, 'en'), \
+(9, 'dorian.jeannin77340@gmail.com', 'olag', '$2a$09$FXaBNRo92qwxpecqlQicKu9vFigq6n2HO34IIIKAimCjAT8y4bNt.', 'olag', 'olag', '/pics/default.jpg', 1, 'fr'), \
+(10, 'ogre181@hotmail.com', 'dodo', 'pwd', 'Jeannin', 'jimem', '/pics/default.jpg', 1, 'en'), \
+(11, 'lguarda@student.42.fr', 'lguarda', 'pwd', 'Guarda', 'lenom', '/pics/default.jpg', 1, 'en');");
 
 connection.query("DROP TABLE IF EXISTS films;");
 
@@ -244,6 +245,18 @@ connection.query("CREATE TABLE `coms` ( \
 	if (err) console.error(err)
 	else console.log('Success: table coms created!')
 });
+
+connection.query("DROP TABLE IF EXISTS downloads;");
+
+connection.query("CREATE TABLE `downloads` ( \
+	`imdb_id` varchar(255) NOT NULL, \
+	`started` int(11) NOT NULL, \
+	`progress` int(11) NOT NULL, \
+	PRIMARY KEY (`imdb_id`)	\
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", err => {
+	  if (err) console.error(err)
+	  else console.log('Success: table downloads created!')
+  })
 
 let time = new Date();
 
