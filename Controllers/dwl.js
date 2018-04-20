@@ -47,7 +47,7 @@ router.get('/:imdb_id', (req, res, next) => {
 
 router.get('/sub/:imdb_id/:lang', (req, res, next) => {
 
-  const path = '/goinfre/' + req.params.imdb_id + '.' + req.params.lang + '.vtt';
+  const path = '/goinfre/' + req.params.imdb_id + '-' + req.params.lang + '.vtt';
   if (fs.existsSync(path)) {
     const stat = fs.statSync(path);
     res.writeHead(200, {
