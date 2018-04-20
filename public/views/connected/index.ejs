@@ -1,5 +1,5 @@
 <% include ./assets/header.ejs %>
-
+</div>
 <div class="ui main container" style="margin-top: 3em;">
     <div class="ui styled fluid accordion">
         <div class="title" style="background-color:#000000; text-align:center;">
@@ -132,9 +132,9 @@
     </div>
 </div>
 <div class="ui main container" style="margin-top: 3em;"></div>
-<div class="ui match-feed center link cards">
+<div class="ui match-feed centered link cards">
 <% films.forEach((video) => { %>
-	    <a id="cardMargin" class="ui black card" href="/video/video.id">
+	    <a id="cardMargin" class="ui black card" href="/video/<%= video.id %>">
 	        <div class="ui image">
 	                <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
 	                <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
@@ -174,7 +174,6 @@
 </div>
 <% if (videos.length == 0) { %> <h1 class="ui">Aucun resultat...</h1> <% } %>
 
-</div>
 <script>
     $('.ui.accordion').accordion();
     $('.ui.dropdown').dropdown();
