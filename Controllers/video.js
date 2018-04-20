@@ -38,27 +38,27 @@ router.get('/:id', (req, res) => {
   }
 
   function dlTorrent() {
-    var engine = torrentStream(video.magnet);
-
+	sql.select('*', 'downloads', {}, {imdb_id: video.imdb_id})
+	.then(resp => {
+		if (resp.length == 0) {
+			sql.insert('downloads', {
+				imdb_id: video.imdb_id,
+				started: 0,
+				progress: 0
+			})
+		}
+	})
+	var engine = torrentStream(video.magnet);
     engine.on('ready', function () {
       engine.files.forEach(function (file) {
         var stream = file.createReadStream();
-        sql.select('*', 'downloads', {}, {imdb_id: video.imdb_id})
-          .then(res => {
-            if (res.length == 0) {
-              sql.insert('downloads', {
-                imdb_id: video.imdb_id,
-                started: 0,
-                progress: 0
-              })
-            }
-          })
         let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
         let total = stream.length;
         let progress = 0;
 
         stream.on('data', (chunk) => {
           progress += chunk.length;
+		  console.log(Math.round(((progress / total) * 100)))
           sql.update('downloads', 'imdb_id', video.imdb_id, {
             started: 1,
             progress: Math.round(((progress / total) * 100))
@@ -153,10 +153,10 @@ router.get('/:id', (req, res) => {
 })
 
 router.get('/download/:imdb_id', (req, res) => {
-  console.log(req.params)
+  // console.log("req.params", req.params)
   sql.select('*', 'downloads', {}, {imdb_id: req.params.imdb_id})
   .then(dbResult => {
-    console.log('yay', dbResult)
+    // console.log('yay', dbResult)
     if (!dbResult.length)
       res.send('error: cannot reach sql')
     res.send(`${dbResult[0].progress}`)
