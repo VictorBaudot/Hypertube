@@ -8,16 +8,44 @@ let sql = new SQL;
 const token = "kb90dQbxzq0397352800";
 
 router.get('/', (req, res, next) => {
-	if (req.query.token == token) {
+	let query = req.query
+	let sortType = 'title'
+	let sortOrder = 'DESC'
+	let conditions = {}
+	let between = ""
+	console.log(req.query)
+	if (query.token == token) {
 		let more = "";
-		if (req.query.page != undefined) {
-			more = " limit 50 offset " + (50 * (req.query.page - 1));
+		if (query.page) {
+			more = " LIMIT 12 OFFSET " + (12 * (query.page - 1));
 		}
-		sql.select('*', 'films', {}, {}, {col: 'rating', order: 'DESC'}, more).then((films) => {
+		if (query.sortType) sortType = query.sortType
+		if (query.sortOrder) sortOrder = query.sortOrder
+		if (query.ratingL && query.ratingU) between += " AND rating >= " + query.ratingL + " AND rating <= " + query.ratingU
+		if (query.yearL && query.yearU) between += " AND year >= " + query.yearL + " AND year <= " + query.yearU
+		if (query.genres) {
+			let genres = query.genres.split(',')
+			genres.forEach(genre => {
+				between += " AND genre LIKE '%"+genre+"%'"
+			});
+		}
+		if (query.directors) {
+			let directors = query.directors.split(',')
+			directors.forEach(director => {
+				between += " AND director LIKE '%"+director+"%'"
+			});
+		}
+		if (query.actors) {
+			let actors = query.actors.split(',')
+			actors.forEach(actor => {
+				between += " AND actors LIKE '%"+actor+"%'"
+			});
+		}
+		sql.select('*', 'films', {}, conditions, {col: sortType, order: sortOrder}, more, between).then((films) => {
 			res.send({ films });
 		}).catch((err) => {console.log(err);});
 	} else {
-		res.send({ "error" : "bad token" });
+		res.send({ "error" : "Token not valid" });
 	}
 });
 
