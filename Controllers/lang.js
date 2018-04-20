@@ -1,15 +1,16 @@
-const express				=	require('express');
-const session      			=	require('express-session');
-const router				=	express.Router();
+"use strict";
 
-router.post('/', function (req, res) {
-	if (req.session.login == undefined) {
-		req.flash("error", "Vous devez vous connecter");
-		return (res.redirect('/signin'));
-	}
+const express = require('express');
+const router = express.Router();
 
-	res.cookie('i18n', session.lang);
-	res.redirect('/');
-});
+router.get('/fr', (req, res, next) => {
+  res.cookie('i18n', 'fr');
+  res.redirect('back')
+})
 
-module.exports = router
+router.get('/en', (req, res, next) => {
+  res.cookie('i18n', 'en');
+  res.redirect('back')
+})
+
+module.exports = router;
