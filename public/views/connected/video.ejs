@@ -11,7 +11,7 @@
     <div id="videoContainer">
 	    <div class="ui segment" id="waiting-download" style="height: 660px">
 	        <div class="ui active dimmer">
-	            <div class="ui indeterminate text loader">Downloading file</div>
+	            <div class="ui indeterminate text loader">Downloading file (<span id="progress">0</span>%)</div>
 	        </div>
 	    </div>
         <!-- <div id="finish-download">
@@ -152,25 +152,21 @@
             }
         })
 
-        // setTimeout(function () {
-        //     $("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
-        //     <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
-        //     <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
-        // }, 3000)
-
         var downloading = setInterval(function () {
             $.ajax({
                 type: "GET",
                 url: "/video/download/<%= video.imdb_id %>",
-                success: function (progress) {
-                    console.log(progress)
-                    if (progress == '100') {
+                success: function (obj) {
+                    console.log(obj)
+                    $("#progress").text(obj.progress)
+                    if (obj.progress == '100' && obj.subtitles == '1') {
                         clearInterval(downloading);
+                        // probably wait 1 second for the subtitle creation
 						$('#waiting-download')[0].style.display = 'none';
 						$("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
-			            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
-			            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
-						// $('#videoContainer').append($( "#finish-download" ))
+			            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>/en" default>
+			            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>/fr" default></video>`)
+						$("#videoPlayer").get(0).play()
 					}
                 }
             })

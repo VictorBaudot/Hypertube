@@ -252,6 +252,7 @@ connection.query("CREATE TABLE `downloads` ( \
 	`imdb_id` varchar(255) NOT NULL, \
 	`started` int(11) NOT NULL, \
 	`progress` int(11) NOT NULL, \
+	`subtitles` int (11) NOT NULL, \
 	PRIMARY KEY (`imdb_id`)	\
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", err => {
 	  if (err) console.error(err)
