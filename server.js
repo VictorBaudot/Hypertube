@@ -1,31 +1,32 @@
-const express		= require("express");
-const i18n			= require('i18n');
-const app			= express();
-const http			= require('http');
-const path			= require('path');
-const bodyParser	= require('body-parser');
-const passport		= require('passport');
-const database		= require('./Model/SQL.class.js');
-const session		= require('express-session');
-const cookieParser	= require('cookie-parser');
+const express = require("express");
+const i18n = require('i18n');
+const app = express();
+const http = require('http');
+const path = require('path');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const database = require('./Model/SQL.class.js');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 require('./private/passport')(passport)
 
-const index				= require('./Controllers/index.js');
-const api				= require('./Controllers/api.js');
-const sort				= require('./Controllers/sort.js');
-const auth				= require('./Controllers/auth.js');
-const signin			= require('./Controllers/signin.js');
-const signup			= require('./Controllers/signup.js');
-const forgot_pwd		= require('./Controllers/forgot_pwd.js');
-const profile			= require('./Controllers/profile.js');
-const modify_profile	= require('./Controllers/modify_profile.js');
-const logout			= require('./Controllers/logout.js');
-const confirm			= require('./Controllers/confirm.js');
-const user				= require('./Controllers/user.js');
-const video				= require('./Controllers/video.js');
-const comments			= require('./Controllers/comments.js');
-const dwl				= require('./Controllers/dwl.js');
+const index = require('./Controllers/index.js');
+const lang = require('./Controllers/lang.js');
+const api = require('./Controllers/api.js');
+const sort = require('./Controllers/sort.js');
+const auth = require('./Controllers/auth.js');
+const signin = require('./Controllers/signin.js');
+const signup = require('./Controllers/signup.js');
+const forgot_pwd = require('./Controllers/forgot_pwd.js');
+const profile = require('./Controllers/profile.js');
+const modify_profile = require('./Controllers/modify_profile.js');
+const logout = require('./Controllers/logout.js');
+const confirm = require('./Controllers/confirm.js');
+const user = require('./Controllers/user.js');
+const video = require('./Controllers/video.js');
+const comments = require('./Controllers/comments.js');
+const dwl = require('./Controllers/dwl.js');
 
 // const port = 8080;
 // const hostname = '127.0.0.1';
@@ -50,7 +51,7 @@ app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true,
-	cookie: { maxAge: 60000*60*24*30 }
+	cookie: { maxAge: 60000 * 60 * 24 * 30 }
 }))
 app.use(i18n.init);
 
@@ -59,6 +60,7 @@ app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
 
 app.use('/', index);
+app.use('/lang', lang)
 app.use('/api', api);
 app.use('/sort', isLoggedIn, sort);
 app.use('/auth', auth(passport))
