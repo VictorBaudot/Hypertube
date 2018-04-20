@@ -10,6 +10,9 @@ const Api	= require('../Model/Api.js');
 router.get('/', (req, res, next) => {
 	let api = new Api;
 
+	if (req.cookies.i18n == undefined) res.setLocale('en')
+  else res.setLocale(req.cookies.i18n)
+		
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
 		let films = []
@@ -42,18 +45,6 @@ router.get('/', (req, res, next) => {
 		}
 
 		function getInfos() {
-			// let count = 0;
-			// let total = 3;
-
-			// for (let i = 0; i < data.length; i++) {
-			// 	sql.select('*', data[i]).then(result => {
-			// 		if (Object.keys(result).length > 0) {
-			// 			data[i] = result
-			// 		}
-			// 		// console.log(result)
-			// 		if (++count == total) display()
-			// 	});
-			// }
 			films.forEach(video =>{
 				let infos_video = {genres: [], directors: [], actors: []}
 				for (const key in infos_video) {
@@ -66,7 +57,7 @@ router.get('/', (req, res, next) => {
 						})
 					}
 				}
-				
+
 			})
 			display()
 		}
@@ -76,12 +67,6 @@ router.get('/', (req, res, next) => {
 				films = body.films
 				getInfos()
 			}).catch((err) => { console.log(err); });
-			// sql.select('*', 'videos', {}, {}, { col: 'score', order: 'DESC' }).then(result => {
-			// 	if (result) {
-			// 		videos = result
-			// 	}
-			// 	addVideosInfos()
-			// });
 		}
 
 		getVideos()
