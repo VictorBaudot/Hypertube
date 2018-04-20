@@ -99,32 +99,13 @@ router.get('/:id', (req, res) => {
           sublanguageid: 'fre,eng'
         })
         .then(subtitles => {
-          console.log("wowowowowowoowowowwoowowowoowow")
           for (let lang in subtitles) {
             let destSrt = `/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.srt`
-            console.log(`created ${destSrt}`)
             let subFile = fs.createWriteStream(destSrt)
             let request = http.get(subtitles[lang].url, response => {
-              response.pipe(subFile)
+              response.pipe(srt2vtt()).pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
             })
-            request.on('finish', () =>  {
-              if (fs.existsSync(destSrt)) {
-                console.log(`${destSrt} exists`)
-                let stream = fs.createReadStream(destSrt)
-                  .pipe(srt2vtt())
-                  .pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
-                  stream.on('finish', () => {
-                    // send dis shit to db
-                    // sql.update('downloads', 'imdb_id', video.imdb_id, {
-                    //   subtitles: 1
-                    // })
-                    process.exit(0)
-                  })
-              }
-            })
-            
           }
-          console.log("wowowowowowoowowowwoowowowoowow")
         })
       })
     }
@@ -132,15 +113,10 @@ router.get('/:id', (req, res) => {
   }
 
   function display(res) {
-    // console.log('Display')
-    // console.log(video_id + " : " + user_id)
-    // coms.forEach(com => {
-    //   console.log(com.first_name + ': '+com.com)
-    // })
     console.log(JSON.parse(JSON.stringify(video)));
     video = JSON.parse(JSON.stringify(video));
     console.log(video.imdb_id)
-	console.log(user);
+	  console.log(user);
     res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
   }
 
