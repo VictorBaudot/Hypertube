@@ -76,7 +76,7 @@ router.get('/:id', (req, res) => {
         })
 
         OpenSubtitles.search({
-          imdbid: 'tt1431045',
+          imdbid: video.imdb_id,
           sublanguageid: 'fre,eng'
         })
         .then(subtitles => {
