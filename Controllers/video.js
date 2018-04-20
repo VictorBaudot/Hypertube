@@ -16,6 +16,7 @@ const OpenSubtitles = new OS({
     username: 'rbadia',
     password: '!^n^b%tmrfm57P2Io^s5'
 });
+const FfmpegCommand = require('fluent-ffmpeg');
 
 router.get('/:id', (req, res) => {
   let coms = [], genres = [], directors = [], actors = [];
@@ -27,7 +28,6 @@ router.get('/:id', (req, res) => {
 
     video = result[0];
     dlTorrent()
-    dlSubtitle()
     display(res);
   });
 
@@ -47,15 +47,17 @@ router.get('/:id', (req, res) => {
   })
   .then(insertResult => {
     if (insertResult != 100) {
+      let is_mkv = false;
       // torrent is new and we have to begin download it
       var engine = torrentStream(video.magnet)
       engine.on('ready', function () {
         engine.files.forEach(function (file) {
           var stream = file.createReadStream();
           let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
+          is_mkv = (file.name.split('.').pop() == "mkv") ? true : false;
           let total = stream.length;
           let progress = 0;
-  
+
           stream.on('data', (chunk) => {
             progress += chunk.length;
             let progressPercent = Math.round(((progress / total) * 100))
@@ -71,12 +73,24 @@ router.get('/:id', (req, res) => {
 
       // kan c fini
       engine.on('idle', function() {
+        if (is_mkv)
+        {
+          var ffmpeg = new FfmpegCommand();
+
+          ffmpeg(stream)
+          .output(`/goinfre/${video.imdb_id}.mp4`)
+          .on('end', () => {
+            console.log("Finish to convert file");
+          })
+          .run();
+        }
+
         sql.update('downloads', 'imdb_id', video.imdb_id, {
           progress: 100
         })
 
         OpenSubtitles.search({
-          imdbid: 'tt1431045',
+          imdbid: video.imdb_id,
           sublanguageid: 'fre,eng'
         })
         .then(subtitles => {
