@@ -46,7 +46,6 @@ router.get('/:id', (req, res) => {
     }
   })
   .then(insertResult => {
-    insertResult = 99
     if (insertResult != 100) {
       // torrent is new and we have to begin download it
       var engine = torrentStream(video.magnet)
