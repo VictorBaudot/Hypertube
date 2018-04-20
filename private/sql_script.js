@@ -53,13 +53,13 @@ connection.query("CREATE TABLE `films` ( \
 	`runtime` varchar(255) NULL, \
 	`genre` varchar(255) NULL, \
 	`director` varchar(255) NULL, \
-	`writers` varchar(255) NULL, \
-	`actors` varchar(255) NULL, \
+	`writers` LONGTEXT NULL, \
+	`actors` LONGTEXT NULL, \
 	`plot` longtext NULL, \
 	`country` varchar(255) NULL, \
 	`language` varchar(255) NULL, \
 	`metascore` int(11) NULL, \
-	`poster` varchar(255) NULL, \
+	`poster` LONGTEXT NULL, \
 	`rating` varchar(255) NULL, \
 	`votes` varchar(255) NULL,  \
 	`budget` varchar(255) NULL,  \
@@ -70,7 +70,7 @@ connection.query("CREATE TABLE `films` ( \
 	`session` varchar(255) NULL,  \
 	`episode` varchar(255) NULL,  \
 	`status` varchar(255) NULL,	\
-	`magnet` longtext NULL, \
+	`magnet` LONGTEXT NULL, \
 	PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
