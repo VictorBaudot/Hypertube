@@ -1,14 +1,19 @@
 <% include ./assets/header.ejs %>
-</div>
-<div class="ui main container" style="margin-top: 3em;">
-    <div class="ui styled fluid accordion">
-        <div class="title" style="background-color:#000000; text-align:center;">
+<form action="/sort" method="POST" class="ui form">
+    <div id="search" class="ui fluid large icon input">
+      <input name="title" class="prompt nice_borders" type="text" placeholder='<%= i18n.__("Search your movie...") %>' value="<%= filters.title %>">
+      <i class="search icon"></i>
+    </div>
+</form>
+    <div class="ui fluid accordion">
+        <div class="title nice_borders" style="font-size: 16px;background-color:#000000; text-align:center;">
             <i class="dropdown icon" style="color:#fff"></i>
             <span style="color:#fff"><%= i18n.__("Filter and / or sort profiles") %></span>
         </div>
-        <div class="content">
+        <div class="content" style="border:none">
             <p class="transition hidden">
                 <form onkeypress="return event.keyCode != 13;" action="/sort" method="POST" class="ui form">
+                    <input name="title" type="hidden" value="<%= filters.title %>">
                     <div class="ui two column middle aligned very relaxed stackable grid">
                         <div class="column">
                             <div class="field">
@@ -165,7 +170,7 @@
 	    </a>
 <% }) %>
 </div>
-<% if (films.length == 0) { %> <div class="ui main centered container" style="margin-top: 3em;"><h1 class="ui centered">Aucun resultat...</h1></div> <% } %>
+<% if (films.length == 0) { %> <div class="ui main centered container" style="margin-top: 3em;text-align:center"><h1 class="ui centered">Aucun resultat...</h1></div> <% } %>
 <script>
 (function($, window, undefined) {
     var page = 1;
@@ -188,9 +193,9 @@
             var windowHeight = $(window).height();
             var height = $(document).height() - windowHeight;
             var scrollPercentage = (scrollTop / height);
-            
-            // if the scroll is more than 90% from the top, load more content.
-            if(scrollPercentage > 0.9 && lastHeight < height) {
+
+            // if the scroll is more than 75% from the top, load more content.
+            if(scrollPercentage > 0.75 && lastHeight < height) {
                 lastHeight = height
                 console.log("scrollTop: "+scrollTop+"\nwindowHeight: "+windowHeight+"\nheight: "+height+"\nscrollPercentage: "+scrollPercentage)
                 this.doSomething();
@@ -200,7 +205,7 @@
         this.doSomething = function() {
             ++page;
             console.log("Page: " + page)
-            var url = "/api?token="+token+"&page="+page;
+            var url = "/api?token="+token+"&page="+page+"&title=<%= filters.title %>";
             url += "&ratingL=<%= filters.rating.l %>&ratingU=<%= filters.rating.u %>&";
             url += "yearL=<%= filters.year.l %>&yearU=<%= filters.year.u %>&";
             url += "genres=<%= filters.genres %>&directors=<%= filters.directors %>&actors=<%= filters.actors %>&";
@@ -260,7 +265,6 @@
     $('.ui.accordion').accordion();
     $('.ui.dropdown').dropdown();
     $('.ui.multiple.search.dropdown').dropdown({allowAdditions: true});
-
 
     var yearRange = document.getElementById('yearRange');
     var ratingRange = document.getElementById('ratingRange');
