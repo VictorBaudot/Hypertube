@@ -13,7 +13,7 @@ module.exports = class Sql {
 		});
 	}
 
-	select(columns, table, innerjoin, condition, orderby, more = "") {
+	select(columns, table, innerjoin, condition, orderby, more = "", between = "") {
 		let request = "SELECT " + columns + " FROM " + table;
 		if (innerjoin && Object.keys(innerjoin).length > 0) {
 			request += " INNER JOIN " + innerjoin.table + " ON " + innerjoin.column1 + " = " + innerjoin.column2;
@@ -32,7 +32,9 @@ module.exports = class Sql {
 					request += i + " = ? AND ";
 			}
 			request = request.substr(0, request.length - 5);
-		}
+			request += between;
+		} else if (between && between.length > 0) request += " WHERE " + between.substr(5, between.length);
+
 
 		if (orderby && Object.keys(orderby).length > 0) {
 			request += " ORDER BY " + orderby.col;
@@ -47,9 +49,10 @@ module.exports = class Sql {
 		}
 
 		request += more;
+
 		return new Promise((resolve, reject) => {
 			this.sql.getConnection(function(error, connection) {
-			// console.log(request + ' / ' + params)
+			console.log(request + " / " + params)
 				connection.query(request, params, (err, result, fields) => {
 					connection.release();
 					if (err) throw console.log(err);

@@ -8,19 +8,19 @@
         </div>
         <div class="content">
             <p class="transition hidden">
-                <form onkeypress="return event.keyCode != 13;" action="/filter" method="POST" class="ui form">
+                <form onkeypress="return event.keyCode != 13;" action="/sort" method="POST" class="ui form">
                     <div class="ui two column middle aligned very relaxed stackable grid">
                         <div class="column">
                             <div class="field">
                                 <span class="range-values">
-                                    <input id="score-lower0" name="scoreL" type="hidden" value="<%= filters.score.l %>">
-                                    <input id="score-upper0" name="scoreU" type="hidden" value="<%= filters.score.u %>">
-                                    <span id="score-lower">3</span>
+                                    <input id="rating-lower0" name="ratingL" type="hidden" value="<%= filters.rating.l %>">
+                                    <input id="rating-upper0" name="ratingU" type="hidden" value="<%= filters.rating.u %>">
+                                    <span id="rating-lower">0</span>
                                     <span>-</span>
-                                    <span id="score-upper">5</span>
+                                    <span id="rating-upper">10</span>
                                 </span>
-                                <label><%= i18n.__("Score") %></label>
-                                <div id="scoreRange"></div>
+                                <label><%= i18n.__("Rating") %></label>
+                                <div id="ratingRange"></div>
                             </div>
                             <div class="field">
                                 <span class="range-values">
@@ -49,39 +49,39 @@
                             <div class="field">
                                 <label><%= i18n.__("Genres") %></label>
                                 <div class="ui fluid multiple search selection dropdown">
-                                    <input name="filterGenres" type="hidden" value="<%= filters.genres.join(',') %>">
+                                    <input name="filterGenres" type="hidden" value="<%= filters.genres %>">
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("Genres") %></div>
                                     <div class="menu">
-                                        <% for (genre of genres) { %>
-                                            <div class="item" data-value="<%= genre.genre %>"><%= i18n.__(genre.genre) %></div>
-                                        <% } %>
+                                        <% genres.forEach(genre => { %>
+                                            <div class="item" data-value="<%= genre %>"><%= i18n.__(genre) %></div>
+                                        <% }) %>
                                     </div>
                                 </div>
                             </div>
                             <div class="field">
                                 <label><%= i18n.__("Directors") %></label>
                                 <div class="ui fluid multiple search selection dropdown">
-                                    <input name="filterDirectors" type="hidden" value="<%= filters.directors.join(',') %>">
+                                    <input name="filterDirectors" type="hidden" value="<%= filters.directors %>">
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("Directors") %></div>
                                     <div class="menu">
-                                        <% for (director of directors) { %>
-                                            <div class="item" data-value="<%= director.director %>"><%= director.director %></div>
-                                        <% } %>
+                                        <% directors.forEach(director => { %>
+                                            <div class="item" data-value="<%= director %>"><%= director %></div>
+                                        <% }) %>
                                     </div>
                                 </div>
                             </div>
                             <div class="field">
                                 <label><%= i18n.__("Actors") %></label>
                                 <div class="ui fluid multiple search selection dropdown">
-                                    <input name="filterActors" type="hidden" value="<%= filters.actors.join(',') %>">
+                                    <input name="filterActors" type="hidden" value="<%= filters.actors %>">
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("Actors") %></div>
                                     <div class="menu">
-                                        <% for (actor of actors) { %>
-                                            <div class="item" data-value="<%= actor.actor %>"><%= actor.actor %></div>
-                                        <% } %>
+                                        <% actors.forEach(actor => { %>
+                                            <div class="item" data-value="<%= actor %>"><%= actor %></div>
+                                        <% }) %>
                                     </div>
                                 </div>
                             </div>
@@ -100,8 +100,8 @@
                                     <i class="dropdown icon"></i>
                                     <div class="default text"><%= i18n.__("None") %></div>
                                     <div class="menu">
-                                        <div class="item" data-value="name"><%= i18n.__("Name") %></div>
-                                        <div class="item" data-value="score"><%= i18n.__("Score") %></div>
+                                        <div class="item" data-value="title"><%= i18n.__("Title") %></div>
+                                        <div class="item" data-value="rating"><%= i18n.__("Rating") %></div>
                                         <div class="item" data-value="year"><%= i18n.__("Year of production") %></div>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
     </div>
 </div>
 <div class="ui main container" style="margin-top: 3em;"></div>
-<div class="ui match-feed centered link cards">
+<div class="ui filmsFeed centered link cards">
 <% films.forEach((video) => { %>
 	    <a id="cardMargin" class="ui black card" href="/video/<%= video.id %>">
 	        <div class="ui image">
@@ -155,25 +155,107 @@
 						<%= video.director %> - <%= video.actors %>
 					</span>
 				</div>
-				<div class="meta">
-					 <span class="date">
-						  <%= video.runtime %>
-					 </span>
-			 	</div>
-	            <div class="description">
-	                 <%= video.synopsis %>
-	            </div>
 	        </div>
 	        <div class="extra content">
+                <%= video.runtime %>
 	            <span class="right floated">
-	                <%= video.genres %>
+	                <%= video.genre %>
 	            </span>
 	        </div>
 	    </a>
 <% }) %>
 </div>
-<% if (videos.length == 0) { %> <h1 class="ui">Aucun resultat...</h1> <% } %>
-
+<% if (films.length == 0) { %> <div class="ui main centered container" style="margin-top: 3em;"><h1 class="ui centered">Aucun resultat...</h1></div> <% } %>
+<script>
+(function($, window, undefined) {
+    var page = 1;
+    var lastHeight = 0;
+    var token = "kb90dQbxzq0397352800";
+    var InfiniteScroll = function() {
+        this.initialize = function() {
+            this.setupEvents();
+        };
+        
+        this.setupEvents = function() {
+            $(window).on(
+                'scroll',
+                this.handleScroll.bind(this)
+            );
+        };
+ 
+        this.handleScroll = function() {
+            var scrollTop = $(document).scrollTop();
+            var windowHeight = $(window).height();
+            var height = $(document).height() - windowHeight;
+            var scrollPercentage = (scrollTop / height);
+            
+            // if the scroll is more than 90% from the top, load more content.
+            if(scrollPercentage > 0.9 && lastHeight < height) {
+                lastHeight = height
+                console.log("scrollTop: "+scrollTop+"\nwindowHeight: "+windowHeight+"\nheight: "+height+"\nscrollPercentage: "+scrollPercentage)
+                this.doSomething();
+            }
+        }
+ 
+        this.doSomething = function() {
+            ++page;
+            console.log("Page: " + page)
+            var url = "/api?token="+token+"&page="+page;
+            url += "&ratingL=<%= filters.rating.l %>&ratingU=<%= filters.rating.u %>&";
+            url += "yearL=<%= filters.year.l %>&yearU=<%= filters.year.u %>&";
+            url += "genres=<%= filters.genres %>&directors=<%= filters.directors %>&actors=<%= filters.actors %>&";
+            url += "sortType=<%= filters.sortType %>&sortOrder=<%= filters.sortOrder %>&";
+            url += "videos_viewed=<%= filters.videos_viewed %>";
+            console.log(url)
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    response.films.forEach(film => {
+                        let html = '<a id="cardMargin" class="ui black card" href="/video/'+film.id+'"> \
+                                    <div class="ui image">\
+                                    <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>\
+                                    <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>';
+                        if (!film.poster) html += '<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">';
+                        else html += '<img src="'+film.poster+'">';
+                        html += '</div>\
+                                <div class="content">\
+                                    <span class="right floated">\
+                                        <i class="star red icon"></i>\
+                                        <span style="color:red !important;">'+film.rating+'</span>\
+                                    </span>\
+                                    <div class="header">'+film.title+'<span style="font-weight:normal;">, '+film.year+'</span></div>\
+                                    <div class="meta">\
+                                        <span class="date">\
+                                            '+film.director+' - '+film.actors+'\
+                                        </span>\
+                                    </div>\
+                                </div>\
+                                <div class="extra content">\
+                                    '+film.runtime+'\
+                                    <span class="right floated">\
+                                        '+film.genre+'\
+                                    </span>\
+                                </div>\
+                            </a>';
+                        $('.filmsFeed').append(html)
+                    })
+                }
+            });
+        }
+ 
+        this.initialize();
+    }
+ 
+    $(document).ready(
+        function() {
+            new InfiniteScroll();
+        }
+    );
+})(jQuery, window);
+</script>
 <script>
     $('.ui.accordion').accordion();
     $('.ui.dropdown').dropdown();
@@ -181,7 +263,7 @@
 
 
     var yearRange = document.getElementById('yearRange');
-    var scoreRange = document.getElementById('scoreRange');
+    var ratingRange = document.getElementById('ratingRange');
 
     noUiSlider.create(yearRange, {
         start: [<%= filters.year.l %>, <%= filters.year.u %>],
@@ -191,13 +273,13 @@
         tooltips: true,
         behaviour: 'tap-drag',
         range: {
-            'min': 1800,
+            'min': 1900,
             'max': 2018
         }
     });
 
-    noUiSlider.create(scoreRange, {
-        start: [<%= filters.score.l %>, <%= filters.score.u %>],
+    noUiSlider.create(ratingRange, {
+        start: [<%= filters.rating.l %>, <%= filters.rating.u %>],
         connect: true,
         margin: 1,
         step: 0.1,
@@ -205,7 +287,7 @@
         behaviour: 'tap-drag',
         range: {
             'min': 0,
-            'max': 5
+            'max': 10
         }
     });
 
@@ -219,23 +301,23 @@
         document.getElementById('year-upper')
     ];
 
-    var scoreValues0 = [
-        document.getElementById('score-lower0'),
-        document.getElementById('score-upper0')
+    var ratingValues0 = [
+        document.getElementById('rating-lower0'),
+        document.getElementById('rating-upper0')
     ];
 
-    var scoreValues = [
-        document.getElementById('score-lower'),
-        document.getElementById('score-upper')
+    var ratingValues = [
+        document.getElementById('rating-lower'),
+        document.getElementById('rating-upper')
     ];
 
     yearRange.noUiSlider.on('update', function( values, handle ) {
         yearValues0[handle].value = values[handle];
         yearValues[handle].innerHTML = Math.round(values[handle]);
     });
-    scoreRange.noUiSlider.on('update', function( values, handle ) {
-        scoreValues0[handle].value = values[handle];
-        scoreValues[handle].innerHTML = Math.round(values[handle]);
+    ratingRange.noUiSlider.on('update', function( values, handle ) {
+        ratingValues0[handle].value = values[handle];
+        ratingValues[handle].innerHTML = Math.round(values[handle]);
     });
 </script>
 

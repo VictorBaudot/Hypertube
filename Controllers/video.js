@@ -29,25 +29,7 @@ router.get('/:id', (req, res) => {
     dlTorrent()
     dlSubtitle()
     display(res);
-
-    // if (Object.keys(result).length > 0) {
-    //   video = result[0]
-    //   user = req.user
-    //   getInfos(res)
-    // }
-    // else {
-    //   req.flashAdd('tabError', 'Cette video n\'existe pas.');
-    //   res.redirect('/');
-    // }
   });
-
-  function getFileExtension(filename) {
-    return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : '';
-  }
-
-  function dlSubtitle() {
-    
-  }
 
   function dlTorrent() {
 	sql.select('*', 'downloads', {}, {imdb_id: video.imdb_id})
@@ -142,6 +124,39 @@ router.get('/:id', (req, res) => {
           tabGenres.push(row.genre)
         })
         video.genres = tabGenres.join(', ')
+      }
+      if (++count2 == total2) display(res)
+    });
+
+    sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
+      if (Object.keys(result).length > 0) {
+        video.director = result[0].director
+      }
+      if (++count2 == total2) display(res)
+    });
+  }
+
+  function getInfos(res) {
+    let count = 0;
+    let total = 4;
+
+    let data = ['genres', 'directors', 'actors']
+
+    for (let i = 0; i < data.length; i++) {
+      sql.select('*', data[i]).then(result => {
+        if (Object.keys(result).length > 0) {
+          data[i] = result
+        }
+        if (++count == total) addVideoInfos(res)
+      });
+    }
+
+    sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
+      if (Object.keys(result).length > 0) {
+        coms = result
+        coms.forEach(com => {
+          com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
+        })
       }
       if (++count2 == total2) display(res)
     });

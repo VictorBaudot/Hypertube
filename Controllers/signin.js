@@ -12,7 +12,6 @@ module.exports = (passport) => {
 		if (body.remember) session.cookie.maxAge = 1000 * 60 * 3;
 		else session.cookie.expires = false;
 		res.json({ loggedin: true });
-		res.redirect('/');
 	});
 	return router
 }
