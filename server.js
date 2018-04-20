@@ -13,8 +13,7 @@ require('./private/passport')(passport)
 
 const index				= require('./Controllers/index.js');
 const api				= require('./Controllers/api.js');
-const sort			= require('./Controllers/sort.js');
-const lang				= require('./Controllers/lang.js');
+const sort				= require('./Controllers/sort.js');
 const auth				= require('./Controllers/auth.js');
 const signin			= require('./Controllers/signin.js');
 const signup			= require('./Controllers/signup.js');
@@ -35,7 +34,7 @@ app.set('views', path.join(__dirname, './public/views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
-app.use(cookieParser());
+app.use(cookieParser('secret'));
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
@@ -46,7 +45,6 @@ i18n.configure({
 	defaultLocale: 'en',
 	cookie: 'i18n'
 });
-app.use(i18n.init);
 
 app.use(session({
 	secret: 'secret',
@@ -54,6 +52,8 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: { maxAge: 60000*60*24*30 }
 }))
+app.use(i18n.init);
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(require('./private/middlewares/flash'))
@@ -61,7 +61,6 @@ app.use(require('./private/middlewares/flash'))
 app.use('/', index);
 app.use('/api', api);
 app.use('/sort', isLoggedIn, sort);
-app.use('/lang', lang);
 app.use('/auth', auth(passport))
 app.use('/signin', signin(passport));
 app.use('/signup', signup(passport));
