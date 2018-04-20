@@ -33,63 +33,64 @@ router.get('/:id', (req, res) => {
     // }
   });
 
-  function getFileExtension(filename) {
-    return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : '';
-  }
 
-  function dlTorrent() {
-    var engine = torrentStream(video.magnet);
+function display(res) {
+  // console.log('Display')
+  // console.log(video_id + " : " + user_id)
+  // coms.forEach(com => {
+  //   console.log(com.first_name + ': '+com.com)
+  // })
+  console.log(JSON.parse(JSON.stringify(video)));
+  video = JSON.parse(JSON.stringify(video));
+  console.log(video.imdb_id)
+  console.log(user);
+  res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
+}
 
-    engine.on('ready', function () {
-      engine.files.forEach(function (file) {
-        var stream = file.createReadStream();
-        sql.select('*', 'downloads', {}, {imdb_id: video.imdb_id})
-          .then(res => {
-            if (res.length == 0) {
-              sql.insert('downloads', {
-                imdb_id: video.imdb_id,
-                started: 0,
-                progress: 0
-              })
-            }
-          })
-        let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
-        let total = stream.length;
-        let progress = 0;
+function getFileExtension(filename) {
+  return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : '';
+}
 
-        stream.on('data', (chunk) => {
-          progress += chunk.length;
-          sql.update('downloads', 'imdb_id', video.imdb_id, {
-            started: 1,
-            progress: Math.round(((progress / total) * 100))
-          })
-          console.log(`readed chunk for torrent ${video.title} : `, Math.round(((progress / total) * 100)) + "%");
-        });
-        stream.pipe(write);
-      });
-    });
+function dlTorrent() {
+  sql.select('*', 'downloads', {}, {imdb_id: video.imdb_id})
+  .then(resp => {
+	  if (resp.length == 0) {
+		  sql.insert('downloads', {
+			  imdb_id: video.imdb_id,
+			  started: 0,
+			  progress: 0
+		  })
+	  }
+  })
+  var engine = torrentStream(video.magnet);
+  engine.on('ready', function () {
+	engine.files.forEach(function (file) {
+	  var stream = file.createReadStream();
+	  let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
+	  let total = stream.length;
+	  let progress = 0;
 
-    engine.on('idle', function() {
-      var srtPath = `/goinfre/${video.imdb_id}.srt`;
-      if (fs.existsSync(srtPath))
-        fs.createReadStream(srtPath)
-        .pipe(srt2vtt())
-        .pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}.vtt`))
-    })
-  }
+	  stream.on('data', (chunk) => {
+		progress += chunk.length;
+		console.log(Math.round(((progress / total) * 100)))
+		sql.update('downloads', 'imdb_id', video.imdb_id, {
+		  started: 1,
+		  progress: Math.round(((progress / total) * 100))
+		})
+		console.log(`readed chunk for torrent ${video.title} : `, Math.round(((progress / total) * 100)) + "%");
+	  });
+	  stream.pipe(write);
+	});
+  });
 
-  function display(res) {
-    // console.log('Display')
-    // console.log(video_id + " : " + user_id)
-    // coms.forEach(com => {
-    //   console.log(com.first_name + ': '+com.com)
-    // })
-    console.log(JSON.parse(JSON.stringify(video)));
-    video = JSON.parse(JSON.stringify(video));
-    console.log(video.imdb_id)
-	console.log(user);
-    res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
-  }
+  engine.on('idle', function() {
+	var srtPath = `/goinfre/${video.imdb_id}.srt`;
+	if (fs.existsSync(srtPath))
+	  fs.createReadStream(srtPath)
+	  .pipe(srt2vtt())
+	  .pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}.vtt`))
+  })
+}
 
   function addVideoInfos(res) {
     let count2 = 0;
@@ -147,16 +148,49 @@ router.get('/:id', (req, res) => {
           com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
         })
       }
+      if (++count2 == total2) display(res)
+    });
+
+    sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
+      if (Object.keys(result).length > 0) {
+        video.director = result[0].director
+      }
+      if (++count2 == total2) display(res)
+    });
+  }
+
+  function getInfos(res) {
+    let count = 0;
+    let total = 4;
+
+    let data = ['genres', 'directors', 'actors']
+
+    for (let i = 0; i < data.length; i++) {
+      sql.select('*', data[i]).then(result => {
+        if (Object.keys(result).length > 0) {
+          data[i] = result
+        }
+        if (++count == total) addVideoInfos(res)
+      });
+    }
+
+    sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
+      if (Object.keys(result).length > 0) {
+        coms = result
+        coms.forEach(com => {
+          com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
+        })
+      }
       if (++count == total) addVideoInfos(res)
     });
   }
 })
 
 router.get('/download/:imdb_id', (req, res) => {
-  console.log(req.params)
+  // console.log("req.params", req.params)
   sql.select('*', 'downloads', {}, {imdb_id: req.params.imdb_id})
   .then(dbResult => {
-    console.log('yay', dbResult)
+    // console.log('yay', dbResult)
     if (!dbResult.length)
       res.send('error: cannot reach sql')
     res.send(`${dbResult[0].progress}`)

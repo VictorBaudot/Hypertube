@@ -8,16 +8,16 @@
         </div>
     </div>
 
-    <div class="ui segment" id="waiting-download" style="height: 660px">
-        <div class="ui active dimmer">
-            <div class="ui indeterminate text loader">Downloading file</div>
-        </div>
+    <div id="videoContainer">
+	    <div class="ui segment" id="waiting-download" style="height: 660px">
+	        <div class="ui active dimmer">
+	            <div class="ui indeterminate text loader">Downloading file</div>
+	        </div>
+	    </div>
+        <!-- <div id="finish-download">
+
+        </div> -->
     </div>
-    <!-- <div id="videoContainer">
-        <div id="waiting-download">
-            
-        </div>
-    </div> -->
     <div class="ui styled fluid accordion">
         <div class="title" style="background-color:#000000; text-align:center;">
             <i class="dropdown icon" style="color:#fff"></i>
@@ -152,11 +152,11 @@
             }
         })
 
-        setTimeout(function () {
-            $("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
-            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
-            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
-        }, 3000)
+        // setTimeout(function () {
+        //     $("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
+        //     <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
+        //     <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
+        // }, 3000)
 
         var downloading = setInterval(function () {
             $.ajax({
@@ -164,8 +164,14 @@
                 url: "/video/download/<%= video.imdb_id %>",
                 success: function (progress) {
                     console.log(progress)
-                    if (progress == '100')
-                        clearInterval(downloading)
+                    if (progress == '100') {
+                        clearInterval(downloading);
+						$('#waiting-download')[0].style.display = 'none';
+						$("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
+			            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>" default>
+			            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>" default></video>`)
+						// $('#videoContainer').append($( "#finish-download" ))
+					}
                 }
             })
         }, 1000)
