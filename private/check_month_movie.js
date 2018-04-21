@@ -15,9 +15,16 @@ let between = "_____last_view BETWEEN '" + start + "' AND '" + end + "'";
 sql.select('imdb_id', 'downloads', null, null, null, null, between).then(result => {
   if (!(result) && !(result.length))
     return (true);
-  for (let i in result)
+  for (let i in result) {
     fs.unlink('/groinfre/' + result[i].imdb_id + '.*', (err) => {
       if (err) throw err;
       console.log("movie number " +result[i].imdb_id + " has been deleted");
+      sql.update('downloads', 'imdb_id', result[i].imdb_id, {
+        started: 0,
+        progress: 0,
+        conversion: 0,
+        _____last_view: null
+      })
     });
+  }
 });

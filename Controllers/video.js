@@ -256,6 +256,13 @@ router.get('/view/:imdb_id', (req, res) => {
       view_history: history.join(',')
     })
   }
+  let date = new Date()
+  let padding = (int) => {
+    return ((int < 10) ? '0' + int : int);
+  };
+  sql.update('downloads', 'imdb_id', req.params.imdb_id, {
+    _____last_view: date.getFullYear() + '-' + padding(date.getMonth()) + '-' + padding(date.getUTCDate())
+  })
   res.send('ok')
 })
 
