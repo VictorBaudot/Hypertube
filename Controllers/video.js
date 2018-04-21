@@ -39,31 +39,34 @@ router.get('/:id', (req, res) => {
 				imdb_id: video.imdb_id,
 				started: 0,
         progress: 0,
-        subtitles: 0
+        subtitles: 0,
+        conversion: 0
 			})
     } else {
-      return Promise.resolve(resp[0].progress)
+      return Promise.resolve(resp[0])
     }
   })
-  .then(insertResult => {
-    if (insertResult != 100) {
+  .then(videoStat => {
+    if (videoStat.progress != 100) {
       let is_mkv = false;
       // torrent is new and we have to begin download it
       var engine = torrentStream(video.magnet)
+      let total = 0;
+      let progress = 0;
       engine.on('ready', function () {
         engine.files.forEach(function (file) {
           var stream = file.createReadStream();
           let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
-          is_mkv = (file.name.split('.').pop() == "mkv") ? true : false;
-          let total = stream.length;
-          let progress = 0;
+          if (file.name.split('.').pop() == "mkv")
+            is_mkv = true;
+          total += stream.length;
 
           stream.on('data', (chunk) => {
             progress += chunk.length;
             let progressPercent = Math.round(((progress / total) * 100))
             sql.update('downloads', 'imdb_id', video.imdb_id, {
               started: 1,
-              progress: progressPercent == 100 ? 99 : progressPercent
+              progress: progressPercent
             })
             // console.log(`readed chunk for torrent ${video.title} (progress: ${progress}, total: ${total}: `, Math.round(((progress / total) * 100)) + "%");
           });
@@ -73,16 +76,31 @@ router.get('/:id', (req, res) => {
 
       // kan c fini
       engine.on('idle', function() {
-        if (is_mkv)
+        if (is_mkv && !videoStat.conversion)
         {
-          var ffmpeg = new FfmpegCommand();
-
-          ffmpeg(stream)
-          .output(`/goinfre/${video.imdb_id}.mp4`)
-          .on('end', () => {
-            console.log("Finish to convert file");
+          const converter = new FfmpegCommand()
+          .input(fs.createReadStream(`/goinfre/${video.imdb_id}.mkv`))
+          .outputOption('-movflags frag_keyframe+empty_moov')
+          .outputFormat('mp4')
+          .output(fs.createWriteStream(`/goinfre/${video.imdb_id}.mp4`))
+          .on('error', (err, stdout, stderr) => { console.log('  miskine ', err, stdout, stderr)})
+          .on('end', (chunk) => {
+            console.log(`mkv to mp4 chunk ${chunk}`)
+            sql.update('downloads', 'imdb_id', video.imdb_id, {
+              conversion: 1
+            })
           })
+          converter.addOption('-vcodec')
+          .addOption('copy')
+          .addOption('-acodec')
+          .addOption('copy')
           .run();
+        }
+        else
+        {
+          sql.update('downloads', 'imdb_id', video.imdb_id, {
+            conversion: 1
+          })
         }
 
         sql.update('downloads', 'imdb_id', video.imdb_id, {
@@ -98,7 +116,12 @@ router.get('/:id', (req, res) => {
             let destSrt = `/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.srt`
             let subFile = fs.createWriteStream(destSrt)
             let request = http.get(subtitles[lang].url, response => {
-              response.pipe(srt2vtt()).pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
+              response
+                .pipe(srt2vtt())
+                .pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
+                .on('finish', () => {
+                  sql.update('downloads', 'imdb_id', video.imdb_id, { subtitles: 1 })
+                })
             })
           }
         })
