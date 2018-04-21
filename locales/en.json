@@ -69,5 +69,9 @@
 	"New password": "New password",
 	"Modify": "Modify",
 	"Picture": "Picture",
-	"Profil": "Profil"
+	"Profil": "Profil",
+	"Home": "Home",
+	"dl_subtitles": "Downloading subtitles...",
+	"convert_file": "Converting video...",
+	"downloading_file": "Downloading file"
 }

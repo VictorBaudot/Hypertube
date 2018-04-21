@@ -69,5 +69,9 @@
 	"New password": "Nouveau Mot de passe",
 	"Modify": "Modifier",
 	"Picture": "Photo",
-	"Profil": "Profile"
+	"Profil": "Profile",
+	"Home": "Accueil",
+	"dl_subtitles": "Téléchargement des sous-titres...",
+	"convert_file": "Conversion de vidéo...",
+	"downloading_file": "Téléchargement du fichier"
 }
