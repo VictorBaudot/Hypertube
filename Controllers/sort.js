@@ -46,6 +46,16 @@ router.post('/', (req, res, next) => {
 		}
 
 		function getInfos() {
+			var viewed = []
+			if (req.user.view_history && req.user.view_history.length) {
+				viewed = req.user.view_history.split(',')
+			}
+
+			if (videos_viewed == 'Y') {
+				films = films.filter(video => viewed.indexOf(video.imdb_id) != -1)
+			} else if (videos_viewed == 'N') {
+				films = films.filter(video => viewed.indexOf(video.imdb_id) == -1)
+			}
 			films.forEach(video =>{
 				let infos_video = {genres: [], directors: [], actors: []}
 				for (const key in infos_video) {
