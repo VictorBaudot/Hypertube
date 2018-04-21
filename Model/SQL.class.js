@@ -48,7 +48,8 @@ module.exports = class Sql {
 			}
 		}
 
-		request += more;
+		if (more)
+			request += more;
 
 		return new Promise((resolve, reject) => {
 			this.sql.getConnection(function(error, connection) {
