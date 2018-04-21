@@ -136,8 +136,19 @@
 <% films.forEach((video) => { %>
 	    <a id="cardMargin" class="ui black card" href="/video/<%= video.id %>">
 	        <div class="ui image">
-	                <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
-	                <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
+                    <% let found = false;
+                        if (history && history.length) {
+                        history.forEach((imdbId) => {
+                            if (video.imdb_id == imdbId) {
+                                found = true; %>
+                                    <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>
+                                <% 
+                            }
+                        })
+                    }
+                    if (!found) { %>
+                        <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>
+                    <% } %>
 				<% if (!video.poster) { %>
 					<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">
 				<% } else { %>
@@ -171,6 +182,9 @@
     var page = 1;
     var lastHeight = 0;
     var token = "kb90dQbxzq0397352800";
+    var history = ("<%= history %>" && "<%= history %>".length) ? "<%= history %>".split(',') : [];
+    var notSeen = '<%= i18n.__("Not seen") %>';
+    var seen = '<%= i18n.__("Seen") %>';
     var InfiniteScroll = function() {
         this.initialize = function() {
             this.setupEvents();
@@ -214,10 +228,20 @@
                 success: function (response) {
                     console.log(response)
                     response.films.forEach(film => {
-                        let html = '<a id="cardMargin" class="ui black card" href="/video/'+film.id+'"> \
-                                    <div class="ui image">\
-                                    <span id="seen" class="ui teal right ribbon label" style="z-index:99"><%= i18n.__("Seen") %></span>\
-                                    <span id="seen" class="ui grey right ribbon label" style="z-index:99"><%= i18n.__("Not seen") %></span>';
+                        let html = '<a id="cardMargin" class="ui black card" href="/video/' + film.id + '"> \
+                                    <div class="ui image">';
+                        let found = false;
+                        if (history && history.length) {
+                            history.forEach((imdbId) => {
+                                if (film.imdb_id == imdbId) {
+                                    found = true;
+                                    html += '<span id="seen" class="ui teal right ribbon label" style="z-index:99">' + seen + '</span>';
+                                }
+                            })
+                        }
+                        if (!found) {
+                            html += '<span id="seen" class="ui grey right ribbon label" style="z-index:99">' + notSeen + '</span>';
+                        }
                         if (!film.poster) html += '<img src="https://sagmeisterwalsh.com/_image/2600x/fb6d4cb88989a0ceb9379c074d66f976.jpg">';
                         else html += '<img src="'+film.poster+'">';
                         html += '</div>\
