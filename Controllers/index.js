@@ -17,6 +17,7 @@ router.get('/', (req, res, next) => {
 		let infos = {genres: [], directors: [], actors: []}
 		let films = []
 		let filters = {
+			title: '',
 			page: 1,
 			rating: { l: 0, u: 10.0 },
 			year: { l: 1900, u: 2018 },

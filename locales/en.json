@@ -73,5 +73,6 @@
 	"Home": "Home",
 	"dl_subtitles": "Downloading subtitles...",
 	"convert_file": "Converting video...",
-	"downloading_file": "Downloading file"
+	"downloading_file": "Downloading file",
+	"Search your movie...": "Search your movie..."
 }

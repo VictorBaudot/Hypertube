@@ -13,9 +13,10 @@ router.post('/', (req, res, next) => {
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
     let films = []
-		let {ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
+		let {title, ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
     let filters = {
-      page: 1,
+			page: 1,
+			title: '',
 			rating: { l: 0, u: 10.0 },
 			year: { l: 1900, u: 2018 },
 			genres: [],
@@ -84,7 +85,8 @@ router.post('/', (req, res, next) => {
         filters.year.l = yearL
         filters.year.u = yearU
       }
-      // ADD REGEX
+			// ADD REGEX
+			if (title) filters.title = title
       if (filterGenres) filters.genres = filterGenres
       if (filterActors) filters.actors = filterActors
       if (filterDirectors) filters.directors = filterDirectors
