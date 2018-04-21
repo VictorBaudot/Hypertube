@@ -171,7 +171,11 @@
 						$("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
 			            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>/en" default>
 			            <track label="French" kind="subtitles" srclang="fr" src="/dwl/sub/<%= video.imdb_id %>/fr" default></video>`)
-						$("#videoPlayer").get(0).play()
+                        $("#videoPlayer").get(0).play()
+                        $.ajax({
+                            type: "GET",
+                            url: "/video/view/<%= video.imdb_id %>"
+                        })
 					}
                 }
             })
