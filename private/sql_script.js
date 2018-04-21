@@ -22,6 +22,7 @@ connection.query("CREATE TABLE `users` ( \
 	`token` TEXT NULL, \
 	`email_confirmed` binary(1) NOT NULL DEFAULT '0', \
 	`lang` varchar(255) DEFAULT 'en', \
+	`view_history` longtext DEFAULT NULL \
  	PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)

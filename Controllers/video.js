@@ -247,6 +247,18 @@ router.get('/download/:imdb_id', (req, res) => {
   })
 })
 
+router.get('/view/:imdb_id', (req, res) => {
+  let user = req.user
+  let history = user.view_history && user.view_history.length ? user.view_history.split(',') : []
+  if (history.findIndex(v => v == req.params.imdb_id) == -1) {
+    history.push(req.params.imdb_id)
+    sql.update('users', 'id', req.session.passport.user, {
+      view_history: history.join(',')
+    })
+  }
+  res.send('ok')
+})
+
 module.exports = router;
 
 
