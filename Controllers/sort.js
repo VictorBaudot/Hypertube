@@ -12,7 +12,8 @@ router.post('/', (req, res, next) => {
 
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
-    	let films = []
+		let allFilms = []
+		let renderedFilms = []
 		let {title, ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
     	let filters = {
 			page: 1,
@@ -35,7 +36,7 @@ router.post('/', (req, res, next) => {
 			}
 			res.render("connected/index", {
 				user: req.user,
-				films,
+				films: renderedFilms,
 				title: 'Accueil',
 				filters,
 				genres: infos.genres,
@@ -47,7 +48,17 @@ router.post('/', (req, res, next) => {
 		}
 
 		function getInfos() {
-			films.forEach(video =>{
+			var viewed = []
+			if (req.user.view_history && req.user.view_history.length) {
+				viewed = req.user.view_history.split(',')
+			}
+
+			if (videos_viewed == 'Y') {
+				renderedFilms = renderedFilms.filter(video => viewed.indexOf(video.imdb_id) != -1)
+			} else if (videos_viewed == 'N') {
+				renderedFilms = renderedFilms.filter(video => viewed.indexOf(video.imdb_id) == -1)
+			}
+			allFilms.forEach(video =>{
 				let infos_video = {genres: [], directors: [], actors: []}
 				for (const key in infos_video) {
 					if (infos_video.hasOwnProperty(key)) {
@@ -65,10 +76,16 @@ router.post('/', (req, res, next) => {
 		}
 
 		function getVideos() {
-			api.get(filters).then((body) => {
-				films = body.films
+			api.get(filters) // get list of films to be rendered
+			.then((body) => {
+				renderedFilms = body.films
+				return api.get({}) // we still need all genre etc. for the form
+			})
+			.then((body) => {
+				allFilms = body.films
 				getInfos()
-			}).catch((err) => { console.log(err); });
+			})
+			.catch((err) => { console.log(err); });
 		}
 
     function getFilters() {
