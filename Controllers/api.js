@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 	if (query.token == token) {
 		let more = "";
 		if (query.page) {
-			more = " LIMIT 12 OFFSET " + (12 * (query.page - 1));
+			more = " LIMIT 30 OFFSET " + (30 * (query.page - 1));
 		}
 		if (query.sortType) sortType = query.sortType
 		if (query.sortOrder) sortOrder = query.sortOrder
@@ -41,6 +41,8 @@ router.get('/', (req, res, next) => {
 				between += " AND actors LIKE '%"+actor+"%'"
 			});
 		}
+		if (query.title) between += " AND title LIKE '%"+query.title+"%'"
+
 		sql.select('*', 'films', {}, conditions, {col: sortType, order: sortOrder}, more, between).then((films) => {
 			res.send({ films });
 		}).catch((err) => {console.log(err);});
