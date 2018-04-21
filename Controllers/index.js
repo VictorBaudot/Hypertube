@@ -41,7 +41,16 @@ router.get('/', (req, res, next) => {
 			// console.log(infos.genres)
 			// console.log(infos.actors)
 			// console.log(infos.directors)
-			res.render("connected/index", { films, title: 'Accueil', filters, genres: infos.genres, directors: infos.directors, actors: infos.actors, i18n: res })
+			res.render("connected/index", {
+				films,
+				title: 'Accueil',
+				filters,
+				genres: infos.genres,
+				directors: infos.directors,
+				actors: infos.actors,
+				i18n: res,
+				history: (req.user.view_history && req.user.view_history.length) ? req.user.view_history.split(',') : []
+			})
 		}
 
 		function getInfos() {

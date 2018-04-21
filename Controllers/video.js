@@ -247,6 +247,25 @@ router.get('/download/:imdb_id', (req, res) => {
   })
 })
 
+router.get('/view/:imdb_id', (req, res) => {
+  let user = req.user
+  let history = user.view_history && user.view_history.length ? user.view_history.split(',') : []
+  if (history.findIndex(v => v == req.params.imdb_id) == -1) {
+    history.push(req.params.imdb_id)
+    sql.update('users', 'id', req.session.passport.user, {
+      view_history: history.join(',')
+    })
+  }
+  let date = new Date()
+  let padding = (int) => {
+    return ((int < 10) ? '0' + int : int);
+  };
+  sql.update('downloads', 'imdb_id', req.params.imdb_id, {
+    _____last_view: date.getFullYear() + '-' + padding(date.getMonth()) + '-' + padding(date.getUTCDate())
+  })
+  res.send('ok')
+})
+
 module.exports = router;
 
 
