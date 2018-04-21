@@ -254,6 +254,7 @@ connection.query("CREATE TABLE `downloads` ( \
 	`progress` int(11) NOT NULL, \
 	`subtitles` int (11) NOT NULL, \
 	`conversion` int (11) NOT NULL, \
+	`last_view` date \
 	PRIMARY KEY (`imdb_id`)	\
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", err => {
 	  if (err) console.error(err)

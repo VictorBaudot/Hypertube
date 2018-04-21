@@ -13,11 +13,24 @@ let start = date.getFullYear() + '-' + padding(date.getMonth()) + '-' + padding(
 let between = "_____last_view BETWEEN '" + start + "' AND '" + end + "'";
 
 sql.select('imdb_id', 'downloads', null, null, null, null, between).then(result => {
-  if (!(result) && !(result.length))
-    return (true);
-  for (let i in result)
-    fs.unlink('/groinfre/' + result[i].imdb_id + '.*', (err) => {
-      if (err) throw err;
-      console.log("movie number " +result[i].imdb_id + " has been deleted");
-    });
+  if (result.length == 0)
+  {
+    console.log("nothing to delete");
+    process.exit(0);
+  }
+  console.log("delete files", result);
+  fs.readdir('/goinfre/', (err, files) => {
+    for (let j in files)
+    {
+      for (let i in result)
+      {
+        let reg = new RegExp("^(" + result[i].imdb_id + "){1}");
+        let match = files[j].match(reg);
+        if (match !== null)
+          fs.unlinkSync('/goinfre/' + match.input);
+      }
+    }
+    console.log("all files has been deleted");
+    process.exit(0);
+  });
 });
