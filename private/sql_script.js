@@ -24,7 +24,7 @@ connection.query("CREATE TABLE `users` ( \
 	`token` TEXT NULL, \
 	`email_confirmed` binary(1) NOT NULL DEFAULT '0', \
 	`lang` varchar(255) DEFAULT 'en', \
-	`view_history` longtext DEFAULT NULL \
+	`view_history` longtext DEFAULT NULL, \
  	PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;", (err) => {
 	if (err) console.error(err)
@@ -90,7 +90,7 @@ connection.query("CREATE TABLE `downloads` ( \
 	`progress` int(11) NOT NULL, \
 	`subtitles` int (11) NOT NULL, \
 	`conversion` int (11) NOT NULL, \
-	`_____last_view` date DEFAULT NULL \
+	`_____last_view` date DEFAULT NULL, \
 	PRIMARY KEY (`imdb_id`)	\
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", err => {
 	  if (err) console.error(err)
