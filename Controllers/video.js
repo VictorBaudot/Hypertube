@@ -28,12 +28,15 @@ router.get('/:id', (req, res) => {
 
     video = result[0];
     dlTorrent();
-    sql.select('coms.com, users.photo', 'coms', {table: 'users', column1: 'coms.user_id', column2: 'users.id'}, {
+    sql.select('coms.com, coms.creation, users.photo, users.first_name', 'coms', {table: 'users', column1: 'coms.user_id', column2: 'users.id'}, {
       video_id: video_id
     }, {
       col: 'coms.creation',
       order: 'DESC'
     }).then(coms => {
+      console.log(coms);
+      for (let i in coms)
+        coms[i].creation = capitalizeFirstLetter(moment(coms[i].creation).fromNow())
       res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
     });
   });
