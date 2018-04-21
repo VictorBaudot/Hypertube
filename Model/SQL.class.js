@@ -48,11 +48,11 @@ module.exports = class Sql {
 			}
 		}
 
-		request += more;
+		if (more)
+			request += more;
 
 		return new Promise((resolve, reject) => {
 			this.sql.getConnection(function(error, connection) {
-			console.log(request + " / " + params)
 				connection.query(request, params, (err, result, fields) => {
 					connection.release();
 					if (err) throw console.log(err);
