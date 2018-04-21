@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 
 	if (req.cookies.i18n == undefined) res.setLocale('en')
   else res.setLocale(req.cookies.i18n)
-		
+
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
 		let films = []
@@ -35,13 +35,6 @@ router.get('/', (req, res, next) => {
 					infos[key].sort();
 				}
 			}
-			// infos.actors.forEach(el => {
-			// 	console.log("-->"+el)
-			// })
-			// console.log(filters)
-			// console.log(infos.genres)
-			// console.log(infos.actors)
-			// console.log(infos.directors)
 			res.render("connected/index", {
 				films,
 				title: 'Accueil',

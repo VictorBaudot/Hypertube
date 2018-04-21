@@ -12,9 +12,9 @@ router.post('/', (req, res, next) => {
 
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
-    let films = []
+    	let films = []
 		let {title, ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
-    let filters = {
+    	let filters = {
 			page: 1,
 			title: '',
 			rating: { l: 0, u: 10.0 },
@@ -25,8 +25,8 @@ router.post('/', (req, res, next) => {
 			sortType: "rating",
 			sortOrder: "desc",
 			videos_viewed: "all"
-    }
-    
+    	}
+
 		function display() {
 			for (const key in infos) {
 				if (infos.hasOwnProperty(key)) {
@@ -34,6 +34,7 @@ router.post('/', (req, res, next) => {
 				}
 			}
 			res.render("connected/index", {
+				user: req.user,
 				films,
 				title: 'Accueil',
 				filters,
@@ -58,7 +59,7 @@ router.post('/', (req, res, next) => {
 						})
 					}
 				}
-				
+
 			})
 			display()
 		}
@@ -91,10 +92,10 @@ router.post('/', (req, res, next) => {
       if (filterActors) filters.actors = filterActors
       if (filterDirectors) filters.directors = filterDirectors
       if (videos_viewed && (videos_viewed == "Y" || videos_viewed == "N")) filters.videos_viewed = videos_viewed
-    
+
       getVideos()
     }
-    
+
 		getFilters()
 
 	} else res.render("not_connected/index", { i18n: res })
