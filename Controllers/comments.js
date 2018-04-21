@@ -13,7 +13,7 @@ router.post('/', (req, res, next) => {
   let com = {}
   let time = new Date();
   com.photo = user.photo
-  com.com = req.body.newcom
+  com.com = htmlspecialchars(req.body.newcom)
   com.first_name = user.first_name
   com.creation = capitalizeFirstLetter(moment(time).fromNow())
   let obj = {
@@ -22,12 +22,8 @@ router.post('/', (req, res, next) => {
     com: com.com,
     creation: time
   }
-  Check.com(com.com, req, (check) => {
-    if (check === true) {
-      sql.insert('coms', obj).then((result) => {
-        res.render('newcom', { com })
-      });
-    } else res.send('<div class="ui negative message">Format du commentaire incorrect</div>')
+  sql.insert('coms', obj).then((result) => {
+    res.render('newcom', { com })
   });
 })
 
