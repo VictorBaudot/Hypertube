@@ -2,6 +2,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const FortyTwoStrategy = require('passport-42').Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
+const LinkedinStrategy = require('passport-linkedin-oauth2').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
 const SQL = require('../Model/SQL.class');
@@ -9,6 +13,12 @@ const sql = new SQL();
 
 const FACEBOOK_APP_ID = '212847129480653'
 const FACEBOOK_APP_SECRET = 'fef4a6f5a25ba642811cce2f412a67f6'
+const GITHUB_APP_ID = '10ef8957267003c42318'
+const GITHUB_APP_SECRET = 'a5fdbda730e7060da9b233edff8c062dbeb724c5'
+const LINKEDIN_APP_ID = '86m9lk4gk9n6cu'
+const LINKEDIN_APP_SECRET = 'qCb9bU4Sa7WTx02C'
+const GOOGLE_CLIENT_ID = '417161231555-h830g287ns38gkd7rqaq625839rh0al7.apps.googleusercontent.com'
+const GOOGLE_CLIENT_SECRET = 'WXgUyDc86wAF9Y5E4YuOLAQG'
 const TWITTER_CONSUMER_KEY = 'IidPkloSmiH1W4uRuYkeuP9HP'
 const TWITTER_CONSUMER_SECRET = 'PE3swPhmFZA3YC5nNnJxOJQOrbjYr9hpPBgyTgIL902stGExLo'
 const FORTYTWO_APP_ID = 'ff7d5d612e9972ef32dba3e2ecee80a5d7167faba6f03ae3c9437716b62159b8'
@@ -38,6 +48,113 @@ module.exports = (passport) => {
       function(accessToken, refreshToken, profile, done) {
         console.log(profile)
         done(null)
+      }
+    ));
+
+    // =========================================================================
+    // GOOGLE STRATEGY  ========================================================
+    // =========================================================================
+
+    passport.use(new GoogleStrategy({
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3001/auth/google/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        // console.log(profile)
+        sql.select('*', 'users', {}, {googleId: profile.id}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    googleId: profile.id,
+                    login: profile.name.givenName + profile.name.familyName,
+                    photo: profile.photos[0].value,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
+                };
+                // console.log(newUser)
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
+      }
+    ));
+
+    // =========================================================================
+    // GITHUB STRATEGY  ======================================================
+    // =========================================================================
+
+    passport.use(new GitHubStrategy({
+        clientID: GITHUB_APP_ID,
+        clientSecret: GITHUB_APP_SECRET,
+        callbackURL: "http://localhost:3001/auth/github/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        // console.log(profile)
+        let {id, login, avatar_url, email} = profile._json
+        // console.log(id + '\n' + login + '\n' + avatar_url + '\n' + email)
+        sql.select('*', 'users', {}, {githubId: id}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    githubId: id,
+                    login: login + id,
+                    photo: avatar_url,
+                    email: email,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+                    email_confirmed: 1
+                };
+                console.log(newUser)
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
+      }
+    ));
+
+    // =========================================================================
+    // LINKEDIN STRATEGY  ======================================================
+    // =========================================================================
+
+    passport.use(new LinkedinStrategy({
+        clientID: LINKEDIN_APP_ID,
+        clientSecret: LINKEDIN_APP_SECRET,
+        callbackURL: "http://localhost:3001/auth/linkedin/callback",
+        scope: ['r_emailaddress', 'r_basicprofile'],
+        state: true
+      },
+      function(accessToken, refreshToken, profile, done) {
+        // console.log(profile)
+        let photo = '/pics/default.jpg';
+        let {id, firstName, lastName} = profile._json
+        // console.log(id + '\n' + firstName + '\n' + lastName)
+        sql.select('*', 'users', {}, {linkedinId: id}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    linkedinId: id,
+                    login: firstName + lastName + id,
+                    first_name: capitalizeFirstLetter(firstName),
+                    last_name: capitalizeFirstLetter(lastName),
+                    photo,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
+                };
+                console.log(newUser)
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
       }
     ));
 

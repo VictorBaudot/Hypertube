@@ -27,8 +27,18 @@ router.get('/:id', (req, res) => {
   sql.select('*', 'films', {}, { id: video_id }).then(result => {
 
     video = result[0];
-    dlTorrent()
-    display(res);
+    dlTorrent();
+    sql.select('coms.com, coms.creation, users.photo, users.first_name', 'coms', {table: 'users', column1: 'coms.user_id', column2: 'users.id'}, {
+      video_id: video_id
+    }, {
+      col: 'coms.creation',
+      order: 'DESC'
+    }).then(coms => {
+      console.log(coms);
+      for (let i in coms)
+        coms[i].creation = capitalizeFirstLetter(moment(coms[i].creation).fromNow())
+      res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
+    });
   });
 
   function dlTorrent() {
@@ -130,14 +140,6 @@ router.get('/:id', (req, res) => {
   })
   }
 
-  function display(res) {
-    console.log(JSON.parse(JSON.stringify(video)));
-    video = JSON.parse(JSON.stringify(video));
-    console.log(video.imdb_id)
-	  console.log(user);
-    res.render('connected/video', { video, title: video.title, user, coms, i18n: res });
-  }
-
   function addVideoInfos(res) {
     let count2 = 0;
     let total2 = 3;
@@ -172,64 +174,66 @@ router.get('/:id', (req, res) => {
     });
   }
 
-  function getInfos(res) {
-    let count = 0;
-    let total = 4;
-
-    let data = ['genres', 'directors', 'actors']
-
-    for (let i = 0; i < data.length; i++) {
-      sql.select('*', data[i]).then(result => {
-        if (Object.keys(result).length > 0) {
-          data[i] = result
-        }
-        if (++count == total) addVideoInfos(res)
-      });
-    }
-
-    sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
-      if (Object.keys(result).length > 0) {
-        coms = result
-        coms.forEach(com => {
-          com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
-        })
-      }
-      if (++count2 == total2) display(res)
-    });
-
-    sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
-      if (Object.keys(result).length > 0) {
-        video.director = result[0].director
-      }
-      if (++count2 == total2) display(res)
-    });
-  }
-
-  function getInfos(res) {
-    let count = 0;
-    let total = 4;
-
-    let data = ['genres', 'directors', 'actors']
-
-    for (let i = 0; i < data.length; i++) {
-      sql.select('*', data[i]).then(result => {
-        if (Object.keys(result).length > 0) {
-          data[i] = result
-        }
-        if (++count == total) addVideoInfos(res)
-      });
-    }
-
-    sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
-      if (Object.keys(result).length > 0) {
-        coms = result
-        coms.forEach(com => {
-          com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
-        })
-      }
-      if (++count == total) addVideoInfos(res)
-    });
-  }
+  // function getInfos(res) {
+  //   let count = 0;
+  //   let total = 4;
+  //
+  //   let data = ['genres', 'directors', 'actors']
+  //
+  //   for (let i = 0; i < data.length; i++) {
+  //     sql.select('*', data[i]).then(result => {
+  //       if (Object.keys(result).length > 0) {
+  //         data[i] = result
+  //       }
+  //       if (++count == total) addVideoInfos(res)
+  //     });
+  //   }
+  //
+  //   sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
+  //     console.log("==================");
+  //     console.log(result);
+  //     console.log("==================");
+  //     if (Object.keys(result).length > 0) {
+  //       coms = result
+  //       coms.forEach(com => {
+  //         com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
+  //       })
+  //     }
+  //     if (++count2 == total2) display(res)
+  //   });
+  //
+  //   sql.select('*', 'directors', { table: 'videos_directors', column1: 'directors.director', column2: 'videos_directors.director' }, { video_id: video.id }).then(result => {
+  //     if (Object.keys(result).length > 0) {
+  //       video.director = result[0].director
+  //     }
+  //     if (++count2 == total2) display(res)
+  //   });
+  // }
+  // function getInfos(res) {
+  //   let count = 0;
+  //   let total = 4;
+  //
+  //   let data = ['genres', 'directors', 'actors']
+  //
+  //   for (let i = 0; i < data.length; i++) {
+  //     sql.select('*', data[i]).then(result => {
+  //       if (Object.keys(result).length > 0) {
+  //         data[i] = result
+  //       }
+  //       if (++count == total) addVideoInfos(res)
+  //     });
+  //   }
+  //
+  //   sql.select('*', 'coms', { table: 'users', column1: 'coms.user_id', column2: 'users.id' }, { 'coms.video_id': video_id }, { col: 'coms.creation', order: 'DESC' }).then(result => {
+  //     if (Object.keys(result).length > 0) {
+  //       coms = result
+  //       coms.forEach(com => {
+  //         com.creation = capitalizeFirstLetter(moment(com.creation).fromNow())
+  //       })
+  //     }
+  //     if (++count == total) addVideoInfos(res)
+  //   });
+  // }
 })
 
 // ENDPOINT TO CHECK IF THE VIDEO IS READY TO BE PLAYED

@@ -6,8 +6,7 @@ const router	=	express.Router();
 module.exports = (passport) => {
   router.get('/42', passport.authenticate('42'));
 
-  router.get('/42/callback', 
-    passport.authenticate('42', { failureRedirect: '/' }), 
+  router.get('/42/callback', passport.authenticate('42', { failureRedirect: '/' }), 
     (req, res) => {
       res.redirect('/'); // Successful authentication, redirect home.
   }); 
@@ -20,7 +19,28 @@ module.exports = (passport) => {
   router.get('/twitter', passport.authenticate('twitter'));
 
   router.get('/twitter/callback', 
-    passport.authenticate('twitter', { successRedirect: '/profile', failureRedirect: '/' }));
+    passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }));
   
+  router.get('/github', passport.authenticate('github'));
+ 
+  router.get('/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
+    (req, res) => {
+      res.redirect('/');
+  });
+
+  router.get('/linkedin', passport.authenticate(('linkedin')));
+
+  router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/' }),
+    (req, res) => {
+      res.redirect('/');
+  });
+
+  router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
+
+  router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+      res.redirect('/');
+  });
+
   return router
 }

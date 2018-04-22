@@ -2,10 +2,6 @@
   margin-top: 7em;
 }
 
-.displayNotifs {
-  display:none;
-}
-
 #wrap {
   min-height: 100%;
 }
@@ -77,4 +73,14 @@ div#dark_light {
 
 .hide-scrollbar ::-webkit-scrollbar{
   visibility : hidden;
+}
+
+.nice_borders, input.prompt.nice_borders {
+  border-radius: 500rem !important;
+}
+
+#search {
+  margin-bottom: 1.5em;
+  margin-right: 15%;
+  margin-left: 15%;
 }
