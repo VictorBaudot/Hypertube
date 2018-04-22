@@ -12,11 +12,13 @@ router.get('/', (req, res, next) => {
 
 	if (req.cookies.i18n == undefined) res.setLocale('en')
   else res.setLocale(req.cookies.i18n)
-		
+
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
-		let films = []
+		let allFilms = []
+		let renderedFilms = []
 		let filters = {
+			title: '',
 			page: 1,
 			rating: { l: 0, u: 10.0 },
 			year: { l: 1900, u: 2018 },
@@ -34,15 +36,8 @@ router.get('/', (req, res, next) => {
 					infos[key].sort();
 				}
 			}
-			// infos.actors.forEach(el => {
-			// 	console.log("-->"+el)
-			// })
-			// console.log(filters)
-			// console.log(infos.genres)
-			// console.log(infos.actors)
-			// console.log(infos.directors)
 			res.render("connected/index", {
-				films,
+				films: renderedFilms,
 				title: 'Accueil',
 				filters,
 				genres: infos.genres,
@@ -54,7 +49,7 @@ router.get('/', (req, res, next) => {
 		}
 
 		function getInfos() {
-			films.forEach(video =>{
+			allFilms.forEach(video =>{
 				let infos_video = {genres: [], directors: [], actors: []}
 				for (const key in infos_video) {
 					if (infos_video.hasOwnProperty(key)) {
@@ -72,10 +67,16 @@ router.get('/', (req, res, next) => {
 		}
 
 		function getVideos() {
-			api.get(filters).then((body) => {
-				films = body.films
+			api.get(filters) // get list of films to be rendered
+			.then((body) => {
+				renderedFilms = body.films
+				return api.get({}) // we still need all genre etc. for the form
+			})
+			.then((body) => {
+				allFilms = body.films
 				getInfos()
-			}).catch((err) => { console.log(err); });
+			})
+			.catch((err) => { console.log(err); });
 		}
 
 		getVideos()

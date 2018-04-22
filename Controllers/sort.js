@@ -12,10 +12,12 @@ router.post('/', (req, res, next) => {
 
 	if (req.isAuthenticated()) {
 		let infos = {genres: [], directors: [], actors: []}
-    let films = []
-		let {ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
-    let filters = {
-      page: 1,
+		let allFilms = []
+		let renderedFilms = []
+		let {title, ratingL, ratingU, yearL, yearU, videos_viewed, filterGenres, filterDirectors, filterActors, sortType, sortOrder} = req.body
+    	let filters = {
+			page: 1,
+			title: '',
 			rating: { l: 0, u: 10.0 },
 			year: { l: 1900, u: 2018 },
 			genres: [],
@@ -24,19 +26,39 @@ router.post('/', (req, res, next) => {
 			sortType: "rating",
 			sortOrder: "desc",
 			videos_viewed: "all"
-    }
-    
+    	}
+
 		function display() {
 			for (const key in infos) {
 				if (infos.hasOwnProperty(key)) {
 					infos[key].sort();
 				}
 			}
-			res.render("connected/index", { films, title: 'Accueil', filters, genres: infos.genres, directors: infos.directors, actors: infos.actors, i18n: res })
+			res.render("connected/index", {
+				user: req.user,
+				films: renderedFilms,
+				title: 'Accueil',
+				filters,
+				genres: infos.genres,
+				directors: infos.directors,
+				actors: infos.actors,
+				i18n: res,
+				history: (req.user.view_history && req.user.view_history.length) ? req.user.view_history.split(',') : []
+			})
 		}
 
 		function getInfos() {
-			films.forEach(video =>{
+			var viewed = []
+			if (req.user.view_history && req.user.view_history.length) {
+				viewed = req.user.view_history.split(',')
+			}
+
+			if (videos_viewed == 'Y') {
+				renderedFilms = renderedFilms.filter(video => viewed.indexOf(video.imdb_id) != -1)
+			} else if (videos_viewed == 'N') {
+				renderedFilms = renderedFilms.filter(video => viewed.indexOf(video.imdb_id) == -1)
+			}
+			allFilms.forEach(video =>{
 				let infos_video = {genres: [], directors: [], actors: []}
 				for (const key in infos_video) {
 					if (infos_video.hasOwnProperty(key)) {
@@ -48,16 +70,22 @@ router.post('/', (req, res, next) => {
 						})
 					}
 				}
-				
+
 			})
 			display()
 		}
 
 		function getVideos() {
-			api.get(filters).then((body) => {
-				films = body.films
+			api.get(filters) // get list of films to be rendered
+			.then((body) => {
+				renderedFilms = body.films
+				return api.get({}) // we still need all genre etc. for the form
+			})
+			.then((body) => {
+				allFilms = body.films
 				getInfos()
-			}).catch((err) => { console.log(err); });
+			})
+			.catch((err) => { console.log(err); });
 		}
 
     function getFilters() {
@@ -75,15 +103,16 @@ router.post('/', (req, res, next) => {
         filters.year.l = yearL
         filters.year.u = yearU
       }
-      // ADD REGEX
+			// ADD REGEXgit s
+			if (title) filters.title = title
       if (filterGenres) filters.genres = filterGenres
       if (filterActors) filters.actors = filterActors
       if (filterDirectors) filters.directors = filterDirectors
       if (videos_viewed && (videos_viewed == "Y" || videos_viewed == "N")) filters.videos_viewed = videos_viewed
-    
+
       getVideos()
     }
-    
+
 		getFilters()
 
 	} else res.render("not_connected/index", { i18n: res })
