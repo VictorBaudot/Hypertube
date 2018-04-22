@@ -103,11 +103,15 @@ router.post('/', (req, res, next) => {
         filters.year.l = yearL
         filters.year.u = yearU
       }
-			// ADD REGEXgit s
-			if (title) filters.title = title
-      if (filterGenres) filters.genres = filterGenres
-      if (filterActors) filters.actors = filterActors
-      if (filterDirectors) filters.directors = filterDirectors
+			// ADD REGEX
+
+			const filtersRegex = new RegExp("^[a-zA-Z0-9\p{L}_,\ +-]{1,1000}$");
+
+			if (title && filtersRegex.test(title)) filters.title = title
+      if (filterGenres && filtersRegex.test(filterGenres)) filters.genres = filterGenres
+      if (filterActors && filtersRegex.test(filterActors)) filters.actors = filterActors
+			if (filterDirectors && filtersRegex.test(filterDirectors)) filters.directors = filterDirectors
+			
       if (videos_viewed && (videos_viewed == "Y" || videos_viewed == "N")) filters.videos_viewed = videos_viewed
 
       getVideos()
