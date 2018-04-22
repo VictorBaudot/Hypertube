@@ -3,7 +3,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const FortyTwoStrategy = require('passport-42').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
-const LinkedinStrategy = require('passport-linkedin').Strategy;
+const LinkedinStrategy = require('passport-linkedin-oauth2').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const nodemailer = require('nodemailer');
@@ -124,11 +124,13 @@ module.exports = (passport) => {
     // =========================================================================
 
     passport.use(new LinkedinStrategy({
-        consumerKey: LINKEDIN_APP_ID,
-        consumerSecret: LINKEDIN_APP_SECRET,
-        callbackURL: "http://localhost:3001/auth/linkedin/callback"
+        clientID: LINKEDIN_APP_ID,
+        clientSecret: LINKEDIN_APP_SECRET,
+        callbackURL: "http://localhost:3001/auth/linkedin/callback",
+        scope: ['r_emailaddress', 'r_basicprofile'],
+        state: true
       },
-      function(token, tokenSecret, profile, done) {
+      function(accessToken, refreshToken, profile, done) {
         // console.log(profile)
         let photo = '/pics/default.jpg';
         let {id, firstName, lastName} = profile._json
