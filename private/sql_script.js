@@ -15,6 +15,7 @@ connection.query("CREATE TABLE `users` ( \
 	`githubId` varchar(255) NULL, \
 	`linkedinId` varchar(255) NULL, \
 	`twitterId` varchar(255) NULL, \
+	`googleId` varchar(255) NULL, \
 	`email` varchar(255) DEFAULT NULL, \
 	`login` varchar(255) NOT NULL, \
 	`psswd` varchar(255) NULL, \

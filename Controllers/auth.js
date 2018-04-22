@@ -24,8 +24,8 @@ module.exports = (passport) => {
   router.get('/github', passport.authenticate('github'));
  
   router.get('/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/');
+    (req, res) => {
+      res.redirect('/');
   });
 
   router.get('/linkedin', passport.authenticate(('linkedin')));
@@ -33,7 +33,14 @@ module.exports = (passport) => {
   router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/' }),
     (req, res) => {
       res.redirect('/');
-    });
+  });
+
+  router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
+
+  router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+      res.redirect('/');
+  });
 
   return router
 }

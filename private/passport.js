@@ -4,6 +4,7 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const FortyTwoStrategy = require('passport-42').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const LinkedinStrategy = require('passport-linkedin').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
@@ -16,6 +17,8 @@ const GITHUB_APP_ID = '10ef8957267003c42318'
 const GITHUB_APP_SECRET = 'a5fdbda730e7060da9b233edff8c062dbeb724c5'
 const LINKEDIN_APP_ID = '86m9lk4gk9n6cu'
 const LINKEDIN_APP_SECRET = 'qCb9bU4Sa7WTx02C'
+const GOOGLE_CLIENT_ID = '417161231555-h830g287ns38gkd7rqaq625839rh0al7.apps.googleusercontent.com'
+const GOOGLE_CLIENT_SECRET = 'WXgUyDc86wAF9Y5E4YuOLAQG'
 const TWITTER_CONSUMER_KEY = 'IidPkloSmiH1W4uRuYkeuP9HP'
 const TWITTER_CONSUMER_SECRET = 'PE3swPhmFZA3YC5nNnJxOJQOrbjYr9hpPBgyTgIL902stGExLo'
 const FORTYTWO_APP_ID = 'ff7d5d612e9972ef32dba3e2ecee80a5d7167faba6f03ae3c9437716b62159b8'
@@ -45,6 +48,38 @@ module.exports = (passport) => {
       function(accessToken, refreshToken, profile, done) {
         console.log(profile)
         done(null)
+      }
+    ));
+
+    // =========================================================================
+    // GOOGLE STRATEGY  ========================================================
+    // =========================================================================
+
+    passport.use(new GoogleStrategy({
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3001/auth/google/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        // console.log(profile)
+        sql.select('*', 'users', {}, {googleId: profile.id}).then(result => {
+            if (Object.keys(result).length > 0) return done(null, result[0]);
+            else {
+                let newpwd = generatePassword()
+                var newUser = {
+                    googleId: profile.id,
+                    login: profile.name.givenName + profile.name.familyName,
+                    photo: profile.photos[0].value,
+                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
+                };
+                // console.log(newUser)
+                sql.insert('users', newUser).then((result) => {
+                    let user = {id: result.insertId}
+                    return done(null, user);
+                });
+            }
+        });
       }
     ));
 
