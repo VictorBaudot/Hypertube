@@ -13,7 +13,6 @@ router.get('/', (req, res, next) => {
 	let sortOrder = 'DESC'
 	let conditions = {}
 	let between = ""
-	console.log(req.query)
 	if (query.token == token) {
 		let more = "";
 		if (query.page) {

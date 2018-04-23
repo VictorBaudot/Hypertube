@@ -103,7 +103,6 @@ router.post('/', (req, res, next) => {
         filters.year.l = yearL
         filters.year.u = yearU
       }
-			// ADD REGEX
 
 			const filtersRegex = new RegExp("^[a-zA-Z0-9\p{L}_,\ +-]{1,1000}$");
 

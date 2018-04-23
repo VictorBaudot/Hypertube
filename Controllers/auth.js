@@ -11,11 +11,6 @@ module.exports = (passport) => {
       res.redirect('/'); // Successful authentication, redirect home.
   }); 
   
-  // router.get('/facebook', passport.authenticate('facebook'));
-
-  // router.get('/facebook/callback', 
-  //   passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/' }));
-
   router.get('/twitter', passport.authenticate('twitter'));
 
   router.get('/twitter/callback', 
