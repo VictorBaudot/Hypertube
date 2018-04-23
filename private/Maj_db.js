@@ -21,22 +21,14 @@ function getAllInfo(films, films_db, model)
 			if (found == undefined && model == "popcorn") {
 				imdb.getById(film.imdb_id).then((res) => {
 					res.magnet = film.torrents.en['720p'].url
-					api.post(res).then((log) => {
-						console.log(log);
-					});
+					api.post(res).then((log) => {});
 					resolve(new_films)
 				}).catch((err) => {console.log(err);});
 			} else if (found == undefined && model == "yify") {
 				imdb.getById(film.imdb_code).then((res) => {
-					// Tbp.getFilm(film.title).then((tbpFilm) => {
-						// if (tbpFilm && tbpFilm[0] && tbpFilm[0].magnetLink)
-						// 	res.magnet = tbpFilm[0].magnetLink;
-						// else
-						// 	reject(new_films);
 						res.magnet = "magnet:?xt=urn:btih:" + film.torrents[0].hash;
 						api.post(res).then((log) => {});
 						resolve(new_films)
-					// }).catch((e) => {console.log(e);})
 				}).catch((err) => {console.log(err);});
 			}
 		});
@@ -77,7 +69,6 @@ async function maj_db(i)
 async function main_as() {
 	for (var i = 1; i < 149; i++) {
 		try {
-			console.log("page number: ", i);
 			let result = await maj_db(i);
 		} catch (e) {
 			console.log(e);

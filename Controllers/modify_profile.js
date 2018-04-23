@@ -38,10 +38,7 @@ router.post('/', (req, res, next) => {
 
 function modify_pics(req, res, cb) {
   let id = req.user.id
-      //console.log(JSON.stringify(o, null, 4));
   if (Object.keys(req.files).length !== 0) {
-    // console.log("File: ")
-    // console.log(req.files['photo'][0].filename)
     let photo = '/pics/'+req.files['photo'][0].filename
     let sql = new SQL();
     sql.update('users', 'id', id, {photo: photo}).then(result => {
@@ -55,10 +52,6 @@ function modify_pics(req, res, cb) {
 }
 
 function modify_profile (req, res) {
-  // console.log("File: ")
-  // console.log(req.files)
-  // console.log("Body: ")
-  // console.log(req.body)
   const Check = require('./../Model/check')
   let {login, first_name, last_name, email, psswd, psswd_confirm} = req.body
   let params = {login, first_name, last_name, email, psswd, psswd_confirm}
@@ -67,8 +60,6 @@ function modify_profile (req, res) {
   let id = req.user.id
   let valid = true
   let total = 0
-
-  console.log(JSON.stringify(params, null, 4));
 
   for (let i in params) {
       if (params[i] && i !== 'psswd_confirm') total++
@@ -80,7 +71,6 @@ function modify_profile (req, res) {
   }
 
   function modify () {
-  //  console.log(JSON.stringify(o, null, 4));
       if (Object.keys(o).length !== 0){
           let sql = new SQL();
           sql.update('users', 'id', id, o).then(result => {
@@ -118,20 +108,15 @@ function modify_profile (req, res) {
 
   for (let i in params) {
       if (params[i] && i !== 'psswd_confirm') {
-        //  console.log(i+" - "+params[i])
         checkField(i)
       }
   }
 
 }
 
-// Check File Type
 function checkFileType(file, cb){
-  // Allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
   const mimetype = filetypes.test(file.mimetype);
 
   if(mimetype && extname){

@@ -84,3 +84,7 @@ div#dark_light {
   margin-right: 15%;
   margin-left: 15%;
 }
+
+#videoPlayer {
+  width: 100%;
+}
