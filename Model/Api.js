@@ -7,6 +7,7 @@ module.exports = class Api
 	get(params) {
 		return new Promise((resolve, reject) => {
 			let request_params = ""
+			
 			for (const key in params) {
 				if (params.hasOwnProperty(key) && params[key] != undefined && params[key] != '') {
 					if (key == "rating" || key == "year") request_params += '&'+key+'L='+ params[key].l+'&'+key+'U='+ params[key].u
