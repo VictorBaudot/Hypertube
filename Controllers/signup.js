@@ -31,10 +31,12 @@ module.exports = (passport) => {
 }
 
 function checkCredentials(req, res, next) {
+	if (req.cookies.i18n == undefined) res.setLocale('en')
+	else res.setLocale(req.cookies.i18n)
 	let {login, first_name, last_name, email, password, psswd_confirm} = req.body
 	if (req.file && login && first_name && last_name && email && password && psswd_confirm) return next();
 
-	req.flashAdd('tabError', 'Tous les champs ne sont pas remplis.');
+	req.flashAdd('tabError', res.__('Missing fields'));
 	res.redirect('back');
 }
 

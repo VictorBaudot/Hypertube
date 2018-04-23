@@ -114,6 +114,8 @@
         $('#comForm #m').keypress(function (e) {
             if (e.which == 13) {
                 let com = $('#comForm #m').val()
+                if (!com.length)
+                    return;
                 $.ajax({
                     type: "POST",
                     url: "/comments",
