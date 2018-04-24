@@ -14,7 +14,6 @@ module.exports = class Api
 					else request_params += '&'+key+'='+ params[key]
 				}
 			}
-			console.log(request_params)
 			request.get("http://127.0.0.1:3001/api?token=" + token + request_params, function (err, response, body) {
 				if (err) throw console.log(err);;
 				resolve(JSON.parse(body));

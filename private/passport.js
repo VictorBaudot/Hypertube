@@ -46,7 +46,6 @@ module.exports = (passport) => {
         callbackURL: "https://localhost:3001/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        console.log(profile)
         done(null)
       }
     ));
@@ -61,7 +60,6 @@ module.exports = (passport) => {
         callbackURL: "http://localhost:3001/auth/google/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        // console.log(profile)
         sql.select('*', 'users', {}, {googleId: profile.id}).then(result => {
             if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
@@ -73,7 +71,6 @@ module.exports = (passport) => {
                     psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
-                // console.log(newUser)
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -93,9 +90,7 @@ module.exports = (passport) => {
         callbackURL: "http://localhost:3001/auth/github/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        // console.log(profile)
         let {id, login, avatar_url, email} = profile._json
-        // console.log(id + '\n' + login + '\n' + avatar_url + '\n' + email)
         sql.select('*', 'users', {}, {githubId: id}).then(result => {
             if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
@@ -109,7 +104,6 @@ module.exports = (passport) => {
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
                     email_confirmed: 1
                 };
-                console.log(newUser)
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -131,10 +125,8 @@ module.exports = (passport) => {
         state: true
       },
       function(accessToken, refreshToken, profile, done) {
-        // console.log(profile)
         let photo = '/pics/default.jpg';
         let {id, firstName, lastName} = profile._json
-        // console.log(id + '\n' + firstName + '\n' + lastName)
         sql.select('*', 'users', {}, {linkedinId: id}).then(result => {
             if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
@@ -148,7 +140,6 @@ module.exports = (passport) => {
                     psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
-                console.log(newUser)
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -168,9 +159,7 @@ module.exports = (passport) => {
         callbackURL: "http://localhost:3001/auth/twitter/callback"
       },
       function(token, tokenSecret, profile, done) {
-        // console.log(profile)
         let {id_str, screen_name, name, profile_image_url} = profile._json
-        // console.log(id_str + '\n' + screen_name + '\n' + name + '\n' + profile_image_url)
         sql.select('*', 'users', {}, {twitterId: id_str}).then(result => {
             if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
@@ -184,7 +173,6 @@ module.exports = (passport) => {
                     token: bcrypt.hashSync('hypertube'+screen_name, bcrypt.genSaltSync(9)).replace(/\//g, ''),
                     email_confirmed: 1
                 };
-                console.log(newUser)
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -204,9 +192,7 @@ module.exports = (passport) => {
         callbackURL: "http://localhost:3001/auth/42/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        // console.log(profile)
         let {id, login, first_name, last_name, image_url, email} = profile._json
-        // console.log(id + '\n' + login + '\n' + first_name + '\n' + last_name + '\n' + image_url + '\n' + email)
         sql.select('*', 'users', {}, {fortytwoId: id}).then(result => {
             if (Object.keys(result).length > 0) return done(null, result[0]);
             else {
@@ -222,7 +208,6 @@ module.exports = (passport) => {
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
                     email_confirmed: 1
                 };
-                console.log(newUser)
                 sql.insert('users', newUser).then((result) => {
                     let user = {id: result.insertId}
                     return done(null, user);
@@ -260,7 +245,6 @@ module.exports = (passport) => {
                     email: req.body.email,
                     token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
                 };
-                console.log(newUser)
                 sql.insert('users', newUser).then(result => {
                     let link = 'http://localhost:3001/confirm/'+newUser.login+'/'+newUser.token
                     let msgtext = "Valider votre compte en vous rendant a cette adresse : "+link
@@ -276,8 +260,6 @@ module.exports = (passport) => {
             console.error('Failed to create a testing account. ' + err.message);
             return process.exit(1);
             }
-        
-            console.log('Credentials obtained, sending message...');
         
             // create reusable transporter object using the default SMTP transport
             let transporter = nodemailer.createTransport({
@@ -299,8 +281,6 @@ module.exports = (passport) => {
                 console.log('Error occurred. ' + err.message);
                 return process.exit(1);
                 }
-                console.log('Message sent: %s', info.messageId);
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
                 return done(null, null, req.flashAdd('tabSuccess', 'Bravo, finalisez votre compte en cliquant sur le lien que vous venez de recevoir par email!'));
             });
         });
@@ -374,7 +354,6 @@ function isSignUpValid (req, login, password, rows) {
 
 function isLengthOkay(champs, value, req) {
     let result = true
-    console.log(champs+" : "+value.length)
     if (value.length < 3) {
         req.flashAdd('tabError', champs+': trop court');
         result = false

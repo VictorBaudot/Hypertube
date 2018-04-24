@@ -114,6 +114,8 @@
         $('#comForm #m').keypress(function (e) {
             if (e.which == 13) {
                 let com = $('#comForm #m').val()
+                if (!com.length)
+                    return;
                 $.ajax({
                     type: "POST",
                     url: "/comments",
@@ -157,7 +159,6 @@
                 type: "GET",
                 url: "/video/download/<%= video.imdb_id %>",
                 success: function (obj) {
-                    console.log(obj)
                     if (obj.progress < 100)
                         $("#progress").text(obj.progress + '%')
                     else if (obj.subtitles == '0')
@@ -166,7 +167,6 @@
                         $("#progress").text('<%= i18n.__("convert_file") %>')
                     else {
                         clearInterval(downloading);
-                        // probably wait 1 second for the subtitle creation
 						$('#waiting-download')[0].style.display = 'none';
 						$("#videoContainer").append(`<video id="videoPlayer" controls><source src="/dwl/<%= video.imdb_id %>" type="video/mp4">
 			            <track label="English" kind="subtitles" srclang="en" src="/dwl/sub/<%= video.imdb_id %>/en" default>

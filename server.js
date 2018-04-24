@@ -28,9 +28,6 @@ const video = require('./Controllers/video.js');
 const comments = require('./Controllers/comments.js');
 const dwl = require('./Controllers/dwl.js');
 
-// const port = 8080;
-// const hostname = '127.0.0.1';
-
 app.set('views', path.join(__dirname, './public/views'));
 app.set('view engine', 'ejs');
 
@@ -77,9 +74,6 @@ app.use('/logout', isLoggedIn, logout);
 app.use('/dwl', dwl);
 
 http.createServer(app).listen(3001);
-// app.listen(port, hostname, () => {
-// 	console.log(`Server running at http://${hostname}:${port}/`);
-// });
 
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated()) return next();
