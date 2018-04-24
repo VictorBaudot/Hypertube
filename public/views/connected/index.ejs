@@ -211,27 +211,23 @@
             // if the scroll is more than 75% from the top, load more content.
             if(scrollPercentage > 0.75 && lastHeight < height) {
                 lastHeight = height
-                console.log("scrollTop: "+scrollTop+"\nwindowHeight: "+windowHeight+"\nheight: "+height+"\nscrollPercentage: "+scrollPercentage)
                 this.doSomething();
             }
         }
  
         this.doSomething = function() {
             ++page;
-            console.log("Page: " + page)
             var url = "/api?token="+token+"&page="+page+"&title=<%= filters.title %>";
             url += "&ratingL=<%= filters.rating.l %>&ratingU=<%= filters.rating.u %>&";
             url += "yearL=<%= filters.year.l %>&yearU=<%= filters.year.u %>&";
             url += "genres=<%= filters.genres %>&directors=<%= filters.directors %>&actors=<%= filters.actors %>&";
             url += "sortType=<%= filters.sortType %>&sortOrder=<%= filters.sortOrder %>&";
             url += "videos_viewed=<%= filters.videos_viewed %>";
-            console.log(url)
             $.ajax({
                 type: "GET",
                 url: url,
                 dataType: "json",
                 success: function (response) {
-                    console.log(response)
                     response.films.forEach(film => {
                         let html = '<a id="cardMargin" class="ui black card" href="/video/' + film.id + '"> \
                                     <div class="ui image">';

@@ -31,13 +31,12 @@ module.exports = (passport) => {
 }
 
 function checkCredentials(req, res, next) {
-	console.log('Check credentials')
-	console.log(req.body)
-	console.log(req.file)
+	if (req.cookies.i18n == undefined) res.setLocale('en')
+	else res.setLocale(req.cookies.i18n)
 	let {login, first_name, last_name, email, password, psswd_confirm} = req.body
 	if (req.file && login && first_name && last_name && email && password && psswd_confirm) return next();
 
-	req.flashAdd('tabError', 'Tous les champs ne sont pas remplis.');
+	req.flashAdd('tabError', res.__('Missing fields'));
 	res.redirect('back');
 }
 
@@ -46,7 +45,6 @@ function checkFileType(file, cb){
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 		const mimetype = filetypes.test(file.mimetype);
 		
-    console.log('check image')
     if(mimetype && extname){
         return cb(null,true);
     } else {

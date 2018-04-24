@@ -43,8 +43,6 @@ function forgot_pwd(req, res) {
       return process.exit(1);
     }
 
-    console.log('Credentials obtained, sending message...');
-
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         port: 1025,
@@ -65,8 +63,6 @@ function forgot_pwd(req, res) {
           console.log('Error occurred. ' + err.message);
           return process.exit(1);
         }
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         req.flashAdd('tabSuccess', 'Felicitations, votre nouveau mot de passe vient de vous etre envoye!')
         res.redirect('/')
 
