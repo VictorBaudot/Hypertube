@@ -25,7 +25,6 @@ router.get('/:imdb_id', (req, res, next) => {
         : fileSize-1
       
       const chunksize = (end-start)+1
-      // console.log(`start: ${start}, end: ${end}, fileSize: ${fileSize}, chunksize: ${chunksize}`)
       const file = fs.createReadStream(path, {start, end})
       const head = {
         'Content-Range': `bytes ${start}-${end}/${fileSize}`,
