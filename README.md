@@ -41,7 +41,7 @@
 	* Security (XSS, SQL injection..) 
 	* Data validation
 
-## My stack
+## Our stack
 	* Node.js
 	* Express (+ middleware)
 	* JavaScript ES6+
