@@ -2,6 +2,14 @@
 
 ![home](https://image.ibb.co/e9wUuS/hypertube.png)
 
+##
+
+![search](https://image.ibb.co/dQyaZS/batman_hypertube.png)
+
+## 
+
+![filter](https://image.ibb.co/mKVpuS/filter_hypertube.png)
+
 ## Install
 
 	1. Clone the repo: `git clone https://github.com/VictorBaudot/Hypertube.git`on :
@@ -49,8 +57,3 @@
 
 	Forbidden tools:
 		* Libraries to create a video stream for a torrent  like webtorrent, pulsar or peerflix
-
-
-![search](https://image.ibb.co/dQyaZS/batman_hypertube.png)
-
-![filter](https://image.ibb.co/mKVpuS/filter_hypertube.png)
