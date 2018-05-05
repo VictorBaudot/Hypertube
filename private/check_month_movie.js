@@ -19,7 +19,7 @@ sql.select('imdb_id', 'downloads', null, null, null, null, between).then(result 
     process.exit(0);
   }
   console.log("delete files", result);
-  fs.readdir('/goinfre/', (err, files) => {
+  fs.readdir('/tmp/', (err, files) => {
     for (let j in files)
     {
       for (let i in result)
@@ -27,7 +27,7 @@ sql.select('imdb_id', 'downloads', null, null, null, null, between).then(result 
         let reg = new RegExp("^(" + result[i].imdb_id + "){1}");
         let match = files[j].match(reg);
         if (match !== null) {
-          fs.unlinkSync('/goinfre/' + match.input);
+          fs.unlinkSync('/tmp/' + match.input);
 			sql.update('downloads', 'imdb_id', result[i].imdb_id, {
 				started: 0,
 				progress: 0,

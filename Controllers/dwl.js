@@ -8,7 +8,7 @@ const fs = require('fs');
 
 router.get('/:imdb_id', (req, res, next) => {
 
-  const path = '/goinfre/' + req.params.imdb_id + '.mp4';
+  const path = '/tmp/' + req.params.imdb_id + '.mp4';
   if (!fs.existsSync(path)) {
     res.send("cant get film try again later");
     return
@@ -48,7 +48,7 @@ router.get('/:imdb_id', (req, res, next) => {
 
 router.get('/sub/:imdb_id/:lang', (req, res, next) => {
 
-  const path = '/goinfre/' + req.params.imdb_id + '-' + req.params.lang + '.vtt';
+  const path = '/tmp/' + req.params.imdb_id + '-' + req.params.lang + '.vtt';
   if (fs.existsSync(path)) {
     const stat = fs.statSync(path);
     res.writeHead(200, {

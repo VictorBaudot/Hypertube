@@ -37,168 +37,178 @@ module.exports = (passport) => {
     // GOOGLE STRATEGY  ========================================================
     // =========================================================================
 
-    passport.use(new GoogleStrategy({
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3001/auth/google/callback"
-      },
-      function(accessToken, refreshToken, profile, done) {
-        sql.select('*', 'users', {}, {googleId: profile.id}).then(result => {
-            if (Object.keys(result).length > 0) return done(null, result[0]);
-            else {
-                let newpwd = generatePassword()
-                var newUser = {
-                    googleId: profile.id,
-                    login: profile.name.givenName + profile.name.familyName,
-                    photo: profile.photos[0].value,
-                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
-                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
-                };
-                sql.insert('users', newUser).then((result) => {
-                    let user = {id: result.insertId}
-                    return done(null, user);
-                });
-            }
-        });
-      }
-    ));
+		if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
+			passport.use(new GoogleStrategy({
+					clientID: GOOGLE_CLIENT_ID,
+					clientSecret: GOOGLE_CLIENT_SECRET,
+					callbackURL: "http://localhost:3001/auth/google/callback"
+				},
+				function(accessToken, refreshToken, profile, done) {
+					sql.select('*', 'users', {}, {googleId: profile.id}).then(result => {
+							if (Object.keys(result).length > 0) return done(null, result[0]);
+							else {
+									let newpwd = generatePassword()
+									var newUser = {
+											googleId: profile.id,
+											login: profile.name.givenName + profile.name.familyName,
+											photo: profile.photos[0].value,
+											psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+											token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
+									};
+									sql.insert('users', newUser).then((result) => {
+											let user = {id: result.insertId}
+											return done(null, user);
+									});
+							}
+					});
+				}
+			));
+		}
 
     // =========================================================================
     // GITHUB STRATEGY  ======================================================
     // =========================================================================
 
-    passport.use(new GitHubStrategy({
-        clientID: GITHUB_APP_ID,
-        clientSecret: GITHUB_APP_SECRET,
-        callbackURL: "http://localhost:3001/auth/github/callback"
-      },
-      function(accessToken, refreshToken, profile, done) {
-        let {id, login, avatar_url, email} = profile._json
-        sql.select('*', 'users', {}, {githubId: id}).then(result => {
-            if (Object.keys(result).length > 0) return done(null, result[0]);
-            else {
-                let newpwd = generatePassword()
-                var newUser = {
-                    githubId: id,
-                    login: login + id,
-                    photo: avatar_url,
-                    email: email,
-                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
-                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
-                    email_confirmed: 1
-                };
-                sql.insert('users', newUser).then((result) => {
-                    let user = {id: result.insertId}
-                    return done(null, user);
-                });
-            }
-        });
-      }
-    ));
+		if (GITHUB_APP_ID && GITHUB_APP_SECRET) {
+			passport.use(new GitHubStrategy({
+					clientID: GITHUB_APP_ID,
+					clientSecret: GITHUB_APP_SECRET,
+					callbackURL: "http://localhost:3001/auth/github/callback"
+				},
+				function(accessToken, refreshToken, profile, done) {
+					let {id, login, avatar_url, email} = profile._json
+					sql.select('*', 'users', {}, {githubId: id}).then(result => {
+							if (Object.keys(result).length > 0) return done(null, result[0]);
+							else {
+									let newpwd = generatePassword()
+									var newUser = {
+											githubId: id,
+											login: login + id,
+											photo: avatar_url,
+											email: email,
+											psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+											token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+											email_confirmed: 1
+									};
+									sql.insert('users', newUser).then((result) => {
+											let user = {id: result.insertId}
+											return done(null, user);
+									});
+							}
+					});
+				}
+			));
+		}
 
     // =========================================================================
     // LINKEDIN STRATEGY  ======================================================
     // =========================================================================
 
-    passport.use(new LinkedinStrategy({
-        clientID: LINKEDIN_APP_ID,
-        clientSecret: LINKEDIN_APP_SECRET,
-        callbackURL: "http://localhost:3001/auth/linkedin/callback",
-        scope: ['r_emailaddress', 'r_basicprofile'],
-        state: true
-      },
-      function(accessToken, refreshToken, profile, done) {
-        let photo = '/pics/default.jpg';
-        let {id, firstName, lastName} = profile._json
-        sql.select('*', 'users', {}, {linkedinId: id}).then(result => {
-            if (Object.keys(result).length > 0) return done(null, result[0]);
-            else {
-                let newpwd = generatePassword()
-                var newUser = {
-                    linkedinId: id,
-                    login: firstName + lastName + id,
-                    first_name: capitalizeFirstLetter(firstName),
-                    last_name: capitalizeFirstLetter(lastName),
-                    photo,
-                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
-                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
-                };
-                sql.insert('users', newUser).then((result) => {
-                    let user = {id: result.insertId}
-                    return done(null, user);
-                });
-            }
-        });
-      }
-    ));
+		if (LINKEDIN_APP_ID && LINKEDIN_APP_SECRET) {
+			passport.use(new LinkedinStrategy({
+					clientID: LINKEDIN_APP_ID,
+					clientSecret: LINKEDIN_APP_SECRET,
+					callbackURL: "http://localhost:3001/auth/linkedin/callback",
+					scope: ['r_emailaddress', 'r_basicprofile'],
+					state: true
+				},
+				function(accessToken, refreshToken, profile, done) {
+					let photo = '/pics/default.jpg';
+					let {id, firstName, lastName} = profile._json
+					sql.select('*', 'users', {}, {linkedinId: id}).then(result => {
+							if (Object.keys(result).length > 0) return done(null, result[0]);
+							else {
+									let newpwd = generatePassword()
+									var newUser = {
+											linkedinId: id,
+											login: firstName + lastName + id,
+											first_name: capitalizeFirstLetter(firstName),
+											last_name: capitalizeFirstLetter(lastName),
+											photo,
+											psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+											token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, '')
+									};
+									sql.insert('users', newUser).then((result) => {
+											let user = {id: result.insertId}
+											return done(null, user);
+									});
+							}
+					});
+				}
+			));
+		}
 
     // =========================================================================
     // TWITTER STRATEGY  =======================================================
     // =========================================================================
 
-    passport.use(new TwitterStrategy({
-        consumerKey: TWITTER_CONSUMER_KEY,
-        consumerSecret: TWITTER_CONSUMER_SECRET,
-        callbackURL: "http://localhost:3001/auth/twitter/callback"
-      },
-      function(token, tokenSecret, profile, done) {
-        let {id_str, screen_name, name, profile_image_url} = profile._json
-        sql.select('*', 'users', {}, {twitterId: id_str}).then(result => {
-            if (Object.keys(result).length > 0) return done(null, result[0]);
-            else {
-                let newpwd = generatePassword()
-                var newUser = {
-                    twitterId: id_str,
-                    login: screen_name,
-                    first_name: capitalizeFirstLetter(name),
-                    photo: profile_image_url,
-                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
-                    token: bcrypt.hashSync('hypertube'+screen_name, bcrypt.genSaltSync(9)).replace(/\//g, ''),
-                    email_confirmed: 1
-                };
-                sql.insert('users', newUser).then((result) => {
-                    let user = {id: result.insertId}
-                    return done(null, user);
-                });
-            }
-        })
-      }
-    ));
+		if (TWITTER_CONSUMER_KEY && TWITTER_CONSUMER_SECRET) {
+			passport.use(new TwitterStrategy({
+					consumerKey: TWITTER_CONSUMER_KEY,
+					consumerSecret: TWITTER_CONSUMER_SECRET,
+					callbackURL: "http://localhost:3001/auth/twitter/callback"
+				},
+				function(token, tokenSecret, profile, done) {
+					let {id_str, screen_name, name, profile_image_url} = profile._json
+					sql.select('*', 'users', {}, {twitterId: id_str}).then(result => {
+							if (Object.keys(result).length > 0) return done(null, result[0]);
+							else {
+									let newpwd = generatePassword()
+									var newUser = {
+											twitterId: id_str,
+											login: screen_name,
+											first_name: capitalizeFirstLetter(name),
+											photo: profile_image_url,
+											psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+											token: bcrypt.hashSync('hypertube'+screen_name, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+											email_confirmed: 1
+									};
+									sql.insert('users', newUser).then((result) => {
+											let user = {id: result.insertId}
+											return done(null, user);
+									});
+							}
+					})
+				}
+			));
+		}
 
     // =========================================================================
     // 42 STRATEGY =============================================================
     // =========================================================================
 
-    passport.use(new FortyTwoStrategy({
-        clientID: FORTYTWO_APP_ID,
-        clientSecret: FORTYTWO_APP_SECRET,
-        callbackURL: "http://localhost:3001/auth/42/callback"
-      },
-      function(accessToken, refreshToken, profile, done) {
-        let {id, login, first_name, last_name, image_url, email} = profile._json
-        sql.select('*', 'users', {}, {fortytwoId: id}).then(result => {
-            if (Object.keys(result).length > 0) return done(null, result[0]);
-            else {
-                let newpwd = generatePassword()
-                var newUser = {
-                    fortytwoId: id,
-                    login: login + id,
-                    first_name: capitalizeFirstLetter(first_name),
-                    last_name: capitalizeFirstLetter(last_name),
-                    photo: image_url,
-                    email: email,
-                    psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
-                    token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
-                    email_confirmed: 1
-                };
-                sql.insert('users', newUser).then((result) => {
-                    let user = {id: result.insertId}
-                    return done(null, user);
-                });
-            }
-        });
-      }
-    ));
+		if (FORTYTWO_APP_ID && FORTYTWO_APP_SECRET) {
+			passport.use(new FortyTwoStrategy({
+					clientID: FORTYTWO_APP_ID,
+					clientSecret: FORTYTWO_APP_SECRET,
+					callbackURL: "http://localhost:3001/auth/42/callback"
+				},
+				function(accessToken, refreshToken, profile, done) {
+					let {id, login, first_name, last_name, image_url, email} = profile._json
+					sql.select('*', 'users', {}, {fortytwoId: id}).then(result => {
+							if (Object.keys(result).length > 0) return done(null, result[0]);
+							else {
+									let newpwd = generatePassword()
+									var newUser = {
+											fortytwoId: id,
+											login: login + id,
+											first_name: capitalizeFirstLetter(first_name),
+											last_name: capitalizeFirstLetter(last_name),
+											photo: image_url,
+											email: email,
+											psswd: bcrypt.hashSync(newpwd, bcrypt.genSaltSync(9)),
+											token: bcrypt.hashSync('hypertube'+login, bcrypt.genSaltSync(9)).replace(/\//g, ''),
+											email_confirmed: 1
+									};
+									sql.insert('users', newUser).then((result) => {
+											let user = {id: result.insertId}
+											return done(null, user);
+									});
+							}
+					});
+				}
+			));
+		}
 
     // =========================================================================
     // LOCAL SIGNUP ============================================================

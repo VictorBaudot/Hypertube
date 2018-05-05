@@ -4,7 +4,7 @@ const connection = require('./db')
 // GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost' WITH GRANT OPTION;
 // CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
 // GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%' WITH GRANT OPTION;
-// CREATE DATABASE 'hypertube';
+// CREATE DATABASE hypertube;
 
 connection.query("DROP TABLE IF EXISTS users;");
 

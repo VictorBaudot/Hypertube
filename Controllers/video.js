@@ -65,7 +65,7 @@ router.get('/:id', (req, res) => {
       engine.on('ready', function () {
         engine.files.forEach(function (file) {
           var stream = file.createReadStream();
-          let write = fs.createWriteStream("/goinfre/" + video.imdb_id + '.' + file.name.split('.').pop());
+          let write = fs.createWriteStream("/tmp/" + video.imdb_id + '.' + file.name.split('.').pop());
           if (file.name.split('.').pop() == "mkv")
             is_mkv = true;
           total += stream.length;
@@ -86,10 +86,10 @@ router.get('/:id', (req, res) => {
         if (is_mkv && !videoStat.conversion)
         {
           const converter = new FfmpegCommand()
-          .input(fs.createReadStream(`/goinfre/${video.imdb_id}.mkv`))
+          .input(fs.createReadStream(`/tmp/${video.imdb_id}.mkv`))
           .outputOption('-movflags frag_keyframe+empty_moov')
           .outputFormat('mp4')
-          .output(fs.createWriteStream(`/goinfre/${video.imdb_id}.mp4`))
+          .output(fs.createWriteStream(`/tmp/${video.imdb_id}.mp4`))
           .on('error', (err, stdout, stderr) => { console.log('  miskine ', err, stdout, stderr)})
           .on('end', (chunk) => {
             sql.update('downloads', 'imdb_id', video.imdb_id, {
@@ -119,12 +119,12 @@ router.get('/:id', (req, res) => {
         })
         .then(subtitles => {
           for (let lang in subtitles) {
-            let destSrt = `/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.srt`
+            let destSrt = `/tmp/${video.imdb_id}-${subtitles[lang].langcode}.srt`
             let subFile = fs.createWriteStream(destSrt)
             let request = http.get(subtitles[lang].url, response => {
               response
                 .pipe(srt2vtt())
-                .pipe(fs.createWriteStream(`/goinfre/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
+                .pipe(fs.createWriteStream(`/tmp/${video.imdb_id}-${subtitles[lang].langcode}.vtt`))
                 .on('finish', () => {
                   sql.update('downloads', 'imdb_id', video.imdb_id, { subtitles: 1 })
                 })
